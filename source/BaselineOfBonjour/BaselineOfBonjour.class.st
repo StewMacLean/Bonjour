@@ -1,6 +1,6 @@
 Class {
 	#name : #BaselineOfBonjour,
-	#superclass : #Object,
+	#superclass : #BaselineOf,
 	#category : #BaselineOfBonjour
 }
 
@@ -10,6 +10,7 @@ BaselineOfBonjour >> baseline: spec [
 
 	spec for: #common do: 
 		[spec 
+			postLoadDoIt: #'postload:package:';
 			package: 'SIM-Base-Extensions';
 			package: 'SIM-Base-Fixes';
 			package: 'SIM-CodeEnhancements';
@@ -17,4 +18,13 @@ BaselineOfBonjour >> baseline: spec [
 		
 		spec baseline: 'OSSubprocess' with: 
     			[spec repository: 'github://pharo-contributions/OSSubprocess:master/repository']]
+]
+
+{ #category : #actions }
+BaselineOfBonjour >> postload: loader package: packageSpec [
+
+	Smalltalk tools browser 
+		openOnClass: BonjourCommandLineInterface 
+		selector: #openApp
+
 ]
