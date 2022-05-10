@@ -37,7 +37,7 @@ It should bring up a browser with the openApp method for the command line interf
 
 Just click it to open the app and watch the services roll in - Enjoy!
 			
-I would very much appreciate any help in getting the library interface working! 
+I would very much appreciate any help in getting the library interface working! There is extensive logging to help...
 
 Thanks,
 
