@@ -35,9 +35,11 @@ To download into your image, execute:
 			
 It should bring up a browser with the openApp method for the command line interface selected. 
 
-Just click it to open the app and watch the services roll in - Enjoy!
+Just click it to open the app and watch the services roll in - Enjoy! 
+
+Open the Transcript to see a log of what is going on under the hood (and see the log files and the system output).
 			
-I would very much appreciate any help in getting the library interface working! There is extensive logging to help...
+I would very much appreciate any help in getting the library interface working!
 
 Thanks,
 
