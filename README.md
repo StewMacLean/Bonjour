@@ -1,6 +1,7 @@
 # Bonjour
 
 Pharo Smalltalk implementation of Bonjour/Zeroconf/mDNS service discovery for MacOS.
+(Tested on Pharo 10 and Mac M1/Monterey).
 
 Bonjour implements discovery of services registered using the mDNS protocol.
 
@@ -23,7 +24,7 @@ is made.
 	
 To run, click on openApp within the testing category of the interface you want to use.
 
-To download, execute:
+To download into your image, execute:
 
 	[Metacello new 
 		repository: 'github://StewMacLean/Bonjour/source';
