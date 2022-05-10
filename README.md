@@ -33,6 +33,10 @@ To download into your image, execute:
 			on: MCMergeOrLoadWarning 
 			do: [: warning | warning load].
 			
+It should bring up a browser with the openApp method for the command line interface selected. 
+
+Just click it to open the app and watch the services roll in - Enjoy!
+			
 I would very much appreciate any help in getting the library interface working! 
 
 Thanks,
