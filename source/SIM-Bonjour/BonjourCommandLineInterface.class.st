@@ -775,13 +775,13 @@ BonjourCommandLineInterface >> startUp [
 	
 	self initializeOnStartUp.
 	
-	"self browseServiceTypes"
+	self browseServiceTypes
 	
 	"self startUpOnRegistrationTypes: #('_airplay._tcp.')."
 	
 	"self startUpOnRegistrationTypes: #('_companion-link._tcp.')."
 	
-	self startUpOnRegistrationTypes: #('_rdlink._tcp.')
+	"self startUpOnRegistrationTypes: #('_rdlink._tcp.')"
 	
 ]
 
