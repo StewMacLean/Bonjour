@@ -27,7 +27,7 @@ is made.
 	
 To run, click on openApp within the testing category of the interface you want to use:
 
-![Screenshot](classeswithopenAppmethod.png.png)
+![Screenshot](screenshots/classeswithopenAppmethod.png.png)
 
 To download into your image, execute:
 
