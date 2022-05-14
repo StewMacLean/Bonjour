@@ -3,7 +3,10 @@
 Pharo Smalltalk implementation of Bonjour/Zeroconf/mDNS service discovery for MacOS.
 (Tested on Pharo 10 and Mac M1/Monterey).
 
-Bonjour implements discovery of services registered using the mDNS protocol.
+The DNS Service Discovery API helps you to perform three main tasks:
+	Registering a service
+	Browsing for services
+	Resolving service names to host names
 
 There are two concrete implementations:
 	1) Using the dns-sd command line utility
@@ -23,6 +26,8 @@ lock up on a blocking call (presumably as Bonjour results are not available when
 is made.
 	
 To run, click on openApp within the testing category of the interface you want to use.
+
+![Screenshot](screenshot.png)
 
 To download into your image, execute:
 
