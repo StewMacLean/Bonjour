@@ -25,9 +25,9 @@ If blocking calls are used (see BonjourLibraryFFI>>runner), it will run, but eve
 lock up on a blocking call (presumably as Bonjour results are not available when the call
 is made.
 	
-To run, click on openApp within the testing category of the interface you want to use.
+To run, click on openApp within the testing category of the interface you want to use:
 
-![Screenshot](screenshot.png)
+![Screenshot](classeswithopenAppmethod.png.png)
 
 To download into your image, execute:
 
