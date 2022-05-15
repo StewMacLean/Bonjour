@@ -29,7 +29,7 @@ To run, click on openApp within the testing category of the interface you want t
 
 ![Click on openApp](https://github.com/StewMacLean/Bonjour/blob/master/screenshots/classeswithopenAppmethod.png)
 
-<img src="https://github.com/StewMacLean/Bonjour/blob/master/screenshots/classeswithopenAppmethod.png" style=" width:100px ; height:100px " />
+<img src="https://github.com/StewMacLean/Bonjour/blob/master/screenshots/classeswithopenAppmethod.png" style=" width:500px " />
 
 To download into your image, execute:
 
