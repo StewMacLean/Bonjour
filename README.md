@@ -1,14 +1,15 @@
 # Bonjour - *C'est si bon!*
 
-Pharo Smalltalk implementation of Bonjour/Zeroconf/mDNS service discovery for MacOS.
-(Tested on Pharo 10 and Mac M1/Monterey).
+A Pharo Smalltalk implementation of Bonjour/Zeroconf/mDNS service discovery for MacOS.
+
+Note that it has only been tested on Pharo 10 and Mac M1/Monterey. Your luck with other versions may vary.
 
 The DNS Service Discovery API helps you to perform three main tasks:
-	Registering a service
-	Browsing for services
-	Resolving service names to host names
+1. Registering a service
+2. Browsing for services
+3. Resolving service names to host names
 
-The Pharo Smalltalk Bonjour has two concrete implementations:
+Pharo Smalltalk Bonjour has two concrete implementations:
 1. Using the dns-sd command line utility
 2. Using a FFI interface to the dnssd dynamic library
 
@@ -72,9 +73,9 @@ Execution is logged to:
 3. To the terminal 
 
 Start Pharo with logLevel=4 using:
-<...>/Pharo.app/Contents/MacOS/Pharo --logLevel=4 <...>/Pharo.image
+<...>/Pharo.app/Contents/MacOS/Pharo  --logLevel=4  <...>/Pharo.image
 
-When you get the Spinning Wheel Of Death, open the Activity Monitor select Pharo and do a SpinDump to see where it is stuck in the bowels of the VM.
+When you get the Spinning Wheel Of Death, open the Activity Monitor select Pharo, and do a SpinDump to see where it is stuck in the bowels of the VM.
 
 ### Get Involved
 			
