@@ -29,6 +29,8 @@ To run, click on openApp within the testing category of the interface you want t
 
 ![Click on openApp](https://github.com/StewMacLean/Bonjour/blob/master/screenshots/classeswithopenAppmethod.png)
 
+<img src="https://github.com/StewMacLean/Bonjour/blob/master/screenshots/classeswithopenAppmethod.png" style=" width:100px ; height:100px " />
+
 To download into your image, execute:
 
 	[Metacello new 
