@@ -12,7 +12,7 @@ The Pharo Smalltalk Bonjour has two concrete implementations:
 1. Using the dns-sd command line utility
 2. Using a FFI interface to the dnssd dynamic library
 
-## There's A Catch...
+### There's A Catch...
 		
 Currently only 1. works reliably.
 
@@ -27,7 +27,7 @@ If blocking calls are used (see BonjourLibraryFFI>>runner), it will run, but eve
 lock up on a blocking call (presumably as Bonjour results are not available when the call
 is made.
 
-## Running The App
+### Running The App
 	
 To run, click on openApp within the testing category of the interface you want to use:
 
@@ -37,7 +37,7 @@ which will open the app to show your serivces (dynamically updating as they come
 
 <img src="https://github.com/StewMacLean/Bonjour/blob/master/screenshots/DiscoveryApp.png" style=" width:600px " />
 
-## Behind The Scenes
+### Behind The Scenes
 
 Both the API classes implement:
 
@@ -51,7 +51,7 @@ which is part of the FFI library:
 
 <img src="https://github.com/StewMacLean/Bonjour/blob/master/screenshots/BonjourFFI.png" style=" width:600px " />
 
-## Installation
+### Installation
 
 To download into your image, execute:
 
@@ -64,7 +64,7 @@ To download into your image, execute:
 			
 It should bring up a browser with the openApp method for the command line interface selected (as shown above) - click it to run the app.
 
-## Troubleshooting
+### Troubleshooting
 
 Execution is logged to:
 1. The Transcript
@@ -76,11 +76,11 @@ Start Pharo with logLevel=4 using:
 
 When you get the Spinning Wheel Of Death, open the Activity Monitor select Pharo and do a SpinDump to see where it is stuck in the bowels of the VM.
 
-## Get Involved
+### Get Involved
 			
 I would very much appreciate any help in getting the library interface working!
 
-Thanks,
+Merci beaucoup,
 
 Stew MacLean
 
