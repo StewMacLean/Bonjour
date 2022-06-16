@@ -42,7 +42,14 @@ BonjourLibraryFFI >> DNSServiceAddRecord: sdRef with: RecordRef with: flags with
 { #category : #callouts }
 BonjourLibraryFFI >> DNSServiceBrowse: sdRef with: flags with: interfaceIndex with: regtype with: domain with: callBack with: context [
 
-	^self ffiCall: #(int DNSServiceBrowse (void **sdRef, uint32 flags, uint32 interfaceIndex, char * regtype, char * domain, FFICallback callBack, void * context))
+	^self ffiCall: #(int DNSServiceBrowse (
+		"DNSServiceRef *"void *sdRef, 
+		uint32 flags, 
+		uint32 interfaceIndex, 
+		char *regtype, 
+		char *domain, 
+		FFICallback callBack, 
+		void *context))
 	
 	
 	"<C: DNSServiceErrorType DNSServiceBrowse(DNSServiceRef * sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, const char * regtype, const char * domain, DNSServiceBrowseReply callBack, void * context)>
