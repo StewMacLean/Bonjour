@@ -662,7 +662,7 @@ BonjourLibraryFFI >> dictionaryFrom: aString [
 	| lines dictionary |
 	
 	dictionary := Dictionary new.
-	lines := aString asArrayOfSubstringsSeparatedBy: $,.
+	lines := aString substrings: ','.
 			
 	lines do: [ : line | | stream key value |
 		stream := line trimmed readStream.
