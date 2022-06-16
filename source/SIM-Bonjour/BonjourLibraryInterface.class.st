@@ -1,6 +1,9 @@
 Class {
 	#name : #BonjourLibraryInterface,
 	#superclass : #BonjourInterface,
+	#instVars : [
+		'callback1'
+	],
 	#category : #'SIM-Bonjour'
 }
 
@@ -49,7 +52,7 @@ BonjourLibraryInterface >> browseSDRef: sdRef flags: flags interfaceIndex: inter
 	"
 	calloutMutex criticalReleasingOnError: 
 		[result := interface DNSServiceBrowse: sdRef with: flags with:
-				interfaceIndex with: regtype with: domain with: callback with: context.
+				interfaceIndex with: regtype with: domain with: callback with: ExternalAddress null.
 		self checkResult: result for: 'DNSServiceBrowse']	"/* DNSServiceBrowse() Parameters:
  *
  * sdRef:           A pointer to an uninitialized DNSServiceRef. If the call succeeds
@@ -101,21 +104,19 @@ DNSServiceErrorType DNSSD_API DNSServiceBrowse
 
 { #category : #api }
 BonjourLibraryInterface >> browseServiceTypes [
-	
-	| flags interfaceIndex regtype domain context callback sdRef connectionSV connectionID |
+	| flags interfaceIndex regtype domain context callback sdRefHandle sdRef connectionSV connectionID |
 
-	sdRef := ExternalAddress new.
+	sdRefHandle := ByteArray new: 8.
 	connectionID := self nextConnectionID.
 	flags := 0.
 	interfaceIndex := interface kDNSServiceInterfaceIndexAny.	"0"
-	regtype := '_services._dns-sd._udp' utf8Encoded.
-	domain := '' utf8Encoded.
+	regtype := '_services._dns-sd._udp' "utf8Encoded".
+	domain := '' "utf8Encoded".
 	context := nil.
 	callback := 
-		"interface newCallbackWithSignature: interface DNSServiceBrowseReply"
-		FFICallback signature: interface DNSServiceBrowseReply
-		block:
-			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :serviceNameCB :regtypeCB :domainCB :contextCB | 
+		BonjourCallback 
+			signature: interface DNSServiceBrowseReply
+			block: [ :sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :serviceNameCB :regtypeCB :domainCB :contextCB | 
 			| sv stream protocol object |
 			self log: '<== ServiceType Add/Remove: ', serviceNameCB, ' interface: ', interfaceIndexCB printString.
 			connectionSV sdRef: sdRefCB.	"The actual service discovery reference that was initialized by DNSServiceBrowse that is used to deallocate."
@@ -143,9 +144,16 @@ BonjourLibraryInterface >> browseServiceTypes [
 	"Initializes sdRef..."
 
 	self log: '==> Browse Service Types...'.
-	self browseSDRef: sdRef flags: flags interfaceIndex: interfaceIndex
-		registrationType: regtype domain: domain callback: callback context:
-			context.	"Fire off callbacks..."	"Note: - Need to hang on to callback, otherwise they don't fire"
+	self 
+		browseSDRef: sdRefHandle 
+		flags: flags 
+		interfaceIndex: interfaceIndex
+		registrationType: regtype 
+		domain: domain 
+		callback: callback 
+		context: context.	
+	sdRef := sdRefHandle pointerAt: 1.
+	"Fire off callbacks..."	"Note: - Need to hang on to callback, otherwise they don't fire"
 	connectionSV := StateVector new
 		id: connectionID;
 		sdRef: sdRef;
@@ -156,15 +164,13 @@ BonjourLibraryInterface >> browseServiceTypes [
 	self openResultsStreamOn: sdRef stateVector: connectionSV
 	but using the call in same process, as it seems to freeze less when in blocking mode."
 	self serviceProcessResult: sdRef.
-	
 ]
 
 { #category : #api }
 BonjourLibraryInterface >> browseServicesOf: aServiceType [
+	| flags interfaceIndex regtype domain context callback sdRefHandle sdRef connectionSV connectionID |
 	
-	| flags interfaceIndex regtype domain context callback sdRef connectionSV connectionID |
-	
-	sdRef := ExternalAddress new.
+	sdRefHandle := ByteArray new: 8.
 	connectionID := self nextConnectionID.
 	flags := 0.
 	interfaceIndex := interface kDNSServiceInterfaceIndexAny.	"0"
@@ -173,38 +179,39 @@ BonjourLibraryInterface >> browseServicesOf: aServiceType [
 	context := nil.
 	callback := 
 		"interface newCallbackWithSignature: interface DNSServiceBrowseReply"
-		FFICallback signature: interface DNSServiceBrowseReply
-		block:
-			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :serviceNameCB :regtypeCB :domainCB :contextCB | 
-			| sv object |
-			"self halt."
-			self log: '<== Service Added/Removed: ', serviceNameCB.
-			connectionSV sdRef: sdRefCB.	"The actual service discovery reference that was initialized by DNSServiceBrowse that is used to deallocate."
-			(sv := StateVector new)
-				id: connectionID;
-				flags: flagsCB;
-				isMoreComing: (self isMoreComing: flagsCB);
-				interfaceIndex: interfaceIndexCB printString;
-				name: serviceNameCB "asStringFromUnicodeStringOnHeap";
-				registrationType: regtypeCB "copyCStringFromHeap";
-				domain: domainCB "copyCStringFromHeap".	"sv registrationType = '_osc._udp.' ifTrue: [self halt]."
-			(self isAdd: sv flags)
-				ifTrue: [sv event: 'Added']
-				ifFalse: [sv event: 'Removed'].	"Transcript cr; show: 'Call back with '; cr; show: sv printString."
-			object := (Service new)
-				name: sv name;
-				domain: sv domain;
-				serviceType: (connections at: connectionID) serviceType.
-			sv object: object.	"self log: 'CALLBACK Service'."
-			callbackQueue nextPut: sv.
-			nil].
+		BonjourCallback 
+			signature: interface DNSServiceBrowseReply
+			block: [ :sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :serviceNameCB :regtypeCB :domainCB :contextCB | 
+				| sv object |
+				"self halt."
+				self log: '<== Service Added/Removed: ', serviceNameCB.
+				connectionSV sdRef: sdRefCB.	"The actual service discovery reference that was initialized by DNSServiceBrowse that is used to deallocate."
+				(sv := StateVector new)
+					id: connectionID;
+					flags: flagsCB;
+					isMoreComing: (self isMoreComing: flagsCB);
+					interfaceIndex: interfaceIndexCB printString;
+					name: serviceNameCB "asStringFromUnicodeStringOnHeap";
+					registrationType: regtypeCB "copyCStringFromHeap";
+					domain: domainCB "copyCStringFromHeap".	"sv registrationType = '_osc._udp.' ifTrue: [self halt]."
+				(self isAdd: sv flags)
+					ifTrue: [sv event: 'Added']
+					ifFalse: [sv event: 'Removed'].	"Transcript cr; show: 'Call back with '; cr; show: sv printString."
+				object := (Service new)
+					name: sv name;
+					domain: sv domain;
+					serviceType: (connections at: connectionID) serviceType.
+				sv object: object.	"self log: 'CALLBACK Service'."
+				callbackQueue nextPut: sv.
+				nil ].
 	"Initializes sdRef..."
 	
 	self log: '==> Browse Services of type ', aServiceType registrationType.
 	"doHalts ifTrue: [self halt]."
-	self browseSDRef: sdRef flags: flags interfaceIndex: interfaceIndex
+	self browseSDRef: sdRefHandle flags: flags interfaceIndex: interfaceIndex
 		registrationType: regtype domain: domain callback: callback context:
 			context.	"Fire off callbacks..."
+	sdRef := sdRefHandle pointerAt: 1.
 	connectionSV := StateVector new
 		id: connectionID;
 		sdRef: sdRef;
@@ -909,7 +916,7 @@ BonjourLibraryInterface >> startUp [
 	LibC runCommand: 'echo sim123  killall -INFO mDNSResponder'.]. "current state in console"
 	500 milliSecond wait.
 	self log: 'Recompiling all FFILibrary (BonjourLibraryInterface) interface methods'.
-	BonjourLibraryFFI compileAll. 
+	
 	interface := BonjourLibraryFFI uniqueInstance.
 	self log: 'Threaded runner is: ', interface runner printString.
 	

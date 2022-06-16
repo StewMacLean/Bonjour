@@ -3,7 +3,8 @@ Class {
 	#superclass : #FFILibrary,
 	#instVars : [
 		'dnsServiceErr',
-		'dnsServiceFlags'
+		'dnsServiceFlags',
+		'runner'
 	],
 	#category : #'SIM-Bonjour'
 }
@@ -41,7 +42,14 @@ BonjourLibraryFFI >> DNSServiceAddRecord: sdRef with: RecordRef with: flags with
 { #category : #callouts }
 BonjourLibraryFFI >> DNSServiceBrowse: sdRef with: flags with: interfaceIndex with: regtype with: domain with: callBack with: context [
 
-	^self ffiCall: #(int DNSServiceBrowse (void **sdRef, uint32 flags, uint32 interfaceIndex, char * regtype, char * domain, FFICallback callBack, void * context))
+	^self ffiCall: #(int DNSServiceBrowse (
+		"DNSServiceRef *"void *sdRef, 
+		uint32 flags, 
+		uint32 interfaceIndex, 
+		char *regtype, 
+		char *domain, 
+		FFICallback callBack, 
+		void *context))
 	
 	
 	"<C: DNSServiceErrorType DNSServiceBrowse(DNSServiceRef * sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, const char * regtype, const char * domain, DNSServiceBrowseReply callBack, void * context)>
@@ -331,6 +339,8 @@ BonjourLibraryFFI >> DNSServiceRefSockFD: sdRef [
 	
 	"<C: int DNSServiceRefSockFD(DNSServiceRef sdRef)>
 	^self externalAccessFailedWith: _errorCode"
+	
+	^ self ffiCall: #(int DNSServiceRefSockFD(void *sdRef))
 ]
 
 { #category : #callouts }
@@ -654,7 +664,7 @@ BonjourLibraryFFI >> dictionaryFrom: aString [
 	| lines dictionary |
 	
 	dictionary := Dictionary new.
-	lines := aString asArrayOfSubstringsSeparatedBy: $,.
+	lines := aString substrings: ','.
 			
 	lines do: [ : line | | stream key value |
 		stream := line trimmed readStream.
@@ -673,20 +683,6 @@ BonjourLibraryFFI >> dictionaryFrom: aString [
 BonjourLibraryFFI >> ffiLibrary [
 
 	^self
-]
-
-{ #category : #configuration }
-BonjourLibraryFFI >> ffiLibraryName [
-
-	self halt.
-
-	"
-	'/usr/lib/system/libsystem_dnssd.dylib' asFileReference exists
-	"
-
-	"^FFIMacLibraryFinder findLibrary: 'libsystem_dnssd.dylib'."
-	
-	^'/usr/lib/system/libsystem_dnssd.dylib'
 ]
 
 { #category : #initialization }
@@ -783,9 +779,7 @@ BonjourLibraryFFI >> macLibraryName [
 { #category : #configuration }
 BonjourLibraryFFI >> runner [
 
-	^super runner
-
-
+	^ runner ifNil: [ runner := TFWorker named: 'BONJOUR' ]
 	"
 	^super runner
 	"
