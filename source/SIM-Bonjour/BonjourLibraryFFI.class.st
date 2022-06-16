@@ -3,7 +3,8 @@ Class {
 	#superclass : #FFILibrary,
 	#instVars : [
 		'dnsServiceErr',
-		'dnsServiceFlags'
+		'dnsServiceFlags',
+		'runner'
 	],
 	#category : #'SIM-Bonjour'
 }
@@ -675,20 +676,6 @@ BonjourLibraryFFI >> ffiLibrary [
 	^self
 ]
 
-{ #category : #configuration }
-BonjourLibraryFFI >> ffiLibraryName [
-
-	self halt.
-
-	"
-	'/usr/lib/system/libsystem_dnssd.dylib' asFileReference exists
-	"
-
-	"^FFIMacLibraryFinder findLibrary: 'libsystem_dnssd.dylib'."
-	
-	^'/usr/lib/system/libsystem_dnssd.dylib'
-]
-
 { #category : #initialization }
 BonjourLibraryFFI >> initialize [
 
@@ -783,9 +770,7 @@ BonjourLibraryFFI >> macLibraryName [
 { #category : #configuration }
 BonjourLibraryFFI >> runner [
 
-	^super runner
-
-
+	^ runner ifNil: [ runner := TFWorker named: 'BONJOUR' ]
 	"
 	^super runner
 	"
