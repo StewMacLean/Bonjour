@@ -52,7 +52,7 @@ BonjourLibraryInterface >> browseSDRef: sdRef flags: flags interfaceIndex: inter
 	"
 	calloutMutex criticalReleasingOnError: 
 		[result := interface DNSServiceBrowse: sdRef with: flags with:
-				interfaceIndex with: regtype with: domain with: callback with: context.
+				interfaceIndex with: regtype with: domain with: callback with: ExternalAddress null.
 		self checkResult: result for: 'DNSServiceBrowse']	"/* DNSServiceBrowse() Parameters:
  *
  * sdRef:           A pointer to an uninitialized DNSServiceRef. If the call succeeds
