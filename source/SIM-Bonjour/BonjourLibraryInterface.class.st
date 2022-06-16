@@ -1,6 +1,9 @@
 Class {
 	#name : #BonjourLibraryInterface,
 	#superclass : #BonjourInterface,
+	#instVars : [
+		'callback1'
+	],
 	#category : #'SIM-Bonjour'
 }
 
@@ -909,7 +912,7 @@ BonjourLibraryInterface >> startUp [
 	LibC runCommand: 'echo sim123  killall -INFO mDNSResponder'.]. "current state in console"
 	500 milliSecond wait.
 	self log: 'Recompiling all FFILibrary (BonjourLibraryInterface) interface methods'.
-	BonjourLibraryFFI compileAll. 
+	
 	interface := BonjourLibraryFFI uniqueInstance.
 	self log: 'Threaded runner is: ', interface runner printString.
 	
