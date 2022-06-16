@@ -339,6 +339,8 @@ BonjourLibraryFFI >> DNSServiceRefSockFD: sdRef [
 	
 	"<C: int DNSServiceRefSockFD(DNSServiceRef sdRef)>
 	^self externalAccessFailedWith: _errorCode"
+	
+	^ self ffiCall: #(int DNSServiceRefSockFD(void *sdRef))
 ]
 
 { #category : #callouts }
