@@ -14,7 +14,7 @@ StateVector class >> new [
 	^super new initialize
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> attributeAt: aKey [
 	
 	^attributes
@@ -22,7 +22,7 @@ StateVector >> attributeAt: aKey [
 		ifAbsent: [nil]
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> attributeAt: aKey ifAbsent: aBlock [
 	
 	^attributes
@@ -30,7 +30,7 @@ StateVector >> attributeAt: aKey ifAbsent: aBlock [
 		ifNotNil: [:value | value at: aKey ifAbsent: aBlock]
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> attributeAt: aKey ifAbsent: anAbsentBlock ifPresent: aPresentBlock [
 	
 	^attributes
@@ -39,7 +39,7 @@ StateVector >> attributeAt: aKey ifAbsent: anAbsentBlock ifPresent: aPresentBloc
 			[:value | value at: aKey ifPresent: aPresentBlock ifAbsent: anAbsentBlock]
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> attributeAt: aKey ifAbsentOrNilPut: aBlock [
 	
 	| absentOrNil |
@@ -54,19 +54,19 @@ StateVector >> attributeAt: aKey ifAbsentOrNilPut: aBlock [
 		ifNotNil: [:value | value]
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> attributeAt: aKey ifAbsentPut: aBlock [
 	
 	^attributes at: aKey ifAbsentPut: aBlock
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> attributeAt: aKey ifPresent: aBlock [
 	
 	^attributes at: aKey ifPresent: aBlock
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> attributeAt: aKey ifPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	
 	^attributes
@@ -75,13 +75,13 @@ StateVector >> attributeAt: aKey ifPresent: aPresentBlock ifAbsent: anAbsentBloc
 			[:value | value at: aKey ifPresent: aPresentBlock ifAbsent: anAbsentBlock]
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> attributeAt: aKey put: aValue [
 	
 	^attributes at: aKey put: aValue
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> basicAttributes [
 	
 	^attributes
@@ -101,7 +101,7 @@ StateVector >> data: anArgument [
 	self error: 'Reserved - see data'
 ]
 
-{ #category : #'error handling' }
+{ #category : #'reflective operations' }
 StateVector >> doesNotUnderstand: aMessage [
 	"
 	StateVector new a1: 'value'; a1; yourself
@@ -121,7 +121,7 @@ StateVector >> doesNotUnderstand: aMessage [
 				ifAbsent: [super doesNotUnderstand: aMessage]]
 ]
 
-{ #category : #'error handling' }
+{ #category : #testing }
 StateVector >> hasAttribute: aString [
 	
 	^attributes
@@ -130,14 +130,14 @@ StateVector >> hasAttribute: aString [
 		ifPresent: [:value | true]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #'reflective operations' }
 StateVector >> initialize [
 	
 	super initialize.
 	attributes := Dictionary new
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> initializeAttributes [
 	
 	attributes := Dictionary new
@@ -158,7 +158,7 @@ StateVector >> printOn: aStream [
 	aStream nextPut: $)
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> removeAttributeAt: aKey [
 	
 	^self
@@ -166,7 +166,7 @@ StateVector >> removeAttributeAt: aKey [
 		ifAbsent: [nil]
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> removeAttributeAt: aKey ifAbsent: aBlock [
 	
 	^attributes
@@ -174,13 +174,13 @@ StateVector >> removeAttributeAt: aKey ifAbsent: aBlock [
 		ifNil: [nil]
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> resetAttributes [
 	
 	attributes := nil
 ]
 
-{ #category : #'error handling' }
+{ #category : #accessing }
 StateVector >> restoreTo: anObject [
 	
 	attributes

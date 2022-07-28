@@ -136,6 +136,14 @@ DiscoveryApp >> log: aString [
 	bonjour log: aString
 ]
 
+{ #category : #'startUp - shutDown' }
+DiscoveryApp >> openAppUsingCommandLineInterface [
+
+	<script: 'self basicNew openAppUsingCommandLineInterface'>
+
+	self class openOn: BonjourCommandLineInterface uniqueInstance
+]
+
 { #category : #'model updates' }
 DiscoveryApp >> serviceAdded: anEvent [
 

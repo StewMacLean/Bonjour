@@ -68,6 +68,27 @@ Timestamp >> printHHMMSSlll [
 ]
 
 { #category : #printing }
+Timestamp >> printHHMMSSlllccc [
+
+	| aStream |
+	
+	aStream := String new writeStream.
+	
+	aStream 
+		nextPutAll: (self hours printString padLeftTo: 2 with: $0); 
+		nextPut: $:;
+		nextPutAll: (self minutes printString padLeftTo: 2 with: $0); 
+		nextPut: $:;
+		nextPutAll: (self seconds printString padLeftTo: 2 with: $0); 
+		nextPut: $:;
+		nextPutAll:  (self milliseconds printString padLeftTo: 3 with: $0);
+		nextPut: $.;
+		nextPutAll: ((self microseconds \\ 1000) printString padWith: $0 left: 3).
+	
+	^aStream contents
+]
+
+{ #category : #printing }
 Timestamp >> printLogTimestamp [
 
 	"Answer the receiver as a String in yyyy-mm-dd hh:mm:ss.lll format."

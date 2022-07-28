@@ -3,7 +3,8 @@ Class {
 	#superclass : #FFILibrary,
 	#instVars : [
 		'dnsServiceErr',
-		'dnsServiceFlags'
+		'dnsServiceFlags',
+		'runner'
 	],
 	#category : #'SIM-Bonjour'
 }
@@ -39,22 +40,23 @@ BonjourLibraryFFI >> DNSServiceAddRecord: sdRef with: RecordRef with: flags with
 ]
 
 { #category : #callouts }
-BonjourLibraryFFI >> DNSServiceBrowse: sdRef with: flags with: interfaceIndex with: regtype with: domain with: callBack with: context [
+BonjourLibraryFFI >> DNSServiceBrowse: sdRef with: flags with: interfaceIndex with: regtype with: domain with: callBack with: context [ 
 
-	^self ffiCall: #(int DNSServiceBrowse (void **sdRef, uint32 flags, uint32 interfaceIndex, char * regtype, char * domain, FFICallback callBack, void * context))
-	
-	
-	"<C: DNSServiceErrorType DNSServiceBrowse(DNSServiceRef * sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, const char * regtype, const char * domain, DNSServiceBrowseReply callBack, void * context)>
-	^self externalAccessFailedWith: _errorCode"
-	
+	^self ffiCall: #(
+		int DNSServiceBrowse 
+			(void * sdRef,   "DNSServiceRef *" 
+			uint32 flags, 
+			uint32 interfaceIndex, 
+			char *regtype, 
+			char *domain, 
+			BonjourCallback callBack, 
+			void *context))
 ]
 
 { #category : #'callbacks types' }
 BonjourLibraryFFI >> DNSServiceBrowseReply [
 	
 	^#(void * (void *sdRef, uint32 flags, uint32 interfaceIndex, int errorCode, char * serviceName, char * regtype, char * replyDomain, void * context))
-	
-		"<C: typedef VOID (__stdcall * DNSServiceBrowseReply)(DNSServiceRef sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceErrorType errorCode, const char * serviceName, const char * regtype, const char * replyDomain, void * context)>"
 	
 ]
 
@@ -209,32 +211,34 @@ BonjourLibraryFFI >> DNSServiceFlagsString [
 { #category : #callouts }
 BonjourLibraryFFI >> DNSServiceGetAddrInfo: sdRef with: flags with: interfaceIndex with: protocol with: hostName with: callBack with: context [
 
-
-	^self ffiCall: #(int DNSServiceGetAddrInfo (void **sdRef, uint32 flags, uint32 interfaceIndex, uint32 * protocol, char * hostName, FFICallback callBack, void * context))
+	^self ffiCall: #(
+		int DNSServiceGetAddrInfo 
+			(void * sdRef, 
+			uint32 flags, 
+			uint32 interfaceIndex, 
+			uint32 * protocol, 
+			char * hostName, 
+			BonjourCallback callBack, 
+			void * context))
 	
-	
-	"<C: DNSServiceErrorType DNSServiceGetAddrInfo(DNSServiceRef * sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceProtocolType protocol, const char * hostName, DNSServiceGetAddrInfoReply callBack, void * context)>
-	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callbacks types' }
 BonjourLibraryFFI >> DNSServiceGetAddrInfoReply [
 
-
 	^#(void * (void *sdRef, uint32 flags, uint32 interfaceIndex, int errorCode, char * hostname, SocketAddressStructure * sockaddr, uint32 ttl, void * context))
-	
-	"<C: typedef void (__stdcall * DNSServiceGetAddrInfoReply)(DNSServiceRef sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceErrorType errorCode, const char * hostname, const struct sockaddr * address, uint32_t ttl, void * context)>"
 	
 ]
 
 { #category : #callouts }
 BonjourLibraryFFI >> DNSServiceGetProperty: property with: result with: size [
 
+	^ self ffiCall: #(
+		int32 DNSServiceGetProperty 
+			(char * property, 
+			void * result, 
+			uint32 * size))
 
-	^ self ffiCall: #(int32 DNSServiceGetProperty (char * property, void * result, uint32 * size))
-	
-	"<C: DNSServiceErrorType DNSServiceGetProperty(const char * property, void * result, uint32_t * size)>
-	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #types }
@@ -247,18 +251,9 @@ BonjourLibraryFFI >> DNSServiceNATPortMappingReply [
 { #category : #callouts }
 BonjourLibraryFFI >> DNSServiceProcessResult: sdRef [ 
 
-	^self ffiCall: #(int DNSServiceProcessResult (void *sdRef))
-	
-	"^self ffiCall: #(int DNSServiceProcessResult (DNSServiceRef *sdRef)) - freezes image"
-
-	"^self ffiCall: #(int DNSServiceProcessResult (void *sdRef))" "Works non threading (but freezes if doesn't return), threading: crashes seg fault"
-	
-	" ^self ffiCall: #(int DNSServiceProcessResult (void sdRef)) - threading - primititve failed"
-
-	"^self ffiCall: #(int DNSServiceProcessResult (void **sdRef)) - get bad parameter"
-	
-	"<C: DNSServiceErrorType _threaded DNSServiceProcessResult(DNSServiceRef sdRef)>
-	^self externalAccessFailedWith: _errorCode"
+	^self ffiCall: #(
+		int DNSServiceProcessResult 
+			(void *sdRef))
 ]
 
 { #category : #'enums - unused' }
@@ -319,15 +314,17 @@ BonjourLibraryFFI >> DNSServiceRef [
 { #category : #callouts }
 BonjourLibraryFFI >> DNSServiceRefDeallocate: sdRef [
 
-
-	^self ffiCall: #(int DNSServiceRefDeallocate (void * sdRef))
+	^self ffiCall: #(
+		int DNSServiceRefDeallocate 
+			(void *sdRef))
 	
-	"<C: void DNSServiceRefDeallocate(DNSServiceRef sdRef)>
-	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
 BonjourLibraryFFI >> DNSServiceRefSockFD: sdRef [
+
+
+	^self ffiCall: #(int DNSServiceRefSockFD(void *sdRef))
 	
 	"<C: int DNSServiceRefSockFD(DNSServiceRef sdRef)>
 	^self externalAccessFailedWith: _errorCode"
@@ -336,11 +333,20 @@ BonjourLibraryFFI >> DNSServiceRefSockFD: sdRef [
 { #category : #callouts }
 BonjourLibraryFFI >> DNSServiceRegister: sdRef with: flags with: interfaceIndex with: name with: regtype with: domain with: host with: port with: txtLen with: txtRecord with: callBack with: context [
 
-
-	^self ffiCall: #(int DNSServiceRegister (void **sdRef, uint32 flags, uint32 interfaceIndex, char * name, char * regtype, char * domain, char * host, uint16 port, unint16 txtLen, void * txtRecord, FFICallback callBack, void * context))
-	
-	"<C: DNSServiceErrorType DNSServiceRegister(DNSServiceRef * sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, const char * name, const char * regtype, const char * domain, const char * host, uint16_t port, uint16_t txtLen, const void * txtRecord, DNSServiceRegisterReply callBack, void * context)>
-	^self externalAccessFailedWith: _errorCode"
+	^self ffiCall: #(
+		int DNSServiceRegister 
+			(void * sdRef, 
+			uint32 flags, 
+			uint32 interfaceIndex, 
+			char * name, 
+			char * regtype, 
+			char * domain, 
+			char * host, 
+			uint16 port, 
+			uint16 txtLen, 
+			void * txtRecord, 
+			BonjourCallback callBack, 
+			void * context))
 ]
 
 { #category : #'callouts - unused' }
@@ -363,7 +369,6 @@ BonjourLibraryFFI >> DNSServiceRegisterReply [
 
 	^#(void * (void *sdRef, uint32 flags, int errorCode, char * name, char * regtype, char * domain, void * context))
 	
-	"<C: typedef void (__stdcall * DNSServiceRegisterReply)(DNSServiceRef sdRef, DNSServiceFlags flags, DNSServiceErrorType errorCode, const char * name, const char * regtype, const char * domain, void * context)>"
 	
 ]
 
@@ -377,21 +382,23 @@ BonjourLibraryFFI >> DNSServiceRemoveRecord: sdRef with: RecordRef with: flags [
 { #category : #callouts }
 BonjourLibraryFFI >> DNSServiceResolve: sdRef with: flags with: interfaceIndex with: name with: regtype with: domain with: callBack with: context [
 
-
-	^self ffiCall: #(int DNSServiceResolve (void **sdRef, uint32 flags, uint32 interfaceIndex, char * name, char * regtype, char * domain, FFICallback callBack, void * context))
-	
-	"<C: DNSServiceErrorType DNSServiceResolve(DNSServiceRef * sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, const char * name, const char * regtype, const char * domain, DNSServiceResolveReply callBack, void * context)>
-	^self externalAccessFailedWith: _errorCode"
+	^self ffiCall: #(
+		int DNSServiceResolve 
+			(void * sdRef, 
+			uint32 flags, 
+			uint32 interfaceIndex, 
+			char * name, 
+			char * regtype, 
+			char * domain, 
+			BonjourCallback callBack, 
+			void * context))
 ]
 
 { #category : #'callbacks types' }
 BonjourLibraryFFI >> DNSServiceResolveReply [
 
-
 		^#(void * (void *sdRef, uint32 flags, uint32 interfaceIndex, int errorCode, char * fullName, char * hosttarget, uint16 port, uint16 txtLen, char * txtRecord, void * context))
 	
-	
-	"<C: typedef VOID (__stdcall * DNSServiceResolveReply)(DNSServiceRef sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceErrorType errorCode, const char * fullname, const char * hosttarget, uint16_t port, uint16_t txtLen, const unsigned char * txtRecord, void * context)>"
 	
 ]
 
@@ -633,9 +640,9 @@ BonjourLibraryFFI >> calloutAPIClass [
 
 	"super calloutAPIClass"
 
-	"^FFICalloutAPI "
+	"^FFICalloutAPI - get subclass responsibility error"
 
-	^TFCalloutAPI 
+	^TFCalloutAPI "Default - required for threaded back end - should be used for non threaded?"
 ]
 
 { #category : #configuration }
@@ -654,7 +661,7 @@ BonjourLibraryFFI >> dictionaryFrom: aString [
 	| lines dictionary |
 	
 	dictionary := Dictionary new.
-	lines := aString asArrayOfSubstringsSeparatedBy: $,.
+	lines := aString substrings: ','.
 			
 	lines do: [ : line | | stream key value |
 		stream := line trimmed readStream.
@@ -783,19 +790,21 @@ BonjourLibraryFFI >> macLibraryName [
 { #category : #configuration }
 BonjourLibraryFFI >> runner [
 
-	^super runner
+	"^TFProcessLocalWorker new
+  			defaultWorker: super runner;
+  			yourself"
 
+	^runner ifNil: [runner := TFWorker named: 'BONJOUR']
 
-	"
-	^super runner
-	"
-
-	"
+	"Poof!!! - threaded
 	^TFWorker default
 	"
+
+	"Spinning Wheel of Death! - non threaded
+	^super runner   
 	
-	"
-	^TFMainThreadRunner uniqueInstance
+	Default == super runner
+	^TFMainThreadRunner uniqueInstance  
 	"
 
 	"

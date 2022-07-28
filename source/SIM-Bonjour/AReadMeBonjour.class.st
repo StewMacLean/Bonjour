@@ -4,15 +4,17 @@ Class {
 	#category : #'SIM-Bonjour-ReadMe'
 }
 
-{ #category : #api }
+{ #category : #'api - overview' }
 AReadMeBonjour >> Architecture [
 	"
-	Function calls to the bonjour api register callbacks that are made when results are available.
-	When the api call is made a handle to a socket is returned. This is stored in a connection for reference when the callbacks fire.
+	Function calls to the Bonjour api register callbacks that are made when results are available.
+	When the api call is made a handle to a socket is returned. This is stored in a connection for 
+	reference when the callbacks fire.
 	When callbacks fire they are added to the callbackQueue to be processed by the callback process.
 	The callback process triggers events depending on the callback.
 	
-	For OverDrive, after the initial resolve and address functions have been completed there are two connections for browsing and one registration connection.
+	For OverDrive, after the initial resolve and address functions have been completed there are two connections 
+	for browsing and one registration connection.
 	
 	Instance variables:
 		connections - a connection SV with socket description reference (sdRef) returned from callback function (see below) 
@@ -33,7 +35,7 @@ AReadMeBonjour >> Architecture [
 	
 ]
 
-{ #category : #api }
+{ #category : #'api - overview' }
 AReadMeBonjour >> Overview [
 	"The DNS Service Discovery API helps you to perform three main tasks:
 Registering a service
@@ -45,9 +47,20 @@ Enumerating domains (finding recommended service domains)
 Updating registrations (changing your DNS registration data dynamically)
 https://developer.apple.com/library/ios/documentation/Networking/Conceptual/dns_discovery_api/Introduction.html"
 	"It is important to understand the structure for working with the socket-based DNSServiceDiscovery APIs . First, you call a function that might, for example, initiate browsing for a service or register a service. Along with the other parameters, you pass in the address of an uninitialized DNSServiceRef (which the call initializes) and also pass in the address of the function that should be called back when interesting events happen.
-You then call DNSServiceRefSockFD( ) , passing in the newly initialized DNSServiceRef , to extract the file descriptor for the Unix Domain Socket connection to the mdnsd daemon running in the background, and add this file descriptor to your select( ) loop. When the mdnsd daemon sends a message over the Unix Domain Socket connection to your process, your select( ) call will wake up, indicating that there is data waiting to be read on the file descriptor. You then call DNSServiceProcessResult( ) ; the DNS-SD code decodes the message and calls the appropriate callback function you previously specified when starting the operation..
+	
+You can then either:
+
+A. Wait for results using a run loop or select loop
+---------------------------------------------------
+
+Call DNSServiceRefSockFD(), passing in the newly initialized DNSServiceRef , to extract the file descriptor for the Unix Domain Socket connection to the mdnsd daemon running in the background, and add this file descriptor to your select( ) loop. When the mdnsd daemon sends a message over the Unix Domain Socket connection to your process, your select( ) call will wake up, indicating that there is data waiting to be read on the file descriptor. You then call DNSServiceProcessResult( ) ; the DNS-SD code decodes the message and calls the appropriate callback function you previously specified when starting the operation..
 http://flylib.com/books/en/2.94.1.53/1/"
 	"From https://github.com/stepheneb/mdns-responder
+	
+
+B. Wait for result synchronously - used in this binding
+--------------------------------
+If you want to run the callback function synchronously instead of setting up a run loop or a select loop, you can call <the api call> and immediately call DNSServiceProcessResult. The DNSServiceProcessResult function will block until the mDNSResponder daemon has a response, at which time the callback specified when DNSServiceResolve was called will be invoked. This entire process should probably be run within a loop of its own for each service you wish to resolve
 
 What is mDNSResponder?
 ----------------------
@@ -344,10 +357,44 @@ AReadMeBonjour >> browseServiceTypes [
 	
 ]
 
+{ #category : #'api - overview' }
+AReadMeBonjour >> callingSequenceOverview [
+
+"Bonjour calling sequence overview
+
+1) Create an uninitialize service definition reference (sdRef)
+2) Create a callback function which will be invoked once results are available
+3) Call the api function passing in the sdRef and the callback.
+	Functions are:
+		Browse for service types (long running)
+		Browse for services (long running)
+		Resolve a found service
+		Get the addresses of a found service
+		Register a service that can be discovered (long running)
+	These calls return an initialised sdRef
+4) Either:
+	4.1
+		a) Obtain a socket reference using the sdRef
+		b) Then execute a select loop on the socket waiting for results
+		c) Once results are available call 'process results' to trigger one or more invocations of the registered callback
+	4.2
+		a) Call 'process results' directly, which blocks until results are available
+		b) Once the synchronous call returns, one or more invocations of the registered callback occur
+5) Extract results from each callback and make further function calls as required
+"
+		
+		  
+]
+
 { #category : #utilities }
 AReadMeBonjour >> commandLine [
 
- "
+ 	"
+	Prefered:
+	sudo -S killall –HUP mDNSResponder
+	sudo -S killall –HUP mDNSHelper
+	
+	Old: 
 	sudo killall -CONT mDNSResponder
 	sudo killall -STOP mDNSResponder
 	"

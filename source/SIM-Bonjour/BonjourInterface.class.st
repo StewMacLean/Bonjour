@@ -17,8 +17,6 @@ Class {
 		'lastConnectionID',
 		'loggingEnabled',
 		'logger',
-		'doHalts',
-		'calloutMutex',
 		'logFileStream',
 		'connectionIDMutex',
 		'logToTranscript'
@@ -197,7 +195,6 @@ BonjourInterface >> initialize [
 	super initialize.
 	logMutex := Semaphore forMutualExclusion.
 	loggingEnabled := true.
-	calloutMutex := Semaphore forMutualExclusion.
 	domains := OrderedCollection new.
 	serviceTypes := OrderedCollection new.
 	services := OrderedCollection new.
@@ -382,8 +379,11 @@ BonjourInterface >> openCallbackStream [
 		priority: 30;
 		resume	.
 			
+	"NOTE: for some reason, this has to be equal or lower priority than the message pump, 
+	otherwise callbacks don't get fired"
+			
 	 "UserBackgroundPriority := 30.  userBackgroundPriority UserSchedulingPriority := 50. userSchedulingPriority""
-	""userInterruptPriority;"	"For some reason, this has to be lower priority than the message pump, otherwise callbacks intermittently don't get fired"
+	""userInterruptPriority;"	
 	
 ]
 
@@ -451,8 +451,8 @@ BonjourInterface >> registerOSCUDPService [
 	
 	Service new
 		serviceType: self oscUDPServiceType;
-		name: '(Sorry Cam, testing connection to Logic...) - iPhone TouchOSC';
-		port: 8888;
+		name: 'MacMini [iPhone] (OverDrive)';
+		port: 8892;
 		textRecordPairs:
 			(OrderedCollection new
 				add: (TextRecordPair key: 'name' value: 'value');
@@ -513,6 +513,16 @@ BonjourInterface >> removeService: theService [
 	services remove: theService.
 	self announce: (ServiceRemoved new service: theService) 
 	
+
+]
+
+{ #category : #'_testing' }
+BonjourInterface >> resetmDNSResponder [
+
+	<script: 'self new resetmDNSResponder'>
+
+	LibC runCommand:  'echo sim123 | sudo -S killall –HUP mDNSResponder'.
+	LibC runCommand:  'echo sim123 | sudo -S killall –HUP mDNSHelper'.
 
 ]
 
@@ -639,6 +649,7 @@ BonjourInterface >> viewLogFile [
 	logFileStream  = Transcript ifTrue: [^self].
 	
 	logFile streamWritable: false do: [: stream | aString := stream upToEnd].
+	
 	(UIManager default edit: aString label: 'Log File: ' , logFile basename)
 		extent: 800@900;
 		position: 0@10
