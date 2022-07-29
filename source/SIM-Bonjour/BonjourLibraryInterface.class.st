@@ -261,7 +261,7 @@ BonjourLibraryInterface >> checkResult: result for: call [
 								ifNil: ['- unknown - ']) , ' (' , errorCode printString , ')']	"asSigned32Integer"
 ]
 
-{ #category : #'startUp - shutDown' }
+{ #category : #'_testing' }
 BonjourLibraryInterface >> cleanUpCommands [
 
 	LibC runCommand:  'echo sim123 | sudo -S killall –HUP mDNSResponder'.
@@ -458,7 +458,7 @@ BonjourLibraryInterface >> noError [
 	^interface DNSServiceErr at: #kDNSServiceErr_NoError
 ]
 
-{ #category : #'startUp - shutDown' }
+{ #category : #'_testing' }
 BonjourLibraryInterface >> openApp [
 
 	"Run this to open the app.
@@ -1023,7 +1023,7 @@ BonjourLibraryInterface >> startUp [
 	self startUpOnRegistrationTypes: self testRegistrationTypes
 ]
 
-{ #category : #'startUp - shutDown' }
+{ #category : #'_testing' }
 BonjourLibraryInterface >> testRegistrationTypes [
 		
 	^#('_test01._tcp.').
