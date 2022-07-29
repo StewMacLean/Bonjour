@@ -461,9 +461,17 @@ BonjourLibraryInterface >> noError [
 { #category : #'startUp - shutDown' }
 BonjourLibraryInterface >> openApp [
 
-	"
-	For testing - register a service type/service via command line:
+	"Run this to open the app.
+	For testing, testRegistrationTypes is currently configured to discover services of _test01._tcp
+	Once the app is running in terminal register a service with this service type by executing:
+	
 		dns-sd -R Test01 _test01._tcp. local. 1111
+		
+	Then register further services of the same type:
+	
+		dns-sd -R Test02 _test01._tcp. local. 2222
+		
+	Observe the execution via the logs or the terminal output (start Pharo via terminal).
 	"
 
 	<script: 'self new openApp'>
@@ -997,16 +1005,12 @@ BonjourLibraryInterface >> serviceResolved: sv [
 { #category : #'startUp - shutDown' }
 BonjourLibraryInterface >> shutDown [
 
-	<script: 'self shutDown'>
-	
 	super shutDown.
 	"interface class unloadLibraries."
 ]
 
 { #category : #'startUp - shutDown' }
 BonjourLibraryInterface >> startUp [
-
-	<script: 'self startUp'>
 
 	self log: 'Starting up on mDNSResponder'.
 	self initializeOnStartUp.
