@@ -23,9 +23,9 @@ of the threaded/non-blocking functionality of FFI is required.
 Update 29/07/22
 Previously the non-blocking calls would cause spectacular crashes.
 Thanks to Estebane Lorenazno, this has now been fixed. His key changes made:
-	Indeed, the library needs to run in a worker thread, otherwise this it will freeze inside a callback.
-	Most important: callbacks needs to run too in the worker thread (hence the existence of BonjourCallback, to be implement ffiLibraryName).
-	Value holders (the ones that you pass to a C function to later get its result). You need to pass a ByteArray to later take the stored value.
+	1. Indeed, the library needs to run in a worker thread, otherwise this it will freeze inside a callback.
+	2. Most important: callbacks needs to run too in the worker thread (hence the existence of BonjourCallback, to be implement ffiLibraryName).
+	3. Value holders (the ones that you pass to a C function to later get its result). You need to pass a ByteArray to later take the stored value.
 
 However it is still not running as expected. The problem is that calls to the api that are non blocking, are not returning immediately.
 For some reason, the call doesn't return, until a call back is fired, such as when you register a new service, which fires a callback.
