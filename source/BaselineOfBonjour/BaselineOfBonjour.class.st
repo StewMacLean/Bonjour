@@ -24,7 +24,7 @@ BaselineOfBonjour >> baseline: spec [
 BaselineOfBonjour >> postload: loader package: packageSpec [
 
 	Smalltalk tools browser 
-		openOnClass: BonjourCommandLineInterface 
+		openOnClass: BonjourLibraryInterface 
 		selector: #openApp
 
 ]
