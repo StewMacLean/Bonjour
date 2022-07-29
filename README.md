@@ -87,7 +87,7 @@ Start Pharo with logLevel=4 using:
 			
 I would very much appreciate any further help in getting the library interface working!
 
-Thanks to Estebane for getting past the "crashing" phase!
+Thanks to Estebane for his help with getting past the "crashing" phase!
 
 Merci beaucoup,
 
