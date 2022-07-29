@@ -20,17 +20,23 @@ Currently only 1. works reliably.
 As some dnssd calls using 2. can be blocking whilst waiting for results the use 
 of the threaded/non-blocking functionality of FFI is required. 
 	
-Unfortunately, for reasons unknown as yet, this doesn't work. Sometimes it crashes, 
-other times it makes the call and the UI stays responsive, but the call never returns, 
-or it simply freezes showing the Spinning Wheel Of Death!
-	
-If blocking calls are used (see BonjourLibraryFFI>>runner), it will run, but eventually
-lock up on a blocking call (presumably as Bonjour results are not available when the call
-is made.
+Update 29/07/22
+Previously the non-blocking calls would cause spectacular crashes.
+Thanks to Estebane Lorenazno, this has now been fixed. His key changes made:
+	Indeed, the library needs to run in a worker thread, otherwise this it will freeze inside a callback.
+	Most important: callbacks needs to run too in the worker thread (hence the existence of BonjourCallback, to be implement ffiLibraryName).
+	Value holders (the ones that you pass to a C function to later get its result). You need to pass a ByteArray to later take the stored value.
+
+However it is still not running as expected. The problem is that calls to the api that are non blocking, are not returning immediately.
+For some reason, the call doesn't return, until a call back is fired, such as when you register a new service, which fires a callback.
+This caused the "blocked" call to return, and the system runs until the same problem occurs. If another service is registered, this
+caused the next "blocked" call to return, and so on. 
+
+Please refer to the annotated trace for further details.
 
 ### Running The App
 	
-To run, click on openApp within the testing category of the interface you want to use:
+To run, click on openApp within the interface you want to use:
 
 <img src="https://github.com/StewMacLean/Bonjour/blob/master/screenshots/classeswithopenAppmethod.png" style=" width:600px " />
 
@@ -63,7 +69,7 @@ To download into your image, execute:
 			on: MCMergeOrLoadWarning 
 			do: [: warning | warning load].
 			
-It should bring up a browser with the openApp method for the command line interface selected (as shown above) - click it to run the app.
+It should bring up a browser with the openApp method for the library interface selected (as shown above) - click it to run the app.
 
 ### Troubleshooting
 
@@ -75,11 +81,12 @@ Execution is logged to:
 Start Pharo with logLevel=4 using:
 <...>/Pharo.app/Contents/MacOS/Pharo  --logLevel=4  <...>/Pharo.image
 
-When you get the Spinning Wheel Of Death, open the Activity Monitor select Pharo, and do a SpinDump to see where it is stuck in the bowels of the VM.
 
 ### Get Involved
 			
-I would very much appreciate any help in getting the library interface working!
+I would very much appreciate any further help in getting the library interface working!
+
+Thanks to Estebane for getting past the "crashing" phase!
 
 Merci beaucoup,
 
