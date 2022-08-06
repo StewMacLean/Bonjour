@@ -1,0 +1,784 @@
+Last login: Sat Aug  6 14:08:16 on ttys000
+/Users/stewart/Desktop/OverDriveNew.command ; exit;
+stewart@Stewarts-Mac-mini ~ % /Users/stewart/Desktop/OverDriveNew.command ; exit;
+[DEBUG] 2022-08-06 14:10:16.000 logParameters (src/parameters/parameters.c:341):Image file name: /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDriveNew/Pharo.image
+[DEBUG] 2022-08-06 14:10:16.000 logParameters (src/parameters/parameters.c:342):Is default Image: no
+[DEBUG] 2022-08-06 14:10:16.000 logParameters (src/parameters/parameters.c:343):Is interactive session: no
+[DEBUG] 2022-08-06 14:10:16.000 logParameterVector (src/parameters/parameters.c:331):vmParameters [count = 2]:
+[DEBUG] 2022-08-06 14:10:16.000 logParameterVector (src/parameters/parameters.c:334): /Volumes/Data/Development/Smalltalk/Engines/Pharo/Pharo10.0/Pharo.app/Contents/MacOS/Pharo
+[DEBUG] 2022-08-06 14:10:16.000 logParameterVector (src/parameters/parameters.c:334): --logLevel=4
+[DEBUG] 2022-08-06 14:10:16.000 logParameterVector (src/parameters/parameters.c:331):imageParameters [count = 0]:
+[INFO ] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:113):Opening Image: /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDriveNew/Pharo.image
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:135):Working Directory /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDriveNew
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:137):sizeof(int): 4
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:138):sizeof(long): 8
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:139):sizeof(long long): 8
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:140):sizeof(void*): 8
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:141):sizeof(sqInt): 8
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:142):sizeof(sqLong): 8
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:143):sizeof(float): 4
+[DEBUG] 2022-08-06 14:10:16.000 vm_main_with_parameters (src/client.c:144):sizeof(double): 8
+[DEBUG] 2022-08-06 14:10:16.000 runOnMainThread (src/client.c:254):Running VM on main thread
+[DEBUG] 2022-08-06 14:10:16.000 allocateJITMemory (src/memoryUnix.c:110):Trying to allocate JIT memory in 0x106384000
+[DEBUG] 2022-08-06 14:10:16.000 sqAllocateMemory (src/memoryUnix.c:139):Trying to load the image in 0x107140000
+[DEBUG] 2022-08-06 14:10:16.000 sqAllocateMemory (src/memoryUnix.c:181):Loading the image in 0x107140000
+[WARN ] 2022-08-06 14:10:16.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: SecurityPlugin
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveTimezoneOffset
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveFileMasks
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveDirectoryDelimitor
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveFileStdioHandles
+[WARN ] 2022-08-06 14:10:16.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: InternetConfigPlugin
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveSigChldNumber
+[WARN ] 2022-08-06 14:10:16.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: os_exports
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveResolverStatus
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveResolverLocalAddress
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveResolverHostNameSize
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveResolverHostNameResult
+[WARN ] 2022-08-06 14:10:16.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: MD5Plugin
+[WARN ] 2022-08-06 14:10:16.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: SDL2DisplayPlugin
+[WARN ] 2022-08-06 14:10:16.000 unimplementedPrimitive (src/nullDisplay.c:6):Unimplemented primitive: ioNoteDisplayChangedwidthheightdepth
+[WARN ] 2022-08-06 14:10:16.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveFileStdioHandles
+2022-08-06 14:10:20:454 931527 40 =====================================================================
+2022-08-06 14:10:20:455 931527 40 Opening Discovery...
+2022-08-06 14:10:20:489 931527 40 Starting up on mDNSResponder
+2022-08-06 14:10:20:489 575180 71 Callback Stream opened
+2022-08-06 14:10:20:517 931527 40 Threaded runner for synchronous callouts is: a TFWorker(@ 16r00000000)
+2022-08-06 14:10:20:517 931527 40 Threaded runner for asynchronous callouts is: a TFWorker(@ 16r00000000)
+2022-08-06 14:10:20:518 931527 40 Browsing for services with types of: #('_osc._udp.')
+2022-08-06 14:10:20:518 350046 71 **> Browse Service Types...
+
+350046 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+350046 |||| doExecuteOn: isSignaled false
+350046 |||| doExecuteOn: BLOCKED 
+350046 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:10:20:524 25374 72 Starting Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r6000020D5110
+2022-08-06 14:10:20:524 25374 72 **>| Threaded Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r6000020D5110
+
+25374 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+25374 |||| doExecuteOn: isSignaled false
+25374 |||| doExecuteOn: BLOCKED 
+
+296068 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:525 296068 69 <** Service Type Added: _smb._tcp.local. interface: 1
+2022-08-06 14:10:20:525 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '1' name : '_smb' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(smb tcp .))
+296068 <<<< evaluate - calling returnCallback:...
+296068 <<<< returnCallback: popping stack... 
+296068 <<<< returnCallback: stack popped
+296068 <<<< evaluate - exiting
+
+373659 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:526 373659 69 <** Service Type Added: _smb._tcp.local. interface: 4
+2022-08-06 14:10:20:526 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '4' name : '_smb' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(smb tcp .))
+373659 <<<< evaluate - calling returnCallback:...
+373659 <<<< returnCallback: popping stack... 
+373659 <<<< returnCallback: stack popped
+373659 <<<< evaluate - exiting
+
+631690 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:526 631690 69 <** Service Type Added: _smb._tcp.local. interface: 5
+2022-08-06 14:10:20:526 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '5' name : '_smb' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(smb tcp .))
+631690 <<<< evaluate - calling returnCallback:...
+631690 <<<< returnCallback: popping stack... 
+631690 <<<< returnCallback: stack popped
+631690 <<<< evaluate - exiting
+
+980965 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:526 980965 69 <** Service Type Added: _smb._tcp.local. interface: 14
+2022-08-06 14:10:20:526 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : '_smb' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(smb tcp .))
+980965 <<<< evaluate - calling returnCallback:...
+980965 <<<< returnCallback: popping stack... 
+980965 <<<< returnCallback: stack popped
+980965 <<<< evaluate - exiting
+
+113841 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:526 113841 69 <** Service Type Added: _smb._tcp.local. interface: 11
+2022-08-06 14:10:20:526 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : '_smb' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(smb tcp .))
+113841 <<<< evaluate - calling returnCallback:...
+113841 <<<< returnCallback: popping stack... 
+113841 <<<< returnCallback: stack popped
+113841 <<<< evaluate - exiting
+
+317807 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:526 317807 69 <** Service Type Added: _osc._udp.local. interface: 4
+2022-08-06 14:10:20:526 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '4' name : '_osc' domain : '.' flags : 3 event : 'Added' registrationType : '_udp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(osc udp .))
+2022-08-06 14:10:20:526 575180 71 ### Service Type created: _osc._udp.
+2022-08-06 14:10:20:530 575180 71 **> Browse Services of type _osc._udp.
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+317807 <<<< evaluate - calling returnCallback:...
+317807 <<<< returnCallback: popping stack... 
+317807 <<<< returnCallback: stack popped
+317807 <<<< evaluate - exiting
+575180 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:10:20:534 972322 72 Starting Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r6000020D5180
+2022-08-06 14:10:20:534 972322 72 **>| Threaded Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r6000020D5180
+
+972322 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+972322 |||| doExecuteOn: isSignaled false
+972322 |||| doExecuteOn: BLOCKED 
+
+595086 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:534 595086 69 <** Service Type Added: _osc._udp.local. interface: 5
+2022-08-06 14:10:20:534 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '5' name : '_osc' domain : '.' flags : 3 event : 'Added' registrationType : '_udp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(osc udp .))
+595086 <<<< evaluate - calling returnCallback:...
+595086 <<<< returnCallback: popping stack... 
+595086 <<<< returnCallback: stack popped
+595086 <<<< evaluate - exiting
+
+229780 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:536 229780 69 <** Service Type Added: _osc._udp.local. interface: 1
+2022-08-06 14:10:20:536 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '1' name : '_osc' domain : '.' flags : 3 event : 'Added' registrationType : '_udp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(osc udp .))
+229780 <<<< evaluate - calling returnCallback:...
+229780 <<<< returnCallback: popping stack... 
+229780 <<<< returnCallback: stack popped
+229780 <<<< evaluate - exiting
+
+871102 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:536 871102 69 <** Service Type Added: _osc._udp.local. interface: 14
+2022-08-06 14:10:20:536 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : '_osc' domain : '.' flags : 3 event : 'Added' registrationType : '_udp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(osc udp .))
+871102 <<<< evaluate - calling returnCallback:...
+871102 <<<< returnCallback: popping stack... 
+871102 <<<< returnCallback: stack popped
+871102 <<<< evaluate - exiting
+
+705689 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:536 705689 69 <** Service Type Added: _osc._udp.local. interface: 11
+2022-08-06 14:10:20:536 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : '_osc' domain : '.' flags : 3 event : 'Added' registrationType : '_udp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(osc udp .))
+705689 <<<< evaluate - calling returnCallback:...
+705689 <<<< returnCallback: popping stack... 
+705689 <<<< returnCallback: stack popped
+705689 <<<< evaluate - exiting
+
+743073 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:536 743073 69 <** Service Type Added: _apple-lgremote._tcp.local. interface: 14
+2022-08-06 14:10:20:536 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : '_apple-lgremote' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(apple-lgremote tcp .))
+743073 <<<< evaluate - calling returnCallback:...
+743073 <<<< returnCallback: popping stack... 
+743073 <<<< returnCallback: stack popped
+743073 <<<< evaluate - exiting
+
+482532 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:536 482532 69 <** Service Type Added: _apple-lgremote._tcp.local. interface: 11
+2022-08-06 14:10:20:536 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : '_apple-lgremote' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(apple-lgremote tcp .))
+482532 <<<< evaluate - calling returnCallback:...
+482532 <<<< returnCallback: popping stack... 
+482532 <<<< returnCallback: stack popped
+482532 <<<< evaluate - exiting
+
+7394 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:536 7394 69 <** Service Type Added: _raop._tcp.local. interface: 4
+2022-08-06 14:10:20:536 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '4' name : '_raop' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(raop tcp .))
+7394 <<<< evaluate - calling returnCallback:...
+7394 <<<< returnCallback: popping stack... 
+7394 <<<< returnCallback: stack popped
+7394 <<<< evaluate - exiting
+
+965802 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:537 965802 69 <** Service Type Added: _companion-link._tcp.local. interface: 4
+2022-08-06 14:10:20:537 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '4' name : '_companion-link' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(companion-link tcp .))
+965802 <<<< evaluate - calling returnCallback:...
+965802 <<<< returnCallback: popping stack... 
+965802 <<<< returnCallback: stack popped
+965802 <<<< evaluate - exiting
+
+500707 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:537 500707 69 <** Service Type Added: _airplay._tcp.local. interface: 4
+2022-08-06 14:10:20:537 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '4' name : '_airplay' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(airplay tcp .))
+500707 <<<< evaluate - calling returnCallback:...
+500707 <<<< returnCallback: popping stack... 
+500707 <<<< returnCallback: stack popped
+500707 <<<< evaluate - exiting
+
+615498 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:537 615498 69 <** Service Type Added: _raop._tcp.local. interface: 5
+2022-08-06 14:10:20:537 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '5' name : '_raop' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(raop tcp .))
+615498 <<<< evaluate - calling returnCallback:...
+615498 <<<< returnCallback: popping stack... 
+615498 <<<< returnCallback: stack popped
+615498 <<<< evaluate - exiting
+
+434032 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:537 434032 69 <** Service Type Added: _companion-link._tcp.local. interface: 5
+2022-08-06 14:10:20:537 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '5' name : '_companion-link' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(companion-link tcp .))
+434032 <<<< evaluate - calling returnCallback:...
+434032 <<<< returnCallback: popping stack... 
+434032 <<<< returnCallback: stack popped
+434032 <<<< evaluate - exiting
+
+582949 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:537 582949 69 <** Service Type Added: _airplay._tcp.local. interface: 5
+2022-08-06 14:10:20:537 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '5' name : '_airplay' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(airplay tcp .))
+582949 <<<< evaluate - calling returnCallback:...
+582949 <<<< returnCallback: popping stack... 
+582949 <<<< returnCallback: stack popped
+582949 <<<< evaluate - exiting
+
+695029 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:537 695029 69 <** Service Type Added: _raop._tcp.local. interface: 1
+2022-08-06 14:10:20:537 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '1' name : '_raop' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(raop tcp .))
+695029 <<<< evaluate - calling returnCallback:...
+695029 <<<< returnCallback: popping stack... 
+695029 <<<< returnCallback: stack popped
+695029 <<<< evaluate - exiting
+
+212350 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:537 212350 69 <** Service Type Added: _companion-link._tcp.local. interface: 1
+2022-08-06 14:10:20:537 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '1' name : '_companion-link' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(companion-link tcp .))
+212350 <<<< evaluate - calling returnCallback:...
+212350 <<<< returnCallback: popping stack... 
+212350 <<<< returnCallback: stack popped
+212350 <<<< evaluate - exiting
+
+457444 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:537 457444 69 <** Service Type Added: _airplay._tcp.local. interface: 1
+2022-08-06 14:10:20:538 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '1' name : '_airplay' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(airplay tcp .))
+457444 <<<< evaluate - calling returnCallback:...
+457444 <<<< returnCallback: popping stack... 
+457444 <<<< returnCallback: stack popped
+457444 <<<< evaluate - exiting
+
+291935 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:538 291935 69 <** Service Type Added: _raop._tcp.local. interface: 14
+2022-08-06 14:10:20:538 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : '_raop' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(raop tcp .))
+291935 <<<< evaluate - calling returnCallback:...
+291935 <<<< returnCallback: popping stack... 
+291935 <<<< returnCallback: stack popped
+291935 <<<< evaluate - exiting
+
+640334 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:538 640334 69 <** Service Type Added: _companion-link._tcp.local. interface: 14
+2022-08-06 14:10:20:538 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : '_companion-link' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(companion-link tcp .))
+640334 <<<< evaluate - calling returnCallback:...
+640334 <<<< returnCallback: popping stack... 
+640334 <<<< returnCallback: stack popped
+640334 <<<< evaluate - exiting
+
+455369 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:538 455369 69 <** Service Type Added: _airplay._tcp.local. interface: 14
+2022-08-06 14:10:20:538 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : '_airplay' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(airplay tcp .))
+455369 <<<< evaluate - calling returnCallback:...
+455369 <<<< returnCallback: popping stack... 
+455369 <<<< returnCallback: stack popped
+455369 <<<< evaluate - exiting
+
+131859 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:538 131859 69 <** Service Type Added: _raop._tcp.local. interface: 11
+2022-08-06 14:10:20:538 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : '_raop' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(raop tcp .))
+131859 <<<< evaluate - calling returnCallback:...
+131859 <<<< returnCallback: popping stack... 
+131859 <<<< returnCallback: stack popped
+131859 <<<< evaluate - exiting
+
+504656 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:538 504656 69 <** Service Type Added: _companion-link._tcp.local. interface: 11
+2022-08-06 14:10:20:538 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : '_companion-link' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(companion-link tcp .))
+504656 <<<< evaluate - calling returnCallback:...
+504656 <<<< returnCallback: popping stack... 
+504656 <<<< returnCallback: stack popped
+504656 <<<< evaluate - exiting
+
+605750 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:538 605750 69 <** Service Type Added: _airplay._tcp.local. interface: 11
+2022-08-06 14:10:20:538 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : '_airplay' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(airplay tcp .))
+605750 <<<< evaluate - calling returnCallback:...
+605750 <<<< returnCallback: popping stack... 
+605750 <<<< returnCallback: stack popped
+605750 <<<< evaluate - exiting
+
+739795 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:538 739795 69 <** Service Type Added: _rdlink._tcp.local. interface: 14
+2022-08-06 14:10:20:538 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : '_rdlink' domain : '.' flags : 3 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : true sdRef : @ 16r6000020D5110 object : ServiceType(rdlink tcp .))
+739795 <<<< evaluate - calling returnCallback:...
+739795 <<<< returnCallback: popping stack... 
+739795 <<<< returnCallback: stack popped
+739795 <<<< evaluate - exiting
+
+644961 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:538 644961 69 <** Service Type Added: _rdlink._tcp.local. interface: 11
+2022-08-06 14:10:20:539 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : '_rdlink' domain : '.' flags : 2 event : 'Added' registrationType : '_tcp.local.' id : '00001' isMoreComing : false sdRef : @ 16r6000020D5110 object : ServiceType(rdlink tcp .))
+644961 <<<< evaluate - calling returnCallback:...
+644961 <<<< returnCallback: popping stack... 
+644961 <<<< returnCallback: stack popped
+644961 <<<< evaluate - exiting
+25374 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:10:20:539 25374 72 |<** Threaded return Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r6000020D5110
+2022-08-06 14:10:20:539 25374 72 **>| Threaded Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r6000020D5110
+
+25374 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+25374 |||| doExecuteOn: isSignaled false
+25374 |||| doExecuteOn: BLOCKED 
+
+638935 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:540 638935 69 <** Service Added : Stewart s MacBook Air type: _osc._udp. interface: 14
+2022-08-06 14:10:20:540 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : 'Stewart s MacBook Air' domain : 'local.' flags : 3 event : 'Added' registrationType : '_osc._udp.' id : '00002' isMoreComing : true sdRef : @ 16r6000020D5180 object : Stewart s MacBook Air._osc._udp.local.  no address 0)
+2022-08-06 14:10:20:540 575180 71 ### Service created: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:10:20:541 575180 71 **> Resolve Service: Stewart s MacBook Air._osc._udp.local.
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+638935 <<<< evaluate - calling returnCallback:...
+638935 <<<< returnCallback: popping stack... 
+638935 <<<< returnCallback: stack popped
+638935 <<<< evaluate - exiting
+575180 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:10:20:545 865745 72 Starting Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r6000020D52D0
+2022-08-06 14:10:20:545 865745 72 **>| Threaded Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r6000020D52D0
+
+865745 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+865745 |||| doExecuteOn: isSignaled false
+865745 |||| doExecuteOn: BLOCKED 
+
+217328 <<<< execute - evaluating callback block... 
+2022-08-06 14:10:20:545 217328 69 <** Service Added : Stewart s MacBook Air type: _osc._udp. interface: 11
+2022-08-06 14:10:20:545 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : 'Stewart s MacBook Air' domain : 'local.' flags : 2 event : 'Added' registrationType : '_osc._udp.' id : '00002' isMoreComing : false sdRef : @ 16r6000020D5180 object : Stewart s MacBook Air._osc._udp.local.  no address 0)
+217328 <<<< evaluate - calling returnCallback:...
+217328 <<<< returnCallback: popping stack... 
+217328 <<<< returnCallback: stack popped
+217328 <<<< evaluate - exiting
+972322 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:10:20:545 972322 72 |<** Threaded return Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r6000020D5180
+2022-08-06 14:10:20:545 972322 72 **>| Threaded Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r6000020D5180
+
+972322 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+972322 |||| doExecuteOn: isSignaled false
+972322 |||| doExecuteOn: BLOCKED 
+2022-08-06 14:10:21:540 931527 40 **> Register Service: MacMini [iPhone] (OverDrive)._osc._udp.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4)
+
+931527 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+931527 |||| doExecuteOn: isSignaled false
+931527 |||| doExecuteOn: BLOCKED 
+931527 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:10:21:551 226884 72 Starting Pump 00004 Register service MacMini [iPhone] (OverDrive)._osc._udp. sdRef: @ 16r6000020D5260
+2022-08-06 14:10:21:551 226884 72 **>| Threaded Pump 00004 Register service MacMini [iPhone] (OverDrive)._osc._udp. sdRef: @ 16r6000020D5260
+
+226884 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+226884 |||| doExecuteOn: isSignaled false
+226884 |||| doExecuteOn: BLOCKED 
+
+772933 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:834 772933 69 <** Service Type Removed: _rdlink._tcp.local. interface: 11
+2022-08-06 14:12:58:840 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : '_rdlink' domain : '.' flags : 0 event : 'Removed' registrationType : '_tcp.local.' id : '00001' isMoreComing : false sdRef : @ 16r6000020D5110 object : ServiceType(rdlink tcp .))
+772933 <<<< evaluate - calling returnCallback:...
+772933 <<<< returnCallback: popping stack... 
+25374 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:12:58:841 25374 72 |<** Threaded return Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r6000020D5110
+2022-08-06 14:12:58:841 25374 72 **>| Threaded Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r6000020D5110
+
+25374 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+25374 |||| doExecuteOn: isSignaled false
+25374 |||| doExecuteOn: BLOCKED 
+772933 <<<< returnCallback: stack popped
+772933 <<<< evaluate - exiting
+
+547592 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:843 547592 69 <** Service Resolved: Stewart s MacBook Air._osc._udp.local. host: Stewarts-MacBook-Air.local. port: 7000 interface: 14
+2022-08-06 14:12:58:843 575180 71 @@@@ Invoking dequeued callback: Vector(hostName : 'Stewarts-MacBook-Air.local.' interfaceIndex : '14' port : '7000' name : 'Stewart s\032MacBook\032Air._osc._udp.local.' event : 'ServiceResolved' flags : 1 id : '00003' textRecord : @ 16r6000025EE85B isMoreComing : true textLength : 27 sdRef : @ 16r6000020D52D0 object : Stewart s MacBook Air._osc._udp.local.  no address 0)
+2022-08-06 14:12:58:844 575180 71 ### Service updated: Stewart s MacBook Air._osc._udp.local. host: Stewarts-MacBook-Air.local. port: 7000
+547592 <<<< evaluate - calling returnCallback:...
+547592 <<<< returnCallback: popping stack... 
+547592 <<<< returnCallback: stack popped
+547592 <<<< evaluate - exiting
+
+464917 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:849 464917 69 <** Service Resolved: Stewart s MacBook Air._osc._udp.local. host: Stewarts-MacBook-Air.local. port: 7000 interface: 11
+2022-08-06 14:12:58:850 575180 71 @@@@ Invoking dequeued callback: Vector(hostName : 'Stewarts-MacBook-Air.local.' interfaceIndex : '11' port : '7000' name : 'Stewart s\032MacBook\032Air._osc._udp.local.' event : 'ServiceResolved' flags : 0 id : '00003' textRecord : @ 16r6000025D5BDB isMoreComing : false textLength : 27 sdRef : @ 16r6000020D52D0 object : Stewart s MacBook Air._osc._udp.local.  no address 7000 TextRecordPair(AppleLogic=LogicProX) TextRecordPair(mfk=1))
+2022-08-06 14:12:58:852 575180 71 **> Get addresses of: Stewart s MacBook Air._osc._udp.local.
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+464917 <<<< evaluate - calling returnCallback:...
+464917 <<<< returnCallback: popping stack... 
+464917 <<<< returnCallback: stack popped
+464917 <<<< evaluate - exiting
+575180 |||| doExecuteOn: UNBLOCKED865745 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:12:58:865 865745 72 |<** Threaded return Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r6000020D52D0
+2022-08-06 14:12:58:865 865745 72 **>| Threaded Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r6000020D52D0
+
+865745 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+865745 |||| doExecuteOn: isSignaled false
+865745 |||| doExecuteOn: BLOCKED 
+
+2022-08-06 14:12:58:865 168145 72 Starting Pump 00005 Get addresses of Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r6000020D07E0
+2022-08-06 14:12:58:865 168145 72 **>| Threaded Pump 00005 Get addresses of Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r6000020D07E0
+
+168145 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+168145 |||| doExecuteOn: isSignaled false
+168145 |||| doExecuteOn: BLOCKED 
+2022-08-06 14:12:58:866 575180 71 Removing Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef @ 16r6000020D52D0
+2022-08-06 14:12:58:866 575180 71 **> Deallocating @ 16r6000020D52D0
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+575180 |||| doExecuteOn: UNBLOCKED
+
+291644 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:867 291644 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 1
+2022-08-06 14:12:58:867 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '1' name : 'MacMini [iPhone] (OverDrive)' domain : 'local.' flags : 3 event : 'Added' registrationType : '_osc._udp.' id : '00002' isMoreComing : true sdRef : @ 16r6000020D5180 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 0)
+2022-08-06 14:12:58:867 575180 71 ### Service created: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:12:58:870 575180 71 **> Resolve Service: MacMini [iPhone] (OverDrive)._osc._udp.local.
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+291644 <<<< evaluate - calling returnCallback:...
+291644 <<<< returnCallback: popping stack... 
+291644 <<<< returnCallback: stack popped
+291644 <<<< evaluate - exiting
+575180 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:12:58:871 914293 72 Starting Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D0D90
+2022-08-06 14:12:58:871 914293 72 **>| Threaded Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D0D90
+
+914293 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+914293 |||| doExecuteOn: isSignaled false
+914293 |||| doExecuteOn: BLOCKED 
+
+985487 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:871 985487 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 4
+2022-08-06 14:12:58:871 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '4' name : 'MacMini [iPhone] (OverDrive)' domain : 'local.' flags : 3 event : 'Added' registrationType : '_osc._udp.' id : '00002' isMoreComing : true sdRef : @ 16r6000020D5180 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 0)
+985487 <<<< evaluate - calling returnCallback:...
+985487 <<<< returnCallback: popping stack... 
+985487 <<<< returnCallback: stack popped
+985487 <<<< evaluate - exiting
+
+288456 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:872 288456 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 5
+2022-08-06 14:12:58:872 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '5' name : 'MacMini [iPhone] (OverDrive)' domain : 'local.' flags : 3 event : 'Added' registrationType : '_osc._udp.' id : '00002' isMoreComing : true sdRef : @ 16r6000020D5180 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 0)
+288456 <<<< evaluate - calling returnCallback:...
+288456 <<<< returnCallback: popping stack... 
+288456 <<<< returnCallback: stack popped
+288456 <<<< evaluate - exiting
+
+369216 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:872 369216 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 11
+2022-08-06 14:12:58:872 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '11' name : 'MacMini [iPhone] (OverDrive)' domain : 'local.' flags : 3 event : 'Added' registrationType : '_osc._udp.' id : '00002' isMoreComing : true sdRef : @ 16r6000020D5180 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 0)
+369216 <<<< evaluate - calling returnCallback:...
+369216 <<<< returnCallback: popping stack... 
+369216 <<<< returnCallback: stack popped
+369216 <<<< evaluate - exiting
+
+203860 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:872 203860 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 14
+2022-08-06 14:12:58:872 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : 'MacMini [iPhone] (OverDrive)' domain : 'local.' flags : 2 event : 'Added' registrationType : '_osc._udp.' id : '00002' isMoreComing : false sdRef : @ 16r6000020D5180 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 0)
+203860 <<<< evaluate - calling returnCallback:...
+203860 <<<< returnCallback: popping stack... 
+203860 <<<< returnCallback: stack popped
+203860 <<<< evaluate - exiting
+972322 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:12:58:872 972322 72 |<** Threaded return Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r6000020D5180
+2022-08-06 14:12:58:872 972322 72 **>| Threaded Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r6000020D5180
+
+972322 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+972322 |||| doExecuteOn: isSignaled false
+972322 |||| doExecuteOn: BLOCKED 
+
+825509 <<<< execute - evaluating callback block... 
+2022-08-06 14:12:58:873 825509 69 <** Service Registered: MacMini [iPhone] (OverDrive)._osc._udp.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4)
+2022-08-06 14:12:58:873 575180 71 @@@@ Invoking dequeued callback: Vector(sdRef : @ 16r6000020D5260 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00004' domain : 'local.' event : 'ServiceRegistered')
+2022-08-06 14:12:58:873 575180 71 ### Service Registered for: MacMini [iPhone] (OverDrive)._osc._udp.local.
+825509 <<<< evaluate - calling returnCallback:...
+825509 <<<< returnCallback: popping stack... 
+825509 <<<< returnCallback: stack popped
+825509 <<<< evaluate - exiting
+
+178080 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:04:084 178080 69 <** Service Type Removed: _rdlink._tcp.local. interface: 14
+2022-08-06 14:13:04:087 575180 71 @@@@ Invoking dequeued callback: Vector(interfaceIndex : '14' name : '_rdlink' domain : '.' flags : 0 event : 'Removed' registrationType : '_tcp.local.' id : '00001' isMoreComing : false sdRef : @ 16r6000020D5110 object : ServiceType(rdlink tcp .))
+178080 <<<< evaluate - calling returnCallback:...
+178080 <<<< returnCallback: popping stack... 
+25374 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:13:04:088 25374 72 |<** Threaded return Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r6000020D5110
+2022-08-06 14:13:04:088 25374 72 **>| Threaded Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r6000020D5110
+
+914293 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:13:04:088 914293 72 |<** Threaded return Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D0D90
+2022-08-06 14:13:04:088 914293 72 **>| Threaded Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D0D90
+
+914293 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+914293 |||| doExecuteOn: isSignaled false
+914293 |||| doExecuteOn: BLOCKED 
+25374 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+25374 |||| doExecuteOn: isSignaled false
+25374 |||| doExecuteOn: BLOCKED 
+178080 <<<< returnCallback: stack popped
+178080 <<<< evaluate - exiting
+
+431281 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:04:089 431281 69 <** Address of service Stewart s MacBook Air._osc._udp.local. is FE80:00:00:00:CC9:67BF:A1A4:9D4A
+2022-08-06 14:13:04:089 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '14' hostName : 'Stewarts-MacBook-Air.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:CC9:67BF:A1A4:9D4A' object : Stewart s MacBook Air._osc._udp.local.  no address 7000 TextRecordPair(AppleLogic=LogicProX) TextRecordPair(mfk=1) id : '00005' sdRef : @ 16r6000020D07E0 isMoreComing : true)
+2022-08-06 14:13:04:090 575180 71 ### Address: FE80:00:00:00:CC9:67BF:A1A4:9D4A on interface: 14 added to: Stewart s MacBook Air._osc._udp.local.
+431281 <<<< evaluate - calling returnCallback:...
+431281 <<<< returnCallback: popping stack... 
+431281 <<<< returnCallback: stack popped
+431281 <<<< evaluate - exiting
+
+405245 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:04:098 405245 69 <** Address of service Stewart s MacBook Air._osc._udp.local. is FE80:00:00:00:CC9:67BF:A1A4:9D4A
+2022-08-06 14:13:04:099 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '11' hostName : 'Stewarts-MacBook-Air.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:CC9:67BF:A1A4:9D4A' object : Stewart s MacBook Air._osc._udp.local. [FE80:00:00:00:CC9:67BF:A1A4:9D4A] 7000 TextRecordPair(AppleLogic=LogicProX) TextRecordPair(mfk=1) id : '00005' sdRef : @ 16r6000020D07E0 isMoreComing : true)
+2022-08-06 14:13:04:099 575180 71 ### Address: FE80:00:00:00:CC9:67BF:A1A4:9D4A on interface: 11 added to: Stewart s MacBook Air._osc._udp.local.
+405245 <<<< evaluate - calling returnCallback:...
+405245 <<<< returnCallback: popping stack... 
+405245 <<<< returnCallback: stack popped
+405245 <<<< evaluate - exiting
+
+917164 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:04:101 917164 69 <** Address of service Stewart s MacBook Air._osc._udp.local. is 192.168.1.8
+2022-08-06 14:13:04:101 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '14' hostName : 'Stewarts-MacBook-Air.local.' event : 'ServiceAddress' address : '192.168.1.8' object : Stewart s MacBook Air._osc._udp.local. [FE80:00:00:00:CC9:67BF:A1A4:9D4A] 7000 TextRecordPair(AppleLogic=LogicProX) TextRecordPair(mfk=1) id : '00005' sdRef : @ 16r6000020D07E0 isMoreComing : true)
+2022-08-06 14:13:04:102 575180 71 ### Address: 192.168.1.8 on interface: 14 added to: Stewart s MacBook Air._osc._udp.local.
+917164 <<<< evaluate - calling returnCallback:...
+917164 <<<< returnCallback: popping stack... 
+917164 <<<< returnCallback: stack popped
+917164 <<<< evaluate - exiting
+
+778270 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:04:103 778270 69 <** Address of service Stewart s MacBook Air._osc._udp.local. is 192.168.1.8
+2022-08-06 14:13:04:103 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741826 interfaceIndex : '11' hostName : 'Stewarts-MacBook-Air.local.' event : 'ServiceAddress' address : '192.168.1.8' object : Stewart s MacBook Air._osc._udp.local. [FE80:00:00:00:CC9:67BF:A1A4:9D4A 192.168.1.8] 7000 TextRecordPair(AppleLogic=LogicProX) TextRecordPair(mfk=1) id : '00005' sdRef : @ 16r6000020D07E0 isMoreComing : false)
+2022-08-06 14:13:04:103 575180 71 ### Address: 192.168.1.8 on interface: 11 added to: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:13:04:104 575180 71 Removing Pump 00005 Get addresses of Stewart s MacBook Air._osc._udp.local. sdRef @ 16r6000020D07E0
+2022-08-06 14:13:04:105 575180 71 **> Deallocating @ 16r6000020D07E0
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+778270 <<<< evaluate - calling returnCallback:...
+778270 <<<< returnCallback: popping stack... 
+575180 |||| doExecuteOn: UNBLOCKED
+[ERROR] 2022-08-06 14:13:04.000 worker_run (ffi/src/worker/worker.c:186):Unsupported task type: 1076313152
+Undefined error: 0
+778270 <<<< returnCallback: stack popped
+778270 <<<< evaluate - exiting
+2022-08-06 14:13:13:193 931527 40 ==============================================================================
+2022-08-06 14:13:13:195 931527 40 Shutting down on BonjourLibraryInterface
+2022-08-06 14:13:13:195 931527 40 ==> Deregister Service: MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4)
+2022-08-06 14:13:13:195 931527 40 **> Deallocating @ 16r6000020D5260
+
+931527 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+931527 |||| doExecuteOn: isSignaled false
+931527 |||| doExecuteOn: BLOCKED 
+931527 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:13:13:954 931527 40 Removing Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef @ 16r6000020D5110
+2022-08-06 14:13:13:959 931527 40 **> Deallocating @ 16r6000020D5110
+
+931527 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+931527 |||| doExecuteOn: isSignaled false
+931527 |||| doExecuteOn: BLOCKED 
+931527 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:13:14:214 931527 40 Removing Pump 00002 Browse Services of type: _osc._udp. sdRef @ 16r6000020D5180
+2022-08-06 14:13:14:216 931527 40 **> Deallocating @ 16r6000020D5180
+
+931527 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+931527 |||| doExecuteOn: isSignaled false
+931527 |||| doExecuteOn: BLOCKED 
+931527 |||| doExecuteOn: UNBLOCKED
+
+928579 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:218 928579 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 1
+2022-08-06 14:13:14:218 575180 71 @@@@ Invoking dequeued callback: Vector(hostName : 'Stewarts-Mac-mini.local.' interfaceIndex : '1' port : '12345' name : 'MacMini\032[iPhone]\032(OverDrive)._osc._udp.local.' event : 'ServiceResolved' flags : 1 id : '00006' textRecord : @ 16r6000039B45FD isMoreComing : true textLength : 39 sdRef : @ 16r6000020D0D90 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 0)
+2022-08-06 14:13:14:219 575180 71 ### Service updated: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345
+928579 <<<< evaluate - calling returnCallback:...
+928579 <<<< returnCallback: popping stack... 
+928579 <<<< returnCallback: stack popped
+928579 <<<< evaluate - exiting
+
+43444 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:224 43444 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 11
+2022-08-06 14:13:14:225 575180 71 @@@@ Invoking dequeued callback: Vector(hostName : 'Stewarts-Mac-mini.local.' interfaceIndex : '11' port : '12345' name : 'MacMini\032[iPhone]\032(OverDrive)._osc._udp.local.' event : 'ServiceResolved' flags : 1 id : '00006' textRecord : @ 16r6000039FCD4D isMoreComing : true textLength : 39 sdRef : @ 16r6000020D0D90 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4))
+43444 <<<< evaluate - calling returnCallback:...
+43444 <<<< returnCallback: popping stack... 
+43444 <<<< returnCallback: stack popped
+43444 <<<< evaluate - exiting
+
+573231 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:227 573231 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 14
+2022-08-06 14:13:14:227 575180 71 @@@@ Invoking dequeued callback: Vector(hostName : 'Stewarts-Mac-mini.local.' interfaceIndex : '14' port : '12345' name : 'MacMini\032[iPhone]\032(OverDrive)._osc._udp.local.' event : 'ServiceResolved' flags : 1 id : '00006' textRecord : @ 16r6000039D483D isMoreComing : true textLength : 39 sdRef : @ 16r6000020D0D90 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4))
+573231 <<<< evaluate - calling returnCallback:...
+573231 <<<< returnCallback: popping stack... 
+573231 <<<< returnCallback: stack popped
+573231 <<<< evaluate - exiting
+
+527629 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:228 527629 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 4
+2022-08-06 14:13:14:228 575180 71 @@@@ Invoking dequeued callback: Vector(hostName : 'Stewarts-Mac-mini.local.' interfaceIndex : '4' port : '12345' name : 'MacMini\032[iPhone]\032(OverDrive)._osc._udp.local.' event : 'ServiceResolved' flags : 1 id : '00006' textRecord : @ 16r6000039D08CD isMoreComing : true textLength : 39 sdRef : @ 16r6000020D0D90 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4))
+527629 <<<< evaluate - calling returnCallback:...
+527629 <<<< returnCallback: popping stack... 
+527629 <<<< returnCallback: stack popped
+527629 <<<< evaluate - exiting
+
+3309 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:228 3309 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 5
+2022-08-06 14:13:14:228 575180 71 @@@@ Invoking dequeued callback: Vector(hostName : 'Stewarts-Mac-mini.local.' interfaceIndex : '5' port : '12345' name : 'MacMini\032[iPhone]\032(OverDrive)._osc._udp.local.' event : 'ServiceResolved' flags : 0 id : '00006' textRecord : @ 16r6000039D483D isMoreComing : false textLength : 39 sdRef : @ 16r6000020D0D90 object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4))
+2022-08-06 14:13:14:229 575180 71 **> Get addresses of: MacMini [iPhone] (OverDrive)._osc._udp.local.
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+3309 <<<< evaluate - calling returnCallback:...
+3309 <<<< returnCallback: popping stack... 
+3309 <<<< returnCallback: stack popped
+3309 <<<< evaluate - exiting
+575180 |||| doExecuteOn: UNBLOCKED914293 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:13:14:232 914293 72 |<** Threaded return Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D0D90
+2022-08-06 14:13:14:233 914293 72 **>| Threaded Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D0D90
+
+914293 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+914293 |||| doExecuteOn: isSignaled false
+914293 |||| doExecuteOn: BLOCKED 
+
+2022-08-06 14:13:14:233 112847 72 Starting Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D5180
+2022-08-06 14:13:14:233 112847 72 **>| Threaded Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D5180
+
+112847 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+112847 |||| doExecuteOn: isSignaled true
+112847 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:13:14:233 112847 72 |<** Threaded return Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D5180
+2022-08-06 14:13:14:234 112847 72 **>| Threaded Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r6000020D5180
+
+112847 |||| doExecuteOn: entry a TFWorker(@ 16r6000028F5D60)
+112847 |||| doExecuteOn: isSignaled false
+112847 |||| doExecuteOn: BLOCKED 
+2022-08-06 14:13:14:234 575180 71 Removing Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef @ 16r6000020D0D90
+2022-08-06 14:13:14:234 575180 71 **> Deallocating @ 16r6000020D0D90
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+575180 |||| doExecuteOn: UNBLOCKED
+[ERROR] 2022-08-06 14:13:14.000 worker_run (ffi/src/worker/worker.c:186):Unsupported task type: 1076095360
+Bad file descriptor
+
+621595 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:235 621595 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 00:00:00:00:00:00:00:01
+2022-08-06 14:13:14:235 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '1' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : '00:00:00:00:00:00:00:01' object : MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:235 575180 71 ### Address: 00:00:00:00:00:00:00:01 on interface: 1 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+621595 <<<< evaluate - calling returnCallback:...
+621595 <<<< returnCallback: popping stack... 
+621595 <<<< returnCallback: stack popped
+621595 <<<< evaluate - exiting
+
+86870 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:238 86870 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:00:00:00:01
+2022-08-06 14:13:14:238 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '1' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:00:00:00:01' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:238 575180 71 ### Address: FE80:00:00:00:00:00:00:01 on interface: 1 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+86870 <<<< evaluate - calling returnCallback:...
+86870 <<<< returnCallback: popping stack... 
+86870 <<<< returnCallback: stack popped
+86870 <<<< evaluate - exiting
+
+875071 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:239 875071 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:D0B1:31FF:FE25:2C35
+2022-08-06 14:13:14:239 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '4' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:D0B1:31FF:FE25:2C35' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:239 575180 71 ### Address: FE80:00:00:00:D0B1:31FF:FE25:2C35 on interface: 4 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+875071 <<<< evaluate - calling returnCallback:...
+875071 <<<< returnCallback: popping stack... 
+875071 <<<< returnCallback: stack popped
+875071 <<<< evaluate - exiting
+
+296344 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:240 296344 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:D0B1:31FF:FE25:2C34
+2022-08-06 14:13:14:240 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '5' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:D0B1:31FF:FE25:2C34' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:241 575180 71 ### Address: FE80:00:00:00:D0B1:31FF:FE25:2C34 on interface: 5 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+296344 <<<< evaluate - calling returnCallback:...
+296344 <<<< returnCallback: popping stack... 
+296344 <<<< returnCallback: stack popped
+296344 <<<< evaluate - exiting
+
+215637 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:241 215637 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:10B0:597C:BA49:798
+2022-08-06 14:13:14:241 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '11' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:10B0:597C:BA49:798' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:242 575180 71 ### Address: FE80:00:00:00:10B0:597C:BA49:798 on interface: 11 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+215637 <<<< evaluate - calling returnCallback:...
+215637 <<<< returnCallback: popping stack... 
+215637 <<<< returnCallback: stack popped
+215637 <<<< evaluate - exiting
+
+443486 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:242 443486 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:1C72:B6C:13DF:7A53
+2022-08-06 14:13:14:242 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '14' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:1C72:B6C:13DF:7A53' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:242 575180 71 ### Address: FE80:00:00:00:1C72:B6C:13DF:7A53 on interface: 14 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+443486 <<<< evaluate - calling returnCallback:...
+443486 <<<< returnCallback: popping stack... 
+443486 <<<< returnCallback: stack popped
+443486 <<<< evaluate - exiting
+
+415317 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:243 415317 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:10B0:597C:BA49:798
+2022-08-06 14:13:14:243 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '14' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:10B0:597C:BA49:798' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:243 575180 71 ### Address: FE80:00:00:00:10B0:597C:BA49:798 on interface: 14 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+415317 <<<< evaluate - calling returnCallback:...
+415317 <<<< returnCallback: popping stack... 
+415317 <<<< returnCallback: stack popped
+415317 <<<< evaluate - exiting
+
+613676 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:245 613676 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:1C72:B6C:13DF:7A53
+2022-08-06 14:13:14:245 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '11' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : 'FE80:00:00:00:1C72:B6C:13DF:7A53' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:245 575180 71 ### Address: FE80:00:00:00:1C72:B6C:13DF:7A53 on interface: 11 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+613676 <<<< evaluate - calling returnCallback:...
+613676 <<<< returnCallback: popping stack... 
+613676 <<<< returnCallback: stack popped
+613676 <<<< evaluate - exiting
+
+28824 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:246 28824 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 127.0.0.1
+2022-08-06 14:13:14:246 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '1' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : '127.0.0.1' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:246 575180 71 ### Address: 127.0.0.1 on interface: 1 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+28824 <<<< evaluate - calling returnCallback:...
+28824 <<<< returnCallback: popping stack... 
+28824 <<<< returnCallback: stack popped
+28824 <<<< evaluate - exiting
+
+778010 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:246 778010 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 192.168.1.6
+2022-08-06 14:13:14:246 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '11' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : '192.168.1.6' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53 127.0.0.1] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:246 575180 71 ### Address: 192.168.1.6 on interface: 11 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+778010 <<<< evaluate - calling returnCallback:...
+778010 <<<< returnCallback: popping stack... 
+778010 <<<< returnCallback: stack popped
+778010 <<<< evaluate - exiting
+
+237415 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:247 237415 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 192.168.1.4
+2022-08-06 14:13:14:247 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '14' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : '192.168.1.4' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53 127.0.0.1 192.168.1.6] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:247 575180 71 ### Address: 192.168.1.4 on interface: 14 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+237415 <<<< evaluate - calling returnCallback:...
+237415 <<<< returnCallback: popping stack... 
+237415 <<<< returnCallback: stack popped
+237415 <<<< evaluate - exiting
+
+202458 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:248 202458 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 192.168.1.6
+2022-08-06 14:13:14:248 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741827 interfaceIndex : '14' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : '192.168.1.6' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53 127.0.0.1 192.168.1.6 192.168.1.4] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : true)
+2022-08-06 14:13:14:248 575180 71 ### Address: 192.168.1.6 on interface: 14 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+202458 <<<< evaluate - calling returnCallback:...
+202458 <<<< returnCallback: popping stack... 
+202458 <<<< returnCallback: stack popped
+202458 <<<< evaluate - exiting
+
+43254 <<<< execute - evaluating callback block... 
+2022-08-06 14:13:14:248 43254 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 192.168.1.4
+2022-08-06 14:13:14:248 575180 71 @@@@ Invoking dequeued callback: Vector(flags : 1073741826 interfaceIndex : '11' hostName : 'Stewarts-Mac-mini.local.' event : 'ServiceAddress' address : '192.168.1.4' object : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53 127.0.0.1 192.168.1.6 192.168.1.4] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) id : '00007' sdRef : @ 16r6000020D5180 isMoreComing : false)
+2022-08-06 14:13:14:248 575180 71 ### Address: 192.168.1.4 on interface: 11 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:13:14:249 575180 71 Removing Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef @ 16r6000020D5180
+2022-08-06 14:13:14:249 575180 71 **> Deallocating @ 16r6000020D5180
+
+575180 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+575180 |||| doExecuteOn: isSignaled false
+575180 |||| doExecuteOn: BLOCKED 
+43254 <<<< evaluate - calling returnCallback:...
+43254 <<<< returnCallback: popping stack... 
+43254 <<<< returnCallback: stack popped
+43254 <<<< evaluate - exiting
+575180 |||| doExecuteOn: UNBLOCKED
+2022-08-06 14:13:14:478 931527 40 Pump not found when removing Vector(pump : a Process in Process>>endProcess service : MacMini [iPhone] (OverDrive)._osc._udp.local. [00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C35 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53 127.0.0.1 192.168.1.6 192.168.1.4] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) callback : a BonjourCallback name : 'Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local.' id : '00006' sdRef : @ 16r6000020D0D90)
+2022-08-06 14:13:14:479 931527 40 @ 16r6000020D0D90
+2022-08-06 14:13:14:479 931527 40 **> Deallocating @ 16r6000020D0D90
+
+931527 |||| doExecuteOn: entry a TFWorker(@ 16r6000028FBBB0)
+931527 |||| doExecuteOn: isSignaled false
+931527 |||| doExecuteOn: BLOCKED 
+931527 |||| doExecuteOn: UNBLOCKED
+
