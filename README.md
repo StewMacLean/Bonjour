@@ -73,7 +73,17 @@ In spite of these problems, by letting it run by shutting down to fire the callb
 4. Obtain the addresses of each service
 5. Registration of a service
 
-Please refer to the sample traces for further details.
+Please refer to the sample trace for further details.
+Log interpretation:
+
+**> Callout (synchronous intrinsically)
+**> | Callout - threaded asynchronous blocking
+|<** Return from blocked callout
+<** Callback block execution on callback queue thread
+@@@@ Application thread callback processing
+### State change of domain model
+
+
 
 ### Running The App
 	
