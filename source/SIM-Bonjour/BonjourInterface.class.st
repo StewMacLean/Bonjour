@@ -48,8 +48,8 @@ BonjourInterface class >> resetCurrent [
 { #category : #'instance creation' }
 BonjourInterface class >> shutDown [
 	
-	current ifNotNil: [current shutDown].
-	current := nil
+	[current ifNotNil: [current shutDown]]
+		ensure: [	current := nil]
 ]
 
 { #category : #'instance creation' }
@@ -81,6 +81,16 @@ BonjourInterface class >> uniqueInstance [
 ]
 
 { #category : #structural }
+BonjourInterface >> addService: aService [
+
+	self log:	'### Service created: ' , aService fullName.
+
+	aService serviceType addService: aService.
+	services add: aService.
+	self announce: (ServiceAdded new service: aService).
+]
+
+{ #category : #structural }
 BonjourInterface >> addServiceType: aServiceType [
 
 	| domain theDomain |
@@ -93,6 +103,7 @@ BonjourInterface >> addServiceType: aServiceType [
 
 	serviceTypes add: aServiceType.
 	
+	self log:	'### Service Type created: ' , aServiceType registrationType.
 	self announce: (ServiceTypeAdded new serviceType: aServiceType).
 	
 	^aServiceType
@@ -119,6 +130,24 @@ BonjourInterface >> appleMIDIUDPServiceType [
 	^serviceTypes
 		detect: [:each | each isAppleMIDIUDP]
 		ifNone: [self addServiceType: (ServiceType udpName: 'apple-midi')]
+]
+
+{ #category : #configuration }
+BonjourInterface >> callbackStreamPriority [
+
+	"Must be greater than incomming system callbacks which is 69 to avoid seg fault on shut down.
+	Also runs further - browse services of service type returns sometimes..."
+	
+	^71
+	
+	"^71" "v4 - runs to end when shutting down without crash"
+
+	"^71"  "v1 seems to go further, and not crash on initial run"
+	
+	"^68" "v2 less than callback queue - jams on callback instead"
+	
+	"^70"  "v3" "Original - NOTE: for some reason, this has to be of lower priority than the message pump, 
+	otherwise callbacks don't get fired"
 ]
 
 { #category : #'accessing - domain' }
@@ -162,15 +191,6 @@ BonjourInterface >> deregisterServiceNamed: aServiceName [
 BonjourInterface >> deregisterServices [
 	
 	registeredServices do: [:each | self deregister: each]
-]
-
-{ #category : #logging }
-BonjourInterface >> doHalt [
-
-	doHalts 
-		ifTrue: 
-			[self log: 'ABOUT TO HALT: ', Processor activeProcess name.
-			self halt]
 ]
 
 { #category : #'accessing - domain' }
@@ -265,7 +285,6 @@ BonjourInterface >> listServicesHierarchically [
 		(serviceType services asSortedCollection: [: a : b| a name < b name]) do: [: service |
 				stream tab; 
 					nextPutAll: service name; space;
-					nextPutAll: service interfacesPrintString;
 					cr.
 				stream tab; tab; nextPutAll: service hostName; cr.
 				(service addresses asSortedCollection: [: a : b| a < b]) do: [: address |
@@ -303,7 +322,9 @@ BonjourInterface >> logLocal: aString [
 			line := String new writeStream
 				nextPutAll: Timestamp now printLogTimestamp;
 				space;
-				nextPutAll: (Processor activeProcess identityHash \\ 999999) printString;
+				nextPutAll: Processor activeProcess identifier;
+				space;
+				nextPutAll: (Processor activeProcess priority) printString;
 				space;
 				nextPutAll: aString;
 				cr;
@@ -348,7 +369,7 @@ BonjourInterface >> loggingEnabled: anObject [
 	loggingEnabled := anObject
 ]
 
-{ #category : #'data streams' }
+{ #category : #'callback processing' }
 BonjourInterface >> nextConnectionID [
 	
 	"self log: 'nextConnectionID - lastConnectionID: ', lastConnectionID printString."
@@ -359,7 +380,7 @@ BonjourInterface >> nextConnectionID [
 	^lastConnectionID printString padLeftTo: 5 with: $0
 ]
 
-{ #category : #'data streams' }
+{ #category : #'callback processing' }
 BonjourInterface >> openCallbackStream [
 
 	callbackQueue := SharedQueue new.
@@ -368,23 +389,16 @@ BonjourInterface >> openCallbackStream [
 		[true]
 			whileTrue:
 				[| callback |
-				"self log: 'Waiting for next callback...'."
 				callback := callbackQueue next.
-				"self log: '<===== About to fire callback callback for: ', callback object printString. "
-				callback object calledback: callback for: self	"self log: 'Post processing callback'."]]
+				self log: '@@@@ Invoking dequeued callback: ', callback printString.
+				"Don't fork, these need to be serialised"
+				callback object calledback: callback for: self   ]]
 			newProcess.	
 	
 	callbackProcess
 		name: 'Bonjour Callback Stream';
-		priority: 30;
-		resume	.
-			
-	"NOTE: for some reason, this has to be equal or lower priority than the message pump, 
-	otherwise callbacks don't get fired"
-			
-	 "UserBackgroundPriority := 30.  userBackgroundPriority UserSchedulingPriority := 50. userSchedulingPriority""
-	""userInterruptPriority;"	
-	
+		priority: self callbackStreamPriority;
+		resume	
 ]
 
 { #category : #'service types' }
@@ -452,7 +466,7 @@ BonjourInterface >> registerOSCUDPService [
 	Service new
 		serviceType: self oscUDPServiceType;
 		name: 'MacMini [iPhone] (OverDrive)';
-		port: 8892;
+		port: 12345;
 		textRecordPairs:
 			(OrderedCollection new
 				add: (TextRecordPair key: 'name' value: 'value');
@@ -476,7 +490,10 @@ BonjourInterface >> registerOSCUDPServiceNamed: aName port: aPort textRecordPair
 { #category : #api }
 BonjourInterface >> registerService: aService [
 	
-	self register: aService.	"If not already browsing for the service's service type, start browsing to trigger discovery callbacks.
+	self register: aService.	
+		
+	"If not already browsing for the service's service type, 
+	start browsing to trigger discovery callbacks.
 	The meta query service types browser doesn't trigger a found Service Type for some reason."
 	connections
 		detect:
@@ -506,8 +523,68 @@ BonjourInterface >> registerappleLGREMOTETCPService [
 		registerOn: self	
 ]
 
+{ #category : #'startUp - shutDown' }
+BonjourInterface >> registrationTypesToBrowse: someRegistrationTypes [
+
+	registrationTypesToBrowse := someRegistrationTypes
+
+	
+]
+
+{ #category : #'results processing' }
+BonjourInterface >> removeConnectionOf: sv [
+
+	connectionIDMutex critical: 
+		[connections
+			at: sv id
+			ifPresent:
+				[: value | 
+				self log: 'Removing Pump ', value id, ' ', value name, ' sdRef ', value sdRef printString.
+				value pump terminate.
+				connections removeKey: sv id]
+			ifAbsent:
+				[self log: 'Pump not found when removing ' , sv printString.
+				self log: sv sdRef printString].
+		self deallocateSDRef: sv sdRef]
+]
+
+{ #category : #'results processing' }
+BonjourInterface >> removeConnectionOfv1: sv [
+
+	connectionIDMutex critical: 
+		[self log: 'Removing connection of ', sv printString.
+		connections
+			at: sv id
+			ifPresent:
+				[: value | 
+				value pump terminate.
+				connections removeKey: sv id]
+			ifAbsent:
+				[self log: 'Connection not found when removing ' , sv printString.
+				self log: sv sdRef printString].
+		self deallocateSDRef: sv sdRef]
+]
+
+{ #category : #'results processing' }
+BonjourInterface >> removeConnectionOfv2: sv [
+
+		self log: 'Removing connection of ', sv printString.
+		connections
+			at: sv id
+			ifPresent:
+				[: value | 
+				value pump terminate.
+				connections removeKey: sv id]
+			ifAbsent:
+				[self log: 'Connection not found when removing ' , sv printString.
+				self log: sv sdRef printString].
+		self deallocateSDRef: sv sdRef
+]
+
 { #category : #structural }
 BonjourInterface >> removeService: theService [
+
+	self log:	'### Service removed: ' , theService fullName.
 
 	theService serviceType removeService: theService.
 	services remove: theService.
@@ -526,6 +603,49 @@ BonjourInterface >> resetmDNSResponder [
 
 ]
 
+{ #category : #configuration }
+BonjourInterface >> resultsPumpPriority [
+
+	"Must be greater than incomming system callbacks which is 69 to avoid seg fault on shut down.
+	Also runs further - browse services of service type returns sometimes..."
+	
+	^72
+	
+	"^72" "v4 - runs to end when shutting down without crash"
+
+	"^70"  "v1"
+	
+	"^70" "v2 > callback queue - jams on callback processing"
+	
+	"^71 "   "v3 - original"
+]
+
+{ #category : #callbacks }
+BonjourInterface >> serviceAddress: sv [
+
+	| address interfaceIndex | 
+	
+	self log:	'### Address: ', sv address, ' on interface: ', sv interfaceIndex, ' added to: ' , sv object fullName.
+		
+	(sv address includes: $:) & (sv address includes: $%)
+		ifTrue: 
+			[address := (sv address splitOn: $%) first.  "dns-sd looks up the interface name from the interface index"
+			interfaceIndex := (sv address splitOn: $%) last.
+			interfaceIndex := sv interfaceIndex, '/', interfaceIndex]
+		ifFalse:
+			[address := sv address.
+			interfaceIndex := sv interfaceIndex].
+			
+	sv object
+		addAddress: 
+			(IPAddress new
+				service: sv object;
+				address: address;
+				addInterface: interfaceIndex).
+				
+	self announce: (ServiceUpdated new service: sv object).
+]
+
 { #category : #'accessing - domain' }
 BonjourInterface >> serviceNamed: aServiceFullName [
 	
@@ -536,15 +656,12 @@ BonjourInterface >> serviceNamed: aServiceFullName [
 
 { #category : #callbacks }
 BonjourInterface >> serviceTypeFound: aServiceType [
-
-
-	self log:	'<== Service Type Found: ' , aServiceType printString, ' interface ', aServiceType interfaceIndex.
 	
-	"A service type is returned for each machine interface - only interested in the type, not the interfaces"
+	"A service type is returned for each machine interface - only interested in the type, 
+	not the interfaces"
 	serviceTypes
 		detect: [:each | each registrationType = aServiceType registrationType]
-		ifFound:
-			[^self	].	
+		ifFound: [^self	].	
 	
 	registrationTypesToBrowse isEmpty
 		ifTrue: 
@@ -562,14 +679,17 @@ BonjourInterface >> serviceTypeFound: aServiceType [
 
 { #category : #callbacks }
 BonjourInterface >> serviceTypeLost: aServiceType [
-	"self log: 'Service Type Lost: ', aServiceType printString."
-	"Don't remove the service type as can have multiple types with the same name - one for each interface.
-	Only interested in the type.
 
+	"Remove when last service of the type is removed?.
+	
+	Don't remove the service type as can have multiple types with the same name - one for each interface.
+	Only interested in the type. "
+	
+	"
 	| theServiceType | 
-	"
-	self log:	'<== Service Type Lost: ' , aServiceType printString, ' interface ', aServiceType interfaceIndex.
-	"
+
+	self log:	'Service Type Lost: ' , aServiceType printString, ' interface ', aServiceType interfaceIndex.
+	
 	theServiceType := 
 		serviceTypes 
 			detect: [: each | each registrationType = aServiceType registrationType]
@@ -605,19 +725,16 @@ BonjourInterface >> shutDown [
 
 	<script: 'self shutDown'>
 	
-	self log: 'Shutting down on ', self class name.
+	self 
+		log: '==============================================================================';
+		log: 'Shutting down on ', self class name.
 	
 	registeredServices do: [:each | self deregister: each].
-	2 seconds wait.	"Give the callbacks a chance to fire"
-	connections copy
-		do:
-			[:each | 
-			each pump 
-				ifNotNil: 
-					[self log: 'Terminating connection process: ', each pump name.
-					each pump terminate].
-			each sdRef ifNotNil: [self deallocateSDRef: each sdRef].
-			connections removeKey: each id].
+	0.5 seconds wait.	"Give the callbacks a chance to fire"
+
+	(connections copy asSortedCollection: [: a : b | a id < b id]) do: [:each | 
+			0.25 seconds wait.
+			self removeConnectionOf: each].
 	callbackProcess ifNotNil: [: value | value terminate].
 	"interface class unloadLibraries."
 	logFile ifNotNil: [logFileStream closed ifFalse: [logFileStream close]].
@@ -630,8 +747,8 @@ BonjourInterface >> startUpOnRegistrationTypes: registrationTypes [
 	_rdlink._tcp. "
 	
 	registrationTypesToBrowse := registrationTypes.
-	self
-		browseServiceTypes
+	
+	self startUp
 ]
 
 { #category : #'announcements-configuring' }
@@ -656,14 +773,14 @@ BonjourInterface >> viewLogFile [
 	
 ]
 
-{ #category : #'data streams' }
+{ #category : #'callback processing' }
 BonjourInterface >> waitForSeconds: seconds [
 
 	self waitForSeconds: seconds for: ''
 
 ]
 
-{ #category : #'data streams' }
+{ #category : #'callback processing' }
 BonjourInterface >> waitForSeconds: seconds for: aString [
 
 	self log: 'Waiting for ', seconds printString, ' seconds ', aString.

@@ -1,38 +1,41 @@
 Class {
 	#name : #BonjourLibraryInterface,
 	#superclass : #BonjourInterface,
+	#instVars : [
+		'asynchronousInterface'
+	],
 	#category : #'SIM-Bonjour'
 }
 
-{ #category : #constants }
-BonjourLibraryInterface >> addressFrom: aCPointer [
+{ #category : #parsing }
+BonjourLibraryInterface >> addressFrom: aHandle [
+
+	"Note - structure doesn't work for callback? Doesn't return correct data...?
+	Different structures for IPv4 and IPv6"
 	
-	| array stream |
-	array := aCPointer contents datum asByteArray copyFrom: 5 to: 8.
+	| array stream readStream |
+	
 	stream := String new writeStream.
-	array
-		do: [:each | stream nextPutAll: each printString]
-		separatedBy: [stream nextPut: $.].
+	(aHandle uint8AtOffset: 0) = 16
+		ifTrue:
+			["aHandle uint8AtOffset: 0."  	"length = 16"
+			"aHandle uint8AtOffset: 1."		"family = 2 - IPv4"
+			"aHandle uint16AtOffset: 2."  	"port = bug, not set - zero!"
+			array := (4 to: 7) collect: [: each | aHandle uint8AtOffset: each].
+			array do: [:each | stream nextPutAll: each printString]
+				separatedBy: [stream nextPut: $.]]
+		ifFalse:
+			[readStream := ((8 to: 23) collect: [: each | aHandle uint8AtOffset: each]) readStream.
+			[readStream atEnd] whileFalse:
+				[readStream next printOn: stream base: 16 length: 1 padded: false.
+				readStream next printOn: stream base: 16 length: 1 padded: false.
+				stream nextPut: $:].
+			stream skip: -1].
+		
 	^stream contents
 ]
 
-{ #category : #constants }
-BonjourLibraryInterface >> addressFromv1: aCPointer [
-	
-	| array stream |
-	aCPointer
-		copyAt: 0
-		to: (array := ByteArray new: 4)
-		size: 4
-		startingAt: 1.
-	stream := String new writeStream.
-	array
-		do: [:each | stream nextPutAll: each printString]
-		separatedBy: [stream nextPut: $.].
-	^stream contents
-]
-
-{ #category : #callouts }
+{ #category : #'callouts - raw' }
 BonjourLibraryInterface >> browseSDRef: sdRef flags: flags interfaceIndex: interfaceIndex registrationType: regtype domain: domain callback: callback context: context [
 	"When you first start browsing, all the callbacks will be for services added. 
 	As services are added and removed from the system, additional 
@@ -47,7 +50,7 @@ BonjourLibraryInterface >> browseSDRef: sdRef flags: flags interfaceIndex: inter
 				with: regtype 
 				with: domain 
 				with: callback 
-				with: ExternalAddress null.
+				with: context.
 		self checkResult: result for: 'DNSServiceBrowse'
 		
 "
@@ -109,51 +112,23 @@ DNSServiceErrorType DNSSD_API DNSServiceBrowse
     );"
 ]
 
-{ #category : #api }
+{ #category : #'callouts - api' }
 BonjourLibraryInterface >> browseServiceTypes [
 	
-	| flags interfaceIndex regtype domain context callback sdRef connectionSV connectionID sdRefHandle |
+	| flags interfaceIndex regtype domain context callback 
+	sdRef connectionSV connectionID sdRefHandle |
 	
 	"Create uninitialised sdRef - pointer to a pointer"
 	sdRefHandle := ByteArray new: 8.
 	connectionID := self nextConnectionID.
 	flags := 0.
 	interfaceIndex := interface kDNSServiceInterfaceIndexAny.	"0"
-	regtype := '_services._dns-sd._udp'. "VW: utf8Encoded."
-	domain := ''. 								"VW: utf8Encoded."
-	context := nil.
-	callback := 
-		"interface newCallbackWithSignature: interface DNSServiceBrowseReply"
-		BonjourCallback signature: interface DNSServiceBrowseReply
-		block:
-			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :serviceNameCB :regtypeCB :domainCB :contextCB | 
-			| sv stream protocol object |
-			
-			connectionSV sdRef: sdRefCB.	"The actual service discovery reference that was initialized by 													  													DNSServiceBrowse that is used to deallocate."
-			(sv := StateVector new)
-				id: connectionID;
-				flags: flagsCB;
-				isMoreComing: (self isMoreComing: flagsCB);
-				interfaceIndex: interfaceIndexCB printString;
-				name: serviceNameCB;							"VW: utf8Decoded" "readStringUTF8" "asStringFromUnicodeStringOnHeap"
-				registrationType: regtypeCB;				"VW: copyCStringFromHeap"
-				domain: domainCB. 								"VW: copyCStringFromHeap"
-			(self isAdd: sv flags)
-				ifTrue: [sv event: 'Added']
-				ifFalse: [sv event: 'Removed'].
-			self log: '<** ServiceType ', sv event, ' : ', serviceNameCB, ' interface: ', interfaceIndexCB printString.
-			stream := ReadStream on: sv registrationType.
-			protocol := stream through: $..
-			object := ServiceType new
-				name: sv name;
-				protocol: protocol;
-				domain: sv domain;
-				interfaceIndex: sv interfaceIndex.
-			sv object: object.	
-			callbackQueue nextPut: sv.
-			nil].
+	regtype := '_services._dns-sd._udp'.
+	domain := ''. 								
+	context := ExternalAddress null.
+	callback := self browseServiceTypesCallback: connectionID.
 		
-	"Initializes sdRef, passes out callback..."
+	"Initializes sdRef..."
 	self log: '**> Browse Service Types...'.
 	self 
 		browseSDRef: sdRefHandle
@@ -161,7 +136,8 @@ BonjourLibraryInterface >> browseServiceTypes [
 		interfaceIndex: interfaceIndex
 		registrationType: regtype 
 		domain: domain 
-		callback: callback context: context.	
+		callback: callback 
+		context: context.	
 	sdRef := sdRefHandle pointerAt: 1.
 			
 	connectionSV := StateVector new
@@ -170,16 +146,52 @@ BonjourLibraryInterface >> browseServiceTypes [
 		name: 'Browse Service Types: ' , regtype;
 		callback: callback.
 		
-	"Fire off callbacks, blocks until results available..."						
-	"Need to keep reference to callback, otherwise they don't fire"	
-	self openResultsStreamOn: sdRef stateVector: connectionSV.
-	
-	"NOTE: using the below to make the call in same Smalltalk process, seems to freeze less when in blocking mode. Not sure why.
-	self serviceProcessResult: sdRef."
+	"Fire off callbacks..."						
+	self runResultsPumpOn: sdRef stateVector: connectionSV
+
 	
 ]
 
-{ #category : #api }
+{ #category : #'callbacks - raw' }
+BonjourLibraryInterface >> browseServiceTypesCallback: connectionID [
+
+	^BonjourCallback 
+		signature: interface DNSServiceBrowseReply
+		block:
+			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :serviceTypeNameCB :protocolDomainCB :domainCB :contextCB | 
+			| sv stream protocol object |
+			sv := StateVector new
+				sdRef: sdRefCB;
+				id: connectionID;
+				flags: flagsCB;
+				isMoreComing: (self isMoreComing: flagsCB);
+				interfaceIndex: interfaceIndexCB printString;
+				name: serviceTypeNameCB;							
+				registrationType: protocolDomainCB;				
+				domain: domainCB. 								
+			(self isAdd: sv flags)
+				ifTrue: [sv event: 'Added']
+				ifFalse: [sv event: 'Removed'].
+				
+			self log: '<** Service Type ', 
+				sv event, 
+				': ', sv name, '.', sv registrationType,
+				' interface: ', interfaceIndexCB printString.
+				
+			stream := ReadStream on: sv registrationType.
+			protocol := stream through: $..
+			object := ServiceType new
+				name: sv name;
+				protocol: protocol;
+				domain: sv domain";
+				interfaceIndex: sv interfaceIndex".
+			sv object: object.	
+			callbackQueue nextPut: sv.
+			nil].
+
+]
+
+{ #category : #'callouts - api' }
 BonjourLibraryInterface >> browseServicesOf: aServiceType [
 	
 	| flags interfaceIndex regtype domain context callback sdRef connectionSV connectionID sdRefHandle |
@@ -188,38 +200,12 @@ BonjourLibraryInterface >> browseServicesOf: aServiceType [
 	connectionID := self nextConnectionID.
 	flags := 0.
 	interfaceIndex := interface kDNSServiceInterfaceIndexAny.	"0"
-	regtype := aServiceType registrationType utf8Encoded.
-	domain := '' utf8Encoded.
-	context := nil.
-	callback := 
-		"interface newCallbackWithSignature: interface DNSServiceBrowseReply"
-		BonjourCallback signature: interface DNSServiceBrowseReply
-		block:
-			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :serviceNameCB :regtypeCB :domainCB :contextCB | 
-			| sv object |
-			"The actual service discovery reference that was initialized by DNSServiceBrowse that is used to deallocate."
-			connectionSV sdRef: sdRefCB.	
-			(sv := StateVector new)
-				id: connectionID;
-				flags: flagsCB;
-				isMoreComing: (self isMoreComing: flagsCB);
-				interfaceIndex: interfaceIndexCB printString;
-				name: serviceNameCB; 											"VW: asStringFromUnicodeStringOnHeap"
-				registrationType: regtypeCB; 								"VW: copyCStringFromHeap"
-				domain: domainCB. 												"VW: copyCStringFromHeap"	
-			(self isAdd: sv flags)
-				ifTrue: [sv event: 'Added']
-				ifFalse: [sv event: 'Removed'].	
-			self log: '<** Service ', sv event, ' : ', serviceNameCB.
-			object := (Service new)
-				name: sv name;
-				domain: sv domain;
-				serviceType: (connections at: connectionID) serviceType.
-			sv object: object.	
-			callbackQueue nextPut: sv.
-			nil].
+	regtype := aServiceType registrationType.
+	domain := ''.
+	context := ExternalAddress null.
+	callback := self browseServicesOfCallback: connectionID.
 		
-	"Initializes sdRef..."
+	"Initialize sdRef..."
 	self log: '**> Browse Services of type ', aServiceType registrationType.
 	self 
 		browseSDRef: sdRefHandle
@@ -227,8 +213,9 @@ BonjourLibraryInterface >> browseServicesOf: aServiceType [
 		interfaceIndex: interfaceIndex
 		registrationType: regtype 
 		domain: domain 
-		callback: callback context: context.
-	sdRef := sdRefHandle pointerAt: 1.	
+		callback: callback 
+		context: context.
+	sdRef := sdRefHandle pointerAt: 1.
 				
 	connectionSV := StateVector new
 		id: connectionID;
@@ -236,12 +223,44 @@ BonjourLibraryInterface >> browseServicesOf: aServiceType [
 		name: 'Browse Services of type: ' , regtype;
 		serviceType: aServiceType;
 		callback: callback.
+		
 	"Fire off callbacks..."
-	self openResultsStreamOn: sdRef stateVector: connectionSV
-	
-	"(#('_rdlink._tcp.' '_rdlink._udp.') includes: aServiceType registrationType)" "These block as none exist - for testing."
-		"ifTrue: [self log: 'Skipping getting services of service type _rdlink' ]
-		ifFalse: [self openResultsStreamOn: sdRef stateVector: connectionSV]"
+	self runResultsPumpOn: sdRef stateVector: connectionSV
+]
+
+{ #category : #'callbacks - raw' }
+BonjourLibraryInterface >> browseServicesOfCallback: connectionID [
+
+	^BonjourCallback 
+		signature: interface DNSServiceBrowseReply
+		block:
+			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :serviceNameCB :regtypeCB :domainCB :contextCB | 
+			| sv object |
+			(sv := StateVector new)
+				sdRef: sdRefCB;
+				id: connectionID;
+				flags: flagsCB;
+				isMoreComing: (self isMoreComing: flagsCB);
+				interfaceIndex: interfaceIndexCB printString;
+				name: serviceNameCB; 
+				registrationType: regtypeCB; 							
+				domain: domainCB. 													
+			(self isAdd: sv flags)
+				ifTrue: [sv event: 'Added']
+				ifFalse: [sv event: 'Removed'].	
+					
+			self log: '<** Service ', sv event, 
+				' : ', serviceNameCB, 
+				' type: ', regtypeCB, 
+				' interface: ', interfaceIndexCB printString.
+				
+			object := Service new
+				name: sv name;
+				domain: sv domain;
+				serviceType: (connections at: connectionID) serviceType.
+			sv object: object.	
+			callbackQueue nextPut: sv.
+			nil]
 ]
 
 { #category : #'error handling' }
@@ -264,6 +283,14 @@ BonjourLibraryInterface >> checkResult: result for: call [
 { #category : #'_testing' }
 BonjourLibraryInterface >> cleanUpCommands [
 
+	self current.
+
+	"FFI modifies the method - recompile to remove when changing runners etc.
+	BonjourLibraryFFIAbstract compileAll.
+	BonjourLibraryFFICalloutCallback compileAll.
+	BonjourLibraryFFIPump  compileAll
+	"
+
 	LibC runCommand:  'echo sim123 | sudo -S killall –HUP mDNSResponder'.
 	LibC runCommand:  'echo sim123 | sudo -S killall –HUP mDNSHelper'.
 	
@@ -283,25 +310,7 @@ BonjourLibraryInterface >> cleanUpCommands [
 
 ]
 
-{ #category : #'z - unused' }
-BonjourLibraryInterface >> createsdRef [
-
-	"Unused - previous attempts..."
-	
-	^ByteArray new: 8.  "This is handle, not the sdRef"
-	
-	"Both of these work - till it freezes!"
-	
-	"Experimented with this - copied from PortMidi that uses 'pointer to a pointer'"
-	"valueHolderClass := FFIExternalValueHolder ofType: 'void**'.
-	valueHolder := valueHolderClass new.
-	^valueHolder tfPointerAddress" "pinInMemory - get a 'you can not get a pointer to me"
-	
-	"Previous version:"
-	"^ExternalAddress new"
-]
-
-{ #category : #callouts }
+{ #category : #'callouts - raw' }
 BonjourLibraryInterface >> daemonVersion [
 	"
 	self new daemonVersion = (LibC resultOfCommand: 'dns-sd -V') substrings last
@@ -328,16 +337,18 @@ BonjourLibraryInterface >> daemonVersion [
 		ensure: []
 ]
 
-{ #category : #callouts }
+{ #category : #'callouts - raw' }
 BonjourLibraryInterface >> deallocateSDRef: sdRef [
 	
-	[self log: '==> Deallocating ' , sdRef printString.	"true ifTrue: [^self]."
+	"Note: no error checking - result is nil/void"
+	
+	[self log: '**> Deallocating ' , sdRef printString.	"true ifTrue: [^self]."
 		interface DNSServiceRefDeallocate: sdRef]
 			on: Error
-			do: [:ex | ]	"no error checking - result is nil/void"
+			do: [:ex | self log: 'Error when deallocating: ', sdRef printString, ' error: ', ex printString]	
 ]
 
-{ #category : #api }
+{ #category : #'callouts - api' }
 BonjourLibraryInterface >> getAddressesOf: aService [
 	
 	| flags interfaceIndex context callback sdRef hostNameutf8 protocol connectionSV connectionID sdRefHandle |
@@ -346,53 +357,62 @@ BonjourLibraryInterface >> getAddressesOf: aService [
 	connectionID := self nextConnectionID.
 	flags := 0.	"Note, can set to timeout via flags"
 	interfaceIndex := interface kDNSServiceInterfaceIndexAny.	"0"
-	protocol := 0.	"requesting both the IPv4 and IPv6 addresses"
-	hostNameutf8 := aService hostName utf8Encoded.
-	context := nil.	
-	callback := 
-		"interface newCallbackWithSignature: interface DNSServiceGetAddrInfoReply"
-		FFICallback signature: interface DNSServiceGetAddrInfoReply
-		block:
-			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :hostNameCB :addressCB :timeValidCB :contextCB | 
-			| sv |
-			self log: '<** Address of Service : ', aService printString.
-			(sv := StateVector new)
-				id: connectionID;
-				sdRef: sdRefCB;
-				flags: flagsCB;
-				isMoreComing: (self isMoreComing: flagsCB);
-				interfaceIndex: interfaceIndexCB;
-				hostName: hostNameCB 								"VW: copyCStringFromHeap";
-				address: (self addressFrom: addressCB).		"VW: address: (self addressFrom: (addressCB memberAt: #sin_addr))."	
-																		"VW: port: (self portFrom: (addressCB memberAt: #sin_port)).  - returns a zero port, looked at mDNSResponder code to verify, use port from resolve"
-			sv
-				event: 'ServiceAddress';
-				object: (connections at: connectionID) service.	
-			callbackQueue nextPut: sv.
-			nil].
+	protocol := 0. "requesting both the IPv4 and IPv6 addresses"
+	hostNameutf8 := aService hostName.
+	context := ExternalAddress null.
+	callback := self getAddressesOf: aService connectionCallback: connectionID.
 		
 	"Initializes sdRef..."
-	self log: '**> Get addresses of: ', aService printString.
+	self log: '**> Get addresses of: ', aService fullName.
 	self 
 		getAddressesSDRef: sdRefHandle
 		flags: flags 
 		interfaceIndex: interfaceIndex
 		protocol: protocol 
 		hostName: hostNameutf8 
-		callback: callback context: context.	
+		callback: callback 
+		context: context.	
 	sdRef := sdRefHandle pointerAt: 1.	
 				
 	connectionSV := StateVector new
 		id: connectionID;
 		sdRef: sdRef;
-		name: 'Get Addresses of service ', aService printString;
+		name: 'Get addresses of ', aService fullName;
 		service: aService;
 		callback: callback.	
+			
 	"Fire off callbacks..."
-	self openResultsStreamOn: sdRef stateVector: connectionSV
+	self runResultsPumpOn: sdRef stateVector: connectionSV
 ]
 
-{ #category : #callouts }
+{ #category : #'callbacks - raw' }
+BonjourLibraryInterface >> getAddressesOf: aService connectionCallback: connectionID [
+
+	^BonjourCallback 
+		signature: interface DNSServiceGetAddrInfoReply
+		block:
+			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :hostNameCB :addressCB :timeValidCB :contextCB | 
+			| sv |
+			sv := StateVector new
+				sdRef: sdRefCB;
+				id: connectionID;
+				flags: flagsCB;
+				isMoreComing: (self isMoreComing: flagsCB);
+				interfaceIndex: interfaceIndexCB printString;
+				hostName: hostNameCB;
+				address: (self addressFrom: addressCB).	
+				"Note: port returned in structure is zero - bug?. Verified from mDNSResponder code, use port from resolve."
+						
+			self log: '<** Address of service ', aService fullName,' is ', sv address.
+				
+			sv
+				event: 'ServiceAddress';
+				object: (connections at: connectionID) service.	
+			callbackQueue nextPut: sv.
+			nil]
+]
+
+{ #category : #'callouts - raw' }
 BonjourLibraryInterface >> getAddressesSDRef: sdRef flags: flags interfaceIndex: interfaceIndex protocol: protocol hostName: hostName callback: callback context: context [
 	
 	| result |
@@ -422,6 +442,7 @@ BonjourLibraryInterface >> isMoreComing: flags [
 
 { #category : #constants }
 BonjourLibraryInterface >> isRemove: flags [
+
 	"No explicit flag - just not of Add - as per dsn-sd.c code "
 	
 	^(self isAdd: flags) not
@@ -461,68 +482,49 @@ BonjourLibraryInterface >> noError [
 { #category : #'_testing' }
 BonjourLibraryInterface >> openApp [
 
-	"Run this to open the app.
-	For testing, testRegistrationTypes is currently configured to discover services of _test01._tcp
-	Once the app is running in terminal register a service with this service type by executing:
+	"Testing notes:
+	Run Pharo from the terminal - see startUpPharoInTerminalViaBashScript.
+	Compare results with Discovery - DNS-SD Browser available from the Mac App Store:
+		https://apps.apple.com/us/app/discovery-dns-sd-browser/id1381004916?mt=12
+	Open the Process Browser to observe the Smalltalk processes. 
+	Set the registration types you want to browse, or empty for all (default).
+	Run this script to open the app.
+	When the callbacks 'log jam/fail to fire':
+	- if a new service type, such as rdlink is found it most of the time it sets of some callbacks
+	- otherwise try creating a new service to set it off - don't know why this does this.
+	Note that shutting down also caused callbacks to fire.
+	On the first window close click, it shuts down without closing so you can see the result.
+	The second click closes the window
 	
-		dns-sd -R Test01 _test01._tcp. local. 1111
-		
-	Then register further services of the same type:
-	
-		dns-sd -R Test02 _test01._tcp. local. 2222
-		
-	Observe the execution via the logs or the terminal output (start Pharo via terminal).
+	Copy and paste into terminal, then execute:
+	dns-sd -R TestService01 _smb._tcp. local. 1111
+	dns-sd -R TestService02 _smb._tcp. local. 1112
+	dns-sd -R TestService03 _smb._tcp. local. 1113
+	dns-sd -R TestService04 _smb._tcp. local. 1114
+	dns-sd -R TestService05 _smb._tcp. local. 1114
+	dns-sd -R TestService06 _smb._tcp. local. 1114
+	dns-sd -R TestService07 _smb._tcp. local. 1114	
 	"
 
-	<script: 'self new openApp'>
-
-	^DiscoveryApp openOn: self class uniqueInstance
+	<script: 'self uniqueInstance openApp'>
+	
+	registrationTypesToBrowse := #('_osc._udp.').				 	
+	registrationTypesToBrowse := #('_apple-lgremote._tcp.'). 
+	registrationTypesToBrowse := #('_net-assistant._udp.').
+	registrationTypesToBrowse := #().  "All services of all service types."
+	registrationTypesToBrowse := #('_smb._tcp.').	
+	registrationTypesToBrowse := #('_airplay._tcp.').
+	registrationTypesToBrowse := #('_companion-link._tcp.').
+	registrationTypesToBrowse := #('_rdlink._tcp.').
+	registrationTypesToBrowse := #('_osc._udp.'). 
+	
+	DiscoveryApp openOn: self class uniqueInstance.
+	
+	1 seconds wait.
+	self registerOSCUDPService
+	
 		
 	
-]
-
-{ #category : #'data streams' }
-BonjourLibraryInterface >> openResultsStreamOn: sdRef stateVector: sv [
-
-	"If you want to run the callback function synchronously instead of setting 
-	up a run loop or a select loop, you can call <the api call> and immediately 
-	call DNSServiceProcessResult. The DNSServiceProcessResult function will block 
-	until the mDNSResponder daemon has a response, at which time the callback specified 
-	when DNSServiceResolve was called will be invoked. 
-	This entire process should probably be run within a loop of its own 
-	for each service you wish to resolve."
-	
-	| pump connectionID label worker | 
-	
-	"worker := TFWorker named: 'Bonjour'."
-	
-	connectionID := sv id.
-	label := 'Pumping ', connectionID, ' ', sv name, ' sdRef: ', sdRef printString.
-	pump := 
-		[self log:  'Starting pumping process:  ', label.
-		"TFProcessLocalWorker worker: worker."
-		[true]
-			whileTrue:
-				[
-				self log: '**|> ', label.
-				"Threaded call so doesn't block Smalltalk engine."
-				"This blocks until data is available. When it unblocks it fires off one or more callbacks."
-				self serviceProcessResult: sdRef. 
-				self log: '**>|<** RETURNED ', label.
-				"UIManager default alert: sv printString"]]
-					newProcess.
-	connections
-		at: connectionID
-		put: (sv pump: pump).	
-			
-	"Processor userInterruptPriority = 50
-	Processor userSchedulingPriority = 40 
-	Processor userBackgroundPriority = 30"
-	
-	^pump
-		name: label;
-		priority: 30;  
-		resume		
 ]
 
 { #category : #constants }
@@ -543,40 +545,25 @@ BonjourLibraryInterface >> promiseTimeout [
 	^5000000
 ]
 
-{ #category : #api }
+{ #category : #'callouts - api' }
 BonjourLibraryInterface >> register: aService [
 	
-	| flags interfaceIndex regtype context callback sdRef nameutf8 
-	textLength textRecord domain hostName portNetworkByteOrder connectionSV connectionID sdRefHandle |
+	| flags interfaceIndex regtype context callback sdRef nameutf8 textLength textRecord 
+	domain hostName portNetworkByteOrder connectionSV connectionID sdRefHandle |
 
 	sdRefHandle := ByteArray new: 8.
 	connectionID := self nextConnectionID.
 	flags := 0.	"No renaming"
 	interfaceIndex := interface kDNSServiceInterfaceIndexAny.	"0"	 "All available"	
-	nameutf8 := aService name utf8Encoded.
-	regtype := aService registrationType utf8Encoded.
-	domain := nil.	"Default domains"
-	hostName := nil.	"Use the machine's default host name(s)."
-	portNetworkByteOrder := aService port reverseByteOrderSIM.
+	nameutf8 := aService name.
+	regtype := aService registrationType.
+	domain := ExternalAddress null.	"Default domains"
+	hostName := ExternalAddress null.	"Use the machine's default host name(s)."
+	portNetworkByteOrder := aService port asInteger asByteArray reverse asInteger.
 	textLength := aService textLengthFromTextRecordPairs.	"0."
 	textRecord := aService textRecordLibraryCalloutParameter.	"nil."
-	callback := 
-		BonjourCallback signature: interface DNSServiceRegisterReply
-		block:
-			[:sdRefCB :flagsCB :errorCodeCB :nameCB :regtypeCB :domainCB :contextCB | 
-			| sv |
-			self log: '<** Service Registered: ', aService printString.
-			"The actual service discovery reference that was initialized by DNSServiceBrowse that is used to deallocate."
-			aService sdRef: sdRefCB.	
-			(sv := StateVector new)
-				id: connectionID;
-				domain: domainCB 						"VW: copyCStringFromHeap";
-				event: 'ServiceRegistered';
-				object: aService.
-			aService domain: sv domain.
-			callbackQueue nextPut: sv.	
-			nil].
-	context := nil.	
+	context := ExternalAddress null.
+	callback := self register: aService connectionCallback: connectionID.
 		
 	"Initializes sdRef..."
 	self log: '**> Register Service: ', aService printString.
@@ -599,14 +586,37 @@ BonjourLibraryInterface >> register: aService [
 	connectionSV := StateVector new
 		id: connectionID;
 		sdRef: sdRef;
-		name: 'Register service ', aService printString;
+		name: 'Register service ', aService fullName;
 		service: aService;
 		callback: callback.
+		
 	"Fire off callbacks..."
-	self openResultsStreamOn: sdRef stateVector: connectionSV
+	self runResultsPumpOn: sdRef stateVector: connectionSV
 ]
 
-{ #category : #callouts }
+{ #category : #'callbacks - raw' }
+BonjourLibraryInterface >> register: aService connectionCallback: connectionID [
+	
+	^BonjourCallback 
+		signature: interface DNSServiceRegisterReply
+		block:
+			[:sdRefCB :flagsCB :errorCodeCB :nameCB :regtypeCB :domainCB :contextCB | 
+			| sv |
+			sv := StateVector new
+				sdRef: sdRefCB;
+				id: connectionID;
+				domain: domainCB;
+				event: 'ServiceRegistered';
+				object: aService.
+				
+			self log: '<** Service Registered: ', aService printString.
+			
+			aService domain: sv domain.
+			callbackQueue nextPut: sv.	
+			nil]
+]
+
+{ #category : #'callouts - raw' }
 BonjourLibraryInterface >> registerSDRef: sdRef flags: flags interfaceIndex: interfaceIndex name: name registrationType: regtype domain: domain hostName: host port: port textLength: txtLen textRecord: txtRecord callback: callback context: context [
 	
 	| result |
@@ -627,7 +637,7 @@ BonjourLibraryInterface >> registerSDRef: sdRef flags: flags interfaceIndex: int
 	self checkResult: result for: 'DNSServiceRegister'
 ]
 
-{ #category : #api }
+{ #category : #'callouts - api' }
 BonjourLibraryInterface >> resolve: aService [
 	
 	| flags interfaceIndex regtype context callback sdRef domainutf8 
@@ -637,37 +647,14 @@ BonjourLibraryInterface >> resolve: aService [
 	connectionID := self nextConnectionID.
 	flags := 0.
 	interfaceIndex := interface kDNSServiceInterfaceIndexAny.	"0"
-	nameutf8 := aService name utf8Encoded.	"Note the header documentation is incorrect - it says full service name, only need the name"
-	regtype := aService registrationType utf8Encoded.
-	domainutf8 := aService domain utf8Encoded.
-	context := nil.	
-	callback := 
-		"interface newCallbackWithSignature: interface DNSServiceResolveReply"
-		FFICallback signature: interface DNSServiceResolveReply
-		block:
-			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :nameCB :hostCB :portCB :textLengthCB :textRecordCB :contextCB | 
-			| sv |
-			self log: '<** Service Resolved: ', aService printString.
-			aService sdRef: sdRefCB.	"The actual service discovery reference that was initialized by DNSServiceBrowse that is used to deallocate."
-			(sv := StateVector new)
-				id: connectionID;
-				sdRef: sdRefCB;
-				flags: flagsCB;
-				isMoreComing: (self isMoreComing: flagsCB);
-				interfaceIndex: interfaceIndexCB;
-				name: nameCB 										"VW: asStringFromUnicodeStringOnHeap";
-				hostName: hostCB 									"VW: copyCStringFromHeap";
-				port: portCB reverseByteOrderSIM asString;
-				textLength: textLengthCB;
-				textRecord: textRecordCB 						"VW: copyCStringFromHeap".
-			sv
-				event: 'ServiceResolved';
-				object: (connections at: connectionID) service.
-			callbackQueue nextPut: sv.
-			nil].
+	nameutf8 := aService name.	"Note the header documentation is incorrect - it says full service name, only need the name"
+	regtype := aService registrationType.
+	domainutf8 := aService domain.
+	context := ExternalAddress null.
+	callback := self resolve: aService connectionIDCallback: connectionID.
 		
-	"Initializes sdRef..."
-	self log: '**> Resolve Service: ', aService printString.
+	"Initialize sdRef..."
+	self log: '**> Resolve Service: ', aService fullName.
 	self 
 		resolveSDRef: sdRefHandle
 		flags: flags 
@@ -682,16 +669,49 @@ BonjourLibraryInterface >> resolve: aService [
 	connectionSV := StateVector new
 		id: connectionID;
 		sdRef: sdRef;
-		name: 'Resolve service ', aService printString;
+		name: 'Resolve: ', aService fullName;
 		service: aService;
 		callback: callback.
+		
 	"Fire off callbacks..."	
-	self openResultsStreamOn: sdRef stateVector: connectionSV
+	self runResultsPumpOn: sdRef stateVector: connectionSV
 ]
 
-{ #category : #callouts }
-BonjourLibraryInterface >> resolveSDRef: sdRef flags: flags interfaceIndex: interfaceIndex name: name registrationType: regtype domain: domain callback: callBack context: context [
+{ #category : #'callbacks - raw' }
+BonjourLibraryInterface >> resolve: aService connectionIDCallback: connectionID [
 	
+	^BonjourCallback 
+		signature: interface DNSServiceResolveReply
+		block:
+			[:sdRefCB :flagsCB :interfaceIndexCB :errorCodeCB :nameCB :hostCB :portCB :textLengthCB :textRecordCB :contextCB | 
+			| sv |
+			sv := StateVector new
+				id: connectionID;
+				sdRef: sdRefCB;
+				flags: flagsCB;
+				isMoreComing: (self isMoreComing: flagsCB);
+				interfaceIndex: interfaceIndexCB printString;
+				name: nameCB;
+				hostName: hostCB;								
+				port: portCB asByteArray reverse asInteger asString;
+				textLength: textLengthCB;
+				textRecord: textRecordCB.
+				
+			self log: '<** Service Resolved: ', 
+				aService fullName,  
+				' host: ', sv hostName,
+				' port: ', sv port,
+				' interface: ', sv interfaceIndex.
+				
+			sv
+				event: 'ServiceResolved';
+				object: (connections at: connectionID) service.
+			callbackQueue nextPut: sv.
+			nil]
+]
+
+{ #category : #'callouts - raw' }
+BonjourLibraryInterface >> resolveSDRef: sdRef flags: flags interfaceIndex: interfaceIndex name: name registrationType: regtype domain: domain callback: callBack context: context [
 	
 	| result |
 	
@@ -703,7 +723,7 @@ BonjourLibraryInterface >> resolveSDRef: sdRef flags: flags interfaceIndex: inte
 		with: regtype 
 		with: domain 
 		with: callBack
-		with: context.
+		with: ExternalAddress null.
 		self checkResult: result for: 'DNSServiceResolve'	
 		
 "Once you have the name, registration type, and domain of a service, you can get information about the service, such as the interface(s) on which the service is registered, the full domain name of the service, name of the host that provides the service, and the content of the service’s primary TXT record, by calling DNSServiceResolve."
@@ -849,72 +869,84 @@ DNSServiceErrorType DNSSD_API DNSServiceResolve
 "
 ]
 
-{ #category : #callbacks }
-BonjourLibraryInterface >> serviceAddress: sv [
+{ #category : #'results processing' }
+BonjourLibraryInterface >> runResultsPumpOn: sdRef stateVector: sv [
+
+	"If you want to run the callback function synchronously instead of setting 
+	up a run loop or a select loop, you can call <the api call> and immediately 
+	call DNSServiceProcessResult. The DNSServiceProcessResult function will block 
+	until the mDNSResponder daemon has a response, at which time the callback specified 
+	when DNSServiceResolve was called will be invoked. 
+	This entire process should probably be run within a loop of its own 
+	for each service you wish to resolve."
 	
-	| theService |
+	| pump connectionID label | 
 	
-	self log:	'<= Service Address for: ' , sv object printString, ' interface ', sv interfaceIndex.
-		
-	(theService := sv object) addAddress: sv address.	"self log: 'Service Address - top: ', sv object printString."
-	sv isMoreComing
-		ifFalse:
-			[connections
-				at: sv id
-				ifPresent:
-					[:value | 
-					value pump terminate.
-					connections removeKey: sv id]
-				ifAbsent:
-					[self
-						log:
-							'No Bonjour connection found when receiving service address for: '
-								, theService printString , ' during service resolution'].
-			self deallocateSDRef: sv sdRef.	
-			"The service is fully resolved now, so add it to the collection."
-			theService serviceType addService: theService.
-			services add: theService.
-			self announce: (ServiceAdded new service: theService)]
+	connectionID := sv id.
+	label := 'Pump ', connectionID, ' ', sv name, ' sdRef: ', sdRef printString.
+	pump := 
+		[self log:  'Starting ', label.
+		[true]
+			whileTrue:
+				[self log: '**>| Threaded ', label.
+				"Threaded call so doesn't block Smalltalk engine."
+				"This blocks the current process, (but not the UI!), until data is available. 
+				When it unblocks it fires off one or more callbacks."
+				self serviceProcessResult: sdRef. 
+				self log: '|<** Threaded return ', label]]
+					newProcess.
+	connections
+		at: connectionID
+		put: (sv pump: pump).	
+			
+	^pump
+		name: label;
+		priority: self resultsPumpPriority;  
+		resume		
 ]
 
-{ #category : #callbacks }
+{ #category : #'callbacks - application' }
+BonjourLibraryInterface >> serviceAddress: sv [
+	
+	super serviceAddress: sv.
+	
+	sv isMoreComing
+		ifFalse: [self removeConnectionOf: sv]
+]
+
+{ #category : #'callbacks - application' }
 BonjourLibraryInterface >> serviceFound: aService on: anInterfaceIndex [
 
-	"Called asynchronously when a service is found whilst browsing for instances of a server type.
+	"Invoked following service added callback whilst browsing for instances of a server type.
 	There are separate callbacks for each interface on which the service is found.
-	One service is created, and the interface indexes are added to that."
+	Only one service is create for all interfaces - the interface indexes are added each address."
 	
 	| theService |
-	
-	self log:	'<= Service Found for: ' , aService printString, ' interface ', anInterfaceIndex.
-	
+		
 	theService := services
 		detect: [:each | each fullName = aService fullName]
 		ifNone: [aService].
-	theService addInterface: anInterfaceIndex.	
-	"If this is the first discovery, fire off the resolve and stash the object."
+	"theService addInterface: anInterfaceIndex.	"
+	"If this is the first discovery, invoke the resolve to get host and port."
 	services
 		detect: [:each | each fullName = theService fullName]
 		ifNone:
-			[self log: 'First discovery - fire off resolve'.
-			self announce: (ServiceAdded new service: aService).
+			[self addService: aService.
 			self resolve: theService]	
 ]
 
-{ #category : #callbacks }
+{ #category : #'callbacks - application' }
 BonjourLibraryInterface >> serviceLost: aService on: anInterfaceIndex callback: aCallbackSV [
 
 	"One lost callback for each interface the service is on..."
 	
 	| theService pendingConnections |
 	
-	self log:	'<= Service Lost for: ' , aService printString, ' interface: ', anInterfaceIndex.
-	
 	theService := services
 		detect: [:each | each fullName = aService fullName]
 		ifNone:
 			["As services only get added after they have been fully resolved (and addresses got), 
-			check to see if it got lost whilst still resolving."
+			check to see if it got lost whilst still resolving. - not true anymore, but leave code"
 			(pendingConnections := connections values
 				select:
 					[:each | 
@@ -926,80 +958,73 @@ BonjourLibraryInterface >> serviceLost: aService on: anInterfaceIndex callback: 
 								do:
 									[:each | 
 									self log: 'Removing pending Bonjour connection: ' , each printString.
-									self log: each sdRef "contents - still needed in Pharo?" printString.
-									each pump terminate.
-									connections removeKey: each id.
-									^self deallocateSDRef: each sdRef "contents - still needed in Pharo?"]]
+									self removeConnectionOf: each]]
 						ifTrue: [^self log: 'Service to remove not found' , aService fullName]].	"Don't error - timing issue?"
 				
 	aCallbackSV object: theService.
-	theService removeInterface: anInterfaceIndex.
-	theService interfaces isEmpty
-		ifTrue: [self removeService: theService]
+	self announce: (ServiceRemoved new service: theService).
+	self removeService: theService
 ]
 
-{ #category : #callouts }
+{ #category : #'callouts - raw' }
 BonjourLibraryInterface >> serviceProcessResult: sdRef [
 
 	| result |
 
-	result := interface DNSServiceProcessResult: sdRef.
+	result := asynchronousInterface DNSServiceProcessResult: sdRef.
 	self checkResult: result for: 'DNSServiceProcessResult'
 	
 
 	
 ]
 
-{ #category : #callbacks }
+{ #category : #'callbacks - application' }
 BonjourLibraryInterface >> serviceRegistered: sv [
+
 	"Service has been registered.
-	Note that it is not added as a service here, but is added through the service discovery service found callback.
-	Assumption: - that service discovery includes the registered service type."
 	
-	self log:	'<= Service Registered for: ' , sv object printString.
+	Note that it is not added as a service here, but is added through the service discovery service found callback.
+	If not already browsing for the service's service type, browsing has already been started when registering the service"
+	
+	self log:	'### Service Registered for: ' , sv object fullName.
 		
 	registeredServices
 		at: sv object fullName
 		put: sv object.	
-	"Remove the register connection, as the sdRef is held by the service."
+			
+	"Remove the register connection, as the sdRef is held by the service.
+	Don't deallocate the sdRef though."
 	connections
 		at: sv id
 		ifPresent:
 			[:value | 
 			value pump terminate.
 			connections removeKey: sv id]
-		ifAbsent: [self halt]
+		ifAbsent: [self log: 'ERROR: connection: ', sv id printString, ' not found within service registered callback']
 ]
 
-{ #category : #callbacks }
+{ #category : #'callbacks - application' }
 BonjourLibraryInterface >> serviceResolved: sv [
+
 	"There are separate resolve callbacks for each interface on which the service is found."
 	
-	self log:	'<= Service Resolved for: ' , sv object printString, ' interface: ', sv interfaceIndex.
+	sv object hostName = '' "Is this the first resolution?"
+		ifTrue:
+			[sv object
+				hostName: sv hostName;
+				port: sv port;
+				textRecordPairs: 
+					(self 
+						textRecordPairsFromTextLength: sv textLength
+						textRecord: sv textRecord).	
+			self log:	'### Service updated: ' , sv object fullName, ' host: ', sv hostName, ' port: ', sv port.
+			self announce: (ServiceUpdated new service: sv object)].
 	
-	sv object
-		hostName: sv hostName;
-		port: sv port;
-		textRecordPairs: 
-			(self 
-				textRecordPairsFromTextLength: sv textLength
-				textRecord: sv textRecord).	
-	"The identical service created when service found."	
-	"self log: 'Resolved: ', sv object printString."
 	sv isMoreComing
 		ifFalse:
 			["Resolve callbacks have finished, get the addresses."
 			self getAddressesOf: sv object.
-			connections
-				at: sv id
-				ifPresent:
-					[:value | 
-					value pump terminate.
-					connections removeKey: sv id]
-				ifAbsent:
-					[self log: 'CONNECTION NOT FOUND FOR RESOLVED CALLBACK: ' , sv printString.
-					self log: sv sdRef printString].
-			self deallocateSDRef: sv sdRef	"sv sdRef free - causes VW to crash, as allready deallocated by previous statement"]
+			self removeConnectionOf: sv]
 ]
 
 { #category : #'startUp - shutDown' }
@@ -1015,57 +1040,71 @@ BonjourLibraryInterface >> startUp [
 	self log: 'Starting up on mDNSResponder'.
 	self initializeOnStartUp.
 	
-	"self log: 'Recompiling all FFILibrary (BonjourLibraryInterface) interface methods'.
-	BonjourLibraryFFI compileAll. "
-	interface := BonjourLibraryFFI uniqueInstance.
-	self log: 'Threaded runner is: ', interface runner printString.
+	"Need to recompile ffi methods, as they are holding onto the previous runner in the byteCodes.
+	This causes a crash when running for the second time without restarting the image."
+	BonjourLibraryFFIAbstract compileAll.
+	BonjourLibraryFFICalloutCallback compileAll.
+	BonjourLibraryFFIPump  compileAll.
 	
-	self startUpOnRegistrationTypes: self testRegistrationTypes
+	BonjourLibraryFFICalloutCallback reset.  "In case change runner type..."
+	BonjourLibraryFFIPump reset.
+	interface := BonjourLibraryFFICalloutCallback uniqueInstance.
+	asynchronousInterface := BonjourLibraryFFIPump uniqueInstance.
+		
+	self log: 'Threaded runner for synchronous callouts is: ', interface runner printString.
+	self log: 'Threaded runner for asynchronous callouts is: ', asynchronousInterface runner printString.
+
+	(registrationTypesToBrowse 
+		ifEmpty: [self log: 'Browsing for all services off all types'] 
+		ifNotEmpty: 
+			[: value | 
+			self log: 'Browsing for services with types of: ', value printString]).
+			
+	[self browseServiceTypes] forkAt: self callbackStreamPriority
 ]
 
 { #category : #'_testing' }
-BonjourLibraryInterface >> testRegistrationTypes [
-		
-	^#('_test01._tcp.').
-	
-	"^#()."   "All service types"
-	
-	"^#('_rdlink._tcp.')."  "Comes when iPhone active - good for testing"
-	"^#('_airplay._tcp.')."
-	"^#('_osc._udp.')."
-	
-	"self inspect."
+BonjourLibraryInterface >> startUpPharoInTerminalViaBashScript [
 
-	
+"
+
+#!/bin/sh
+
+# Execute this after saving to remove from quarantine:
+# xattr -r -d com.apple.quarantine /Users/stewart/Desktop/OverDrive.P10.command
+
+cd /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDrive
+/Volumes/Data/Development/Smalltalk/Engines/Pharo/Pharo10.0/Pharo.app/Contents/MacOS/Pharo --logLevel=4 /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDrive/Pharo.image
+
+"
 ]
 
 { #category : #parsing }
-BonjourLibraryInterface >> textRecordPairsFromTextLength: recordLengthCB textRecord: cString [
-	"Unmarshal the key/value pairs from within cString."
+BonjourLibraryInterface >> textRecordPairsFromTextLength: textLength textRecord: externalAddress [
+
+	"Unmarshal the key/value pairs from within the string pointed to by externalAddress."
 	
-	| stream textLength textRecord pairs |
+	| stream pairs textRecord |
 	
-	textLength := recordLengthCB.
-	textRecord := cString.
-	textRecord := textRecord isEmpty
-		ifTrue: ['']
-		ifFalse: [textRecord copyFrom: 1 to: textLength].
+	textRecord := externalAddress copyFrom: 1 to: textLength.
 	stream := ReadStream on: textRecord.
 	pairs := OrderedCollection new.
 	[stream atEnd]
 		whileFalse:
 			[| keyValue |
-			(keyValue := (stream next: stream next asInteger) splitOn: $=) size = 2
+			(keyValue := (stream next: stream next asInteger) utf8Decoded splitOn: $=) size = 2
 				ifTrue:
 					[pairs add: 
 						(TextRecordPair
-							key: (keyValue at: 1) "unicodeStringToHostString"
-							value: (keyValue at: 2)) "unicodeStringToHostString"]
+							key: (keyValue at: 1)
+							value: (keyValue at: 2))]
 				ifFalse:
-					[pairs add: 
-						(TextRecordPair
-							key: (keyValue at: 1) "unicodeStringToHostString"
-							value: '')]].
+					[(keyValue at: 1) 
+						ifNotEmpty:
+							[pairs add: 
+								(TextRecordPair
+									key: (keyValue at: 1)
+									value: '')]]].
 				
 	^pairs
 					
@@ -1078,71 +1117,51 @@ BonjourLibraryInterface >> textRecordPairsFromTextLength: recordLengthCB textRec
 		yourself) inspect"
 ]
 
-{ #category : #troubleshooting }
-BonjourLibraryInterface >> usingThreadedCallout [
-
-"BenchTFFIWorker>>runCall - works ok.
-
-^TFWorker default
-
-1) Test
-
-Thread 0 Crashed::  Dispatch queue: com.apple.main-thread
-0   libsystem_kernel.dylib        	       0x1841319b8 __pthread_kill + 8
-1   libsystem_pthread.dylib       	       0x18416515c pthread_kill + 288
-2   libsystem_c.dylib             	       0x1840a23a0 __abort + 128
-3   libsystem_c.dylib             	       0x18409418c __stack_chk_fail + 96
-4   libPharoVMCore.dylib          	       0x102986a10 compileCogMethod + 12960
-	
-2) Test
-Application Specific Information:
-BUG IN CLIENT OF LIBPLATFORM: Trying to recursively lock an os_once_t
-Abort Cause 67611
-stack buffer overflow
-
-
-Thread 0 Crashed:: SDLTimer
-0   libsystem_kernel.dylib        	       0x18412d0c0 __psynch_cvwait + 8
-1   libsystem_pthread.dylib       	       0x184165ab4 _pthread_cond_wait + 1228
-2   libSDL2.dylib                 	       0x107edba14 SDL_CondWaitTimeout_REAL + 148
-3   libSDL2.dylib                 	       0x107edb574 SDL_SemWaitTimeout_REAL + 76
-4   libSDL2.dylib                 	       0x107e7c7f0 SDL_TimerThread + 84
-5   libSDL2.dylib                 	       0x107e7c3d0 SDL_RunThread + 48
-6   libSDL2.dylib                 	       0x107edb174 RunThread + 12
-7   libsystem_pthread.dylib       	       0x1841654ec _pthread_start + 148
-8   libsystem_pthread.dylib       	       0x1841602d0 thread_start + 8
-	
-3) Test - UI responsive, but hasn't returned results:
-
-Thread 0x18a19    1001 samples (1-1001)    priority 31 (base 31)
-  1001  thread_start + 8 (libsystem_pthread.dylib + 8912) [0x1841602d0]
-    1001  _pthread_start + 148 (libsystem_pthread.dylib + 29932) [0x1841654ec]
-      1001  worker_run + 172 (libPharoVMCore.dylib + 46560) [0x10239f5e0]
-        1001  ffi_call_int + 948 (libffi.dylib + 68068) [0x19222c9e4]
-          1001  ffi_call_SYSV + 80 (libffi.dylib + 32848) [0x192224050]
-            1001  DNSServiceProcessResult + 248 (libsystem_dnssd.dylib + 11196) [0x18ebedbbc]
-              1001  __recvfrom_nocancel + 8 (libsystem_kernel.dylib + 24156) [0x18412de5c]
-               *1001  ??? (kernel.release.t8101 + 30712) [0xfffffe00079137f8]
-                 *1001  ??? (kernel.release.t8101 + 1567524) [0xfffffe0007a8ab24]
-                   *1001  ??? (kernel.release.t8101 + 6934044) [0xfffffe0007fa8e1c]
-                     *1001  ??? (kernel.release.t8101 + 6260520) [0xfffffe0007f04728]
-                       *1001  ??? (kernel.release.t8101 + 6260848) [0xfffffe0007f04870]
-                         *1001  soreceive + 1920 (kernel.release.t8101 + 6194252) [0xfffffe0007ef444c]
-                           *1001  ??? (kernel.release.t8101 + 6236188) [0xfffffe0007efe81c]
-                             *1001  ??? (kernel.release.t8101 + 5874920) [0xfffffe0007ea64e8]
-                               *1001  lck_mtx_sleep + 136 (kernel.release.t8101 + 428264) [0xfffffe00079748e8]
-                                 *1001  ??? (kernel.release.t8101 + 524964) [0xfffffe000798c2a4]
-                                   *1001  ??? (kernel.release.t8101 + 531352) [0xfffffe000798db98]
-
-4) Attempting to shut down, after asynchronous call hasn't returned
-
-0x16f430938 M [] in Semaphore>criticalReleasingOnError: 0x3c3437b78: a(n) Semaphore
-       0x16f430978 M FullBlockClosure(BlockClosure)>ensure: 0x39fd5dd10: a(n) FullBlockClosure
-       0x16f4309b8 M Semaphore>criticalReleasingOnError: 0x3c3437b78: a(n) Semaphore
-       0x16f430a00 I BonjourLibraryInterface>deallocateSDRef: 0x3c4c1b240: a(n) BonjourLibraryInterface
-       0x16f430a38 M [] in BonjourLibraryInterface>shutDown 0x3c4c1b240: a(n) BonjourLibraryInterface
-
+{ #category : #'_testing' }
+BonjourLibraryInterface >> troubleShooting [
 	
 	"
+	Callbacks:
+	TFCallbackQueue>>executeCallback: - traced - removed as it runs on the queue thread.
+	To guarantee the stack is not modified while this method runs, 
+	this method should be called from a high priority process.
+	  => no callbacks should finish while this method runs.
+	
+	TFCallbackInvocation>>execute - traced
+	TFRunner>>returnCallback: - traced
+	
+	Callouts:
+	FFICalloutAPI>>function: functionSignature library: moduleNameOrLibrary
+	
+	TFExternalAsyncCall
+		TFPooledExternalAsyncCall>>doExecute: - traced
+		
+	TFPooledExternalAsyncCall allInstances.
+	TFRunner allInstances
+	
+	"
+	self current.
+	self allInstances.
 
+	BonjourLibraryFFICalloutCallback uniqueInstance runner.
+	BonjourLibraryFFIPump uniqueInstance runner.
+
+	SpApplication defaultApplication: nil.
+	
+	SpNullApplication allInstances do: [: each | each reset].
+
+	SpaceTally new printSpaceAnalysis.
+
+	TFWorker allInstances.
+
+	MCHttpRepository
+      location: 'http://smalltalkhub.com/mc/JohnBrant/ReferenceFinder/main'
+      user: ''
+      password: ''.
+
+	ReferenceFinder findPathTo:  BonjourLibraryFFICalloutCallback allInstances first.
+	
+	ReferenceFinder findPathTo: TFWorker allInstances first.
+	
+	ReferenceFinder findPathTo: DiscoveryApp allInstances first
 ]

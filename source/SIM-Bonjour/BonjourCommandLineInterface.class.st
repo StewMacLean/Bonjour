@@ -10,9 +10,7 @@ Class {
 { #category : #structural }
 BonjourCommandLineInterface >> addService: aService [
 
-	aService serviceType addService: aService.
-	services add: aService.
-	self announce: (ServiceAdded new service: aService).
+	super addService: aService.
 	(connections select: [: connection | 
 			(#('Resolve Host Name' 'Get Addresses') includes: connection type)
 				and: [connection service = aService]]) 
@@ -180,7 +178,6 @@ BonjourCommandLineInterface >> emitBrowseServiceCallbacks: aString serviceType: 
 							name: each value first name;
 							serviceType: aServiceType; 
 							domain: each value first domain).
-				each value do: [: each1 | service addInterface: each1 interfaceIndex].
 				(each key includesSubstring: 'Add')
 					ifTrue: [svEvent event: 'Added']
 					ifFalse: [svEvent event: 'Removed'].
@@ -201,89 +198,6 @@ BonjourCommandLineInterface >> emitBrowseServiceCallbacks: aString serviceType: 
 			each event = 'Added'
 				ifTrue: [self addService: each object]
 				ifFalse: ["Already removed in callback"]]  
-				
-		
-						
-		
-		  
-		
-]
-
-{ #category : #'callback emitters' }
-BonjourCommandLineInterface >> emitBrowseServiceCallbacksv1: aString serviceType: aServiceType [
-
-	| lines sv events theString linesAsSubstrings eventLines serviceIndex callbacks |
-	
-	aString ifEmpty: [^self]. "We're polling after all!"
-	theString := aString asByteArray utf8Decoded.
-	
-	self log: '<<====================================================='.
-	self log: 'EMIT Services for: ', aServiceType printString.
-	self log: theString.
-	
-	
-	false ifTrue: [^self].
-	
-	lines := theString substrings: {Character lf}.
-	linesAsSubstrings := (lines collect: [: each | each substrings]).
-	eventLines := OrderedCollection new.
-	lines with: linesAsSubstrings do: [: line : substrings | 
-		(#('Add' 'Rmv') includes: (substrings at: 2))
-			ifTrue: [eventLines add: line trimmed]].
-	events := eventLines collect: 
-		 [: line | | readStream name registrationType addRemove domain interfaceIndex |
-			readStream := line readStream.
-			readStream nextAlphabeticWord.
-			addRemove := readStream nextAlphabeticWord.
-			readStream nextAlphabeticWord.
-			interfaceIndex := readStream nextAlphabeticWord.
-			domain := readStream nextAlphabeticWord.
-			registrationType := readStream nextAlphabeticWord.
-			name := readStream upToEnd.  "This can have spaces, so can't use substring."
-			(sv := StateVector new)
-				name: name;
-				registrationType: registrationType;
-				interfaceIndex: interfaceIndex.
-				addRemove = 'Add'
-					ifTrue: [sv event: 'Added']
-					ifFalse: [sv event: 'Removed'].	
-				sv domain: domain].
-		
-		serviceIndex := events 
-			groupedBy: [: each | 
-				(StateVector new 
-					event: each event; 
-					name: each name; registrationType: 
-					each registrationType; 
-					domain: each domain) printString].
-			
-		callbacks := serviceIndex associations collect: [: each | | svEvent service |
-				svEvent := StateVector new 
-					object: 
-						(service := Service new
-							name: each value first name;
-							serviceType: aServiceType; 
-							domain: each value first domain).
-					(each value collect: [: each1 | service addInterface: each1 interfaceIndex]).
-				(each key includesSubstring: 'Add')
-					ifTrue: [svEvent event: 'Added']
-					ifFalse: [svEvent event: 'Removed'].
-				svEvent interfaceIndex: 'dummy index'. "to comply with framework"
-				svEvent].	
-				
-		callbacks do: [: each | 
-			callbackQueue nextPut: each.
-			"self halt."
-			[self log: self elapsedTimeWaitingForServiceResolution printMMSSlllccc.
-			self elapsedTimeWaitingForServiceResolution > 1000 milliSeconds]
-			whileFalse:
-				[100 milliSeconds wait.
-				self log: 'Busy wait...'.
-				Processor yield].
-			self log: 'Finished Busy wait for ', each object printString.
-			each event = 'Added'
-				ifTrue: [self addService: each object]
-				ifFalse: ["self removeService: each object - already done in callback"]]  
 				
 		
 						
@@ -322,8 +236,7 @@ BonjourCommandLineInterface >> emitBrowseServiceTypeCallbacks: aString [
 			object := ServiceType new
 				name: sv name;
 				protocol: protocol;
-				domain: domain;
-				interfaceIndex: sv interfaceIndex.
+				domain: domain.
 			sv object: object.	
 			callbackQueue nextPut: sv.
 			]
@@ -347,42 +260,6 @@ BonjourCommandLineInterface >> emitGetAddressesOfServiceCallbacks: aString servi
 	lines := theString substrings: {Character lf}.
 	lines := lines collect: [: each | each substrings].
 	lines := lines select: [: each | (each size > 1) and: [#('Add' 'Rmv') includes: (each at: 2)]].
-	
-	events := lines collect: 
-		 [: line | 
-		(sv := StateVector new)
-			name: (line at: 5);
-			interfaceIndex: (line at: 4);
-			address: (line at: 6).
-			 (line at: 2) = 'Add'
-				ifTrue: [sv event: 'Added']
-				ifFalse: [sv event: 'Removed'].	
-			sv
-				event: 'ServiceAddress';
-				object: (connections at: id) service.
-			callbackQueue nextPut: sv] 
-]
-
-{ #category : #'callback emitters' }
-BonjourCommandLineInterface >> emitGetAddressesOfServiceCallbacksv1: aString service: aService connectionID: id [
-
-	| lines sv events theString filteredLines |
-	
-	aString ifEmpty: [^self]. "We're polling after all!"
-	theString := aString asByteArray utf8Decoded.
-	
-	self log: '<<====================================================='.
-	self log: 'EMIT Addresses for: ', aService printString.
-	self log: theString.
-	
-	
-	false ifTrue: [^self].
-
-	lines := theString substrings: {Character lf}.
-	lines := lines collect: [: each | each substrings].
-	lines := lines select: [: each | (each size > 1) and: [#('Add' 'Rmv') includes: (each at: 2)]].
-	"Remove duplicates - note ip6 are suffixed with interface, so differs from Discovery"
-	lines := (lines groupedBy: [: each | each at: 6]) values collect: [: oc | oc first].
 	
 	events := lines collect: 
 		 [: line | 
@@ -666,30 +543,6 @@ BonjourCommandLineInterface >> runRegistrationTests [
 ]
 
 { #category : #callbacks }
-BonjourCommandLineInterface >> serviceAddress: sv [
-
-	| address | 
-	
-	self log:	'<== Service Address: ', sv address, ' for: ' , sv object printString, ' interface ', sv interfaceIndex.
-	
-	(sv address includes: $:)
-		ifTrue: 
-			[address := (sv address splitOn: $%) first.
-			interface := (sv address splitOn: $%) last.
-			interface := sv interfaceIndex, '/', interface]
-		ifFalse:
-			[address := sv address.
-			interface := sv interfaceIndex].
-			
-	sv object
-		addAddress: 
-			(IPAddress new
-				service: sv object;
-				address: address;
-				addInterface: interface)
-]
-
-{ #category : #callbacks }
 BonjourCommandLineInterface >> serviceAddressv1: sv [
 	
 	| theService |
@@ -734,6 +587,7 @@ BonjourCommandLineInterface >> serviceLost: aService on: anInterfaceIndex callba
 
 { #category : #callbacks }
 BonjourCommandLineInterface >> serviceRegistered: sv [
+
 	"Service has been registered.
 	Note that it is not added as a service here, but is added through the service discovery service found callback.
 	Assumption: - that service discovery includes the registered service type."
@@ -775,13 +629,13 @@ BonjourCommandLineInterface >> startUp [
 	
 	self initializeOnStartUp.
 	
+	"registrationTypesToBrowse := #('_airplay._tcp.')."
+	"registrationTypesToBrowse := #('_companion-link._tcp.')."
+	"registrationTypesToBrowse := #('_rdlink._tcp.')"
+	
 	self browseServiceTypes
 	
-	"self startUpOnRegistrationTypes: #('_airplay._tcp.')."
 	
-	"self startUpOnRegistrationTypes: #('_companion-link._tcp.')."
-	
-	"self startUpOnRegistrationTypes: #('_rdlink._tcp.')"
 	
 ]
 

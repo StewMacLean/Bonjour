@@ -7,11 +7,11 @@ Class {
 { #category : #'library path' }
 BonjourCallback class >> ffiLibraryName [ 
 
-	^BonjourLibraryFFI
+	^BonjourLibraryFFICalloutCallback
 ]
 
 { #category : #'library path' }
 BonjourCallback >> ffiLibraryName [ 
 
-	^BonjourLibraryFFI
+	^BonjourLibraryFFICalloutCallback
 ]

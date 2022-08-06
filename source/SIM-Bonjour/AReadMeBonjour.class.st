@@ -21,15 +21,6 @@ AReadMeBonjour >> Architecture [
 		registrations - a Service object with socket description reference (sdRef) returned from the initial registriation callback (see below)
 		
 	Service Found (1 per interface) -> Service Resolve (1 per interface)-> Service Address (per address) {including 127.0.0.1 loopback}
-	
-		
-	ServiceType
-	        |
-	        | *
-	Service -- * Interface (#)
-               |
-               | *
-	ServiceAddress		
 	"
 	
 	
@@ -357,6 +348,57 @@ AReadMeBonjour >> browseServiceTypes [
 	
 ]
 
+{ #category : #'api - notes' }
+AReadMeBonjour >> byteOrderConversion [
+
+	^self asByteArray reverse asInteger
+
+"he htonl() function converts the unsigned integer hostlong from host byte order to network byte order.
+The htons() function converts the unsigned short integer hostshort from host byte order to network byte order.
+The ntohl() function converts the unsigned integer netlong from network byte order to host byte order.
+The ntohs() function converts the unsigned short integer netshort from network byte order to host byte order.
+
+On the i386 the host byte order is Least Significant Byte first, whereas the network byte order, as used on the Internet, is Most Significant Byte first.
+
+From https://www.gnu.org/software/libc/manual/html_node/Byte-Order.html
+
+16.6.5 Byte Order Conversion
+
+Different kinds of computers use different conventions for the ordering of bytes within a word. Some computers put the most significant byte within a word first (this is called “big-endian” order), and others put it last (“little-endian” order).
+
+So that machines with different byte order conventions can communicate, the Internet protocols specify a canonical byte order convention for data transmitted over the network. This is known as network byte order.
+
+When establishing an Internet socket connection, you must make sure that the data in the sin_port and sin_addr members of the sockaddr_in structure are represented in network byte order. If you are encoding integer data in the messages sent through the socket, you should convert this to network byte order too. If you don’t do this, your program may fail when running on or talking to other kinds of machines.
+
+If you use getservbyname and gethostbyname or inet_addr to get the port number and host address, the values are already in network byte order, and you can copy them directly into the sockaddr_in structure.
+
+Otherwise, you have to convert the values explicitly. Use htons and ntohs to convert values for the sin_port member. Use htonl and ntohl to convert IPv4 addresses for the sin_addr member. (Remember, struct in_addr is equivalent to uint32_t.) These functions are declared in netinet/in.h.
+
+Function: uint16_t htons (uint16_t hostshort)
+Preliminary: | MT-Safe | AS-Safe | AC-Safe | See POSIX Safety Concepts.
+
+This function converts the uint16_t integer hostshort from host byte order to network byte order.
+
+Function: uint16_t ntohs (uint16_t netshort)
+Preliminary: | MT-Safe | AS-Safe | AC-Safe | See POSIX Safety Concepts.
+
+This function converts the uint16_t integer netshort from network byte order to host byte order.
+
+Function: uint32_t htonl (uint32_t hostlong)
+Preliminary: | MT-Safe | AS-Safe | AC-Safe | See POSIX Safety Concepts.
+
+This function converts the uint32_t integer hostlong from host byte order to network byte order.
+
+This is used for IPv4 Internet addresses.
+
+Function: uint32_t ntohl (uint32_t netlong)
+Preliminary: | MT-Safe | AS-Safe | AC-Safe | See POSIX Safety Concepts.
+
+This function converts the uint32_t integer netlong from network byte order to host byte order.
+
+This is used for IPv4 Internet addresses."
+]
+
 { #category : #'api - overview' }
 AReadMeBonjour >> callingSequenceOverview [
 
@@ -405,15 +447,20 @@ AReadMeBonjour >> commands [
 
 	"
 	help:
-	man mDSNResonder
+	man mDNSResponder
 	Refresh cache:
 	LibC runCommand:  'echo sim123 | sudo -S killall –HUP mDNSResponder'.
 	LibC runCommand:  'echo sim123 | sudo -S killall –HUP mDNSHelper'.
 	
 	warning and notice logging
 	LibC runCommand: 'echo sim123 | sudo killall -USR1 mDNSResponder'. 
+	
+	Toggle packet logging:
+	LibC runCommand: 'echo sim123 | sudo killall -USR2 mDNSResponder'. 
+	
 	log levels Emergency to Debug
 	LibC runCommand:  'echo sim123 | syslog -c mDNSResponder -d'. 
+	
 	current state in console
 	LibC runCommand: 'echo sim123  killall -INFO mDNSResponder'
 	"
@@ -957,6 +1004,28 @@ Now, what to put into a TXT record? Let’s start with what not to put in there.
 	
 ]
 
+{ #category : #'api - overview' }
+AReadMeBonjour >> domainModel [
+
+	"
+	Bonjour
+		|
+		|*
+	Domain (name)
+	   |
+		|*
+	ServiceType (name protocol domain)
+	   |
+	   | *
+	Service (host port)--------------------------
+      |														|
+      | *	                                        | *
+	ServiceAddress (name)	-- * Interface (#)	   TextRecordPair(key value)
+	"
+	
+	
+]
+
 { #category : #api }
 AReadMeBonjour >> getAddressesNotes [
 	"From https://justanapplication.wordpress.com/tag/dnsservicebrowsereply/#start_method
@@ -1194,6 +1263,14 @@ HISTORY
 "
 
 
+]
+
+{ #category : #'api - notes' }
+AReadMeBonjour >> references [
+
+	"
+	https://opensource.apple.com/source/mDNSResponder/mDNSResponder-878.70.2/mDNSShared/dns_sd.h.auto.html
+	"
 ]
 
 { #category : #api }
@@ -1471,6 +1548,80 @@ AReadMeBonjour >> serviceTypeNotes [
 _ServiceType._TransportProtocolName.
 
 The service type is the official IANA-registered name for the service, for example, ftp, http or printer. The transport protocol name is tcp or udp, depending on the transport protocol the service uses. An FTP service running over TCP would have a registration type of _ftp._tcp. and would register a DNS PTR record named _ftp._tcp.local. with its hosts’ Multicast DNS responder. "
+	
+	
+]
+
+{ #category : #'api - notes' }
+AReadMeBonjour >> socketNotes [
+	"	From IPSocket class comment (VisualWorks):
+	That is, an Internet address has a 2-byte port number and a 4-byte host address.
+	struct in_addr {
+		union {
+			struct { u_char s_b1,s_b2,s_b3,s_b4; } S_un_b;
+			struct { u_short s_w1,s_w2; } S_un_w;
+			u_long S_addr;
+		} S_un;
+	struct sockaddr_in {
+		short sin_family;
+		u_short sin_port;
+		struct in_addr sin_addr;	
+		char sin_zero[8];
+	};
+=========================================================
+http://www.informit.com/articles/article.aspx?p=169505&seqNum=2
+The Internet (IPv4) socket address structure: sockaddr_in.
+struct in_addr {
+  in_addr_t   s_addr;           /* 32-bit IPv4 address */
+                                /* network byte ordered */
+};
+
+struct sockaddr_in {
+  uint8_t         sin_len;      /* length of structure (16) */
+  sa_family_t     sin_family;   /* AF_INET */
+  in_port_t       sin_port;     /* 16-bit TCP or UDP port number */
+                                /* network byte ordered */
+  struct in_addr  sin_addr;     /* 32-bit IPv4 address */
+                                /* network byte ordered */
+  char            sin_zero[8];  /* unused */
+};
+===============================================
+From: http://stackoverflow.com/questions/11924068/what-is-sa-family-t
+struct sockaddr {
+        u_short sa_family;              /* address family */
+        char    sa_data[14];            /* up to 14 bytes of direct address */
+};
+
+IPv6
+http://uw714doc.xinuos.com/en/SDK_netapi/sockC.TheIPv6sockaddrstructure.html
+https://tldp.org/HOWTO/Linux+IPv6-HOWTO/ch23s01.html
+
+
+The in6_addr structure
+The in6_addr structure holds a single IPv6 address. The structure is shown below.
+
+   struct in6_addr {
+           u_int8_t  s6_addr[16];  /* IPv6 address */
+   }
+The structure contains an array of sixteen 8-bit elements, that together make up a single 128-bit IPv6 address. 
+The address is usually stored in network byte order.
+This structure is declared in netinet/in.h.
+
+The sockaddr_in6 structure
+The sockaddr_in6 structure is used to pass address information to the socket function calls that require network address information. The structure is shown below.
+
+   # define SIN6_LEN
+   
+
+   struct sockaddr_in6 {
+          u_char           sin6_len;      /* length of this structure */
+          u_char           sin6_family;   /* AF_INET6                 */
+          u_int16m_t       sin6_port;     /* Transport layer port #   */
+          u_int32m_t       sin6_flowinfo; /* IPv6 flow information    */
+          struct in6_addr  sin6_addr;     /* IPv6 address             */
+   };
+
+"
 	
 	
 ]

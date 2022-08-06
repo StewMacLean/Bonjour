@@ -20,12 +20,12 @@ SocketAddressStructure class >> fieldsDesc [
 	"
 
 	^#(
-	char				length;
-	char		 		family;
-	uint16 			port;
-	uint32 			address;
-	uint32 			zero_part1
-	uint32 			zero_part2			
+	uint8		length;
+	uint8 		family;
+	uint16 	port;
+	uint32 	address;
+	uint32 	zero_part1;
+	uint32 	zero_part2;	
 	)
 
 
@@ -54,25 +54,25 @@ SocketAddressStructure >> address: anObject [
 { #category : #'accessing - structure variables' }
 SocketAddressStructure >> family [
 	"This method was automatically generated"
-	^handle unsignedCharAt: OFFSET_FAMILY
+	^handle unsignedByteAt: OFFSET_FAMILY
 ]
 
 { #category : #'accessing - structure variables' }
 SocketAddressStructure >> family: anObject [
 	"This method was automatically generated"
-	handle unsignedCharAt: OFFSET_FAMILY put: anObject
+	handle unsignedByteAt: OFFSET_FAMILY put: anObject
 ]
 
 { #category : #'accessing - structure variables' }
 SocketAddressStructure >> length [
 	"This method was automatically generated"
-	^handle unsignedCharAt: OFFSET_LENGTH
+	^handle unsignedByteAt: OFFSET_LENGTH
 ]
 
 { #category : #'accessing - structure variables' }
 SocketAddressStructure >> length: anObject [
 	"This method was automatically generated"
-	handle unsignedCharAt: OFFSET_LENGTH put: anObject
+	handle unsignedByteAt: OFFSET_LENGTH put: anObject
 ]
 
 { #category : #'accessing - structure variables' }

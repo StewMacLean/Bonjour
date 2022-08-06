@@ -8,8 +8,7 @@ Class {
 		'addresses',
 		'textRecordPairs',
 		'port',
-		'sdRef',
-		'interfaces'
+		'sdRef'
 	],
 	#category : #'SIM-Bonjour-Model'
 }
@@ -129,9 +128,9 @@ Service >> addAddressv1: anIPAddressString [
 { #category : #accessing }
 Service >> addInterface: anInterfaceIndex [
 	
-	^interfaces
+	"^interfaces
 		add: anInterfaceIndex;
-		yourself
+		yourself"
 ]
 
 { #category : #'text record/pairs' }
@@ -196,8 +195,14 @@ Service >> displayNodes [
 
 	| nodes |
 
-	^(nodes := OrderedCollection new)
-		add: (StateVector new displayStringUI: hostName; displayNodes: #());
+	nodes := OrderedCollection new.
+	hostName ifNotEmpty: 
+		[nodes add: 
+			(StateVector new 
+				displayStringUI: hostName; 
+				displayNodes: #())].
+	
+	^nodes
 		addAll: addresses;
 		addAll: textRecordPairs;
 		yourself
@@ -287,44 +292,7 @@ Service >> initialize [
 	port := '0'.
 	domain := ''.
 	textRecordPairs := OrderedCollection new.
-	addresses := OrderedCollection new.
-	interfaces := OrderedCollection new
-]
-
-{ #category : #accessing }
-Service >> interface [
-	
-	^interfaces first
-]
-
-{ #category : #accessing }
-Service >> interfaces [
-	
-	^interfaces
-]
-
-{ #category : #printing }
-Service >> interfacesPrintString [
-
-	| stream |
-	
-	stream := String new writeStream.
-
-	interfaces isEmpty
-		ifFalse:
-			[stream nextPut: ${.
-			interfaces
-				do:
-					[:each | 
-					stream
-						nextPutAll: each "printString";
-						space].
-			stream skip: -1.
-			stream
-				nextPut: $};
-				space].	
-			
-		^stream contents
+	addresses := OrderedCollection new
 ]
 
 { #category : #testing }
@@ -387,7 +355,7 @@ Service >> printOn: aStream [
 	aStream
 		nextPutAll: self fullName;
 		space.	
-	aStream nextPutAll: self interfacesPrintString. 
+	"aStream nextPutAll: self interfacesPrintString. "
 	addresses isEmpty
 		ifTrue:
 			[aStream
@@ -399,7 +367,7 @@ Service >> printOn: aStream [
 				do:
 					[:each | 
 					aStream
-						nextPutAll: each printString;
+						nextPutAll: each name;
 						space].
 			aStream skip: -1.
 			aStream
@@ -434,14 +402,6 @@ Service >> registrationType [
 	^serviceType
 		ifNotNil: [serviceType registrationType]
 		ifNil: [nil]
-]
-
-{ #category : #accessing }
-Service >> removeInterface: anInterfaceIndex [
-	
-	^[interfaces remove: anInterfaceIndex]
-		on: Error
-		do: [:ex | ]
 ]
 
 { #category : #accessing }

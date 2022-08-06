@@ -1,5 +1,5 @@
 Class {
-	#name : #BonjourLibraryFFI,
+	#name : #BonjourLibraryFFIAbstract,
 	#superclass : #FFILibrary,
 	#instVars : [
 		'dnsServiceErr',
@@ -9,38 +9,29 @@ Class {
 	#category : #'SIM-Bonjour'
 }
 
-{ #category : #structs }
-BonjourLibraryFFI >> CompileTimeAssertionChecks_DNS_SD [
-	
-	"<C: struct CompileTimeAssertionChecks_DNS_SD {
-			char assert0[1];
-		}>"
-	
-]
-
 { #category : #types }
-BonjourLibraryFFI >> DNSRecordRef [
+BonjourLibraryFFIAbstract >> DNSRecordRef [
 	
 	"<C: typedef struct _DNSRecordRef_t * DNSRecordRef>"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> DNSSD_API [
+BonjourLibraryFFIAbstract >> DNSSD_API [
 	
 	"<C: #define DNSSD_API>"
 	
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceAddRecord: sdRef with: RecordRef with: flags with: rrtype with: rdlen with: rdata with: ttl [
+BonjourLibraryFFIAbstract >> DNSServiceAddRecord: sdRef with: RecordRef with: flags with: rrtype with: rdlen with: rdata with: ttl [
 	
 	"<C: DNSServiceErrorType DNSServiceAddRecord(DNSServiceRef sdRef, DNSRecordRef * RecordRef, DNSServiceFlags flags, uint16_t rrtype, uint16_t rdlen, const void * rdata, uint32_t ttl)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #callouts }
-BonjourLibraryFFI >> DNSServiceBrowse: sdRef with: flags with: interfaceIndex with: regtype with: domain with: callBack with: context [ 
+BonjourLibraryFFIAbstract >> DNSServiceBrowse: sdRef with: flags with: interfaceIndex with: regtype with: domain with: callBack with: context [ 
 
 	^self ffiCall: #(
 		int DNSServiceBrowse 
@@ -54,28 +45,14 @@ BonjourLibraryFFI >> DNSServiceBrowse: sdRef with: flags with: interfaceIndex wi
 ]
 
 { #category : #'callbacks types' }
-BonjourLibraryFFI >> DNSServiceBrowseReply [
+BonjourLibraryFFIAbstract >> DNSServiceBrowseReply [
 	
 	^#(void * (void *sdRef, uint32 flags, uint32 interfaceIndex, int errorCode, char * serviceName, char * regtype, char * replyDomain, void * context))
 	
 ]
 
-{ #category : #'callbacks types' }
-BonjourLibraryFFI >> DNSServiceBrowseReplyJames [
-	
-	"<C: typedef VOID (__stdcall * DNSServiceBrowseReply)(DNSServiceRef sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceErrorType errorCode, const char * serviceName, const char * regtype, const char * replyDomain, void * context)>"
-	
-]
-
-{ #category : #'callbacks types' }
-BonjourLibraryFFI >> DNSServiceBrowseReplyOriginal [
-	
-	"<C: typedef void ( * DNSServiceBrowseReply)(DNSServiceRef sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceErrorType errorCode, const char * serviceName, const char * regtype, const char * replyDomain, void * context)>"
-	
-]
-
 { #category : #'enums - unused' }
-BonjourLibraryFFI >> DNSServiceClass [
+BonjourLibraryFFIAbstract >> DNSServiceClass [
 	
 	"<C: enum DNSServiceClass {
 			kDNSServiceClass_IN = 1
@@ -84,41 +61,41 @@ BonjourLibraryFFI >> DNSServiceClass [
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceConstructFullName: fullName with: service with: regtype with: domain [
+BonjourLibraryFFIAbstract >> DNSServiceConstructFullName: fullName with: service with: regtype with: domain [
 	
 	"<C: DNSServiceErrorType DNSServiceConstructFullName(char * fullName, const char * service, const char * regtype, const char * domain)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceCreateConnection: sdRef [
+BonjourLibraryFFIAbstract >> DNSServiceCreateConnection: sdRef [
 	
 	"<C: DNSServiceErrorType DNSServiceCreateConnection(DNSServiceRef * sdRef)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceDomainEnumReply [
+BonjourLibraryFFIAbstract >> DNSServiceDomainEnumReply [
 	
 	"<C: typedef void (* DNSServiceDomainEnumReply)(DNSServiceRef sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceErrorType errorCode, const char * replyDomain, void * context)>"
 	
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceEnumerateDomains: sdRef with: flags with: interfaceIndex with: callBack with: context [
+BonjourLibraryFFIAbstract >> DNSServiceEnumerateDomains: sdRef with: flags with: interfaceIndex with: callBack with: context [
 	
 	"<C: DNSServiceErrorType DNSServiceEnumerateDomains(DNSServiceRef * sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceDomainEnumReply callBack, void * context)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #enums }
-BonjourLibraryFFI >> DNSServiceErr [
+BonjourLibraryFFIAbstract >> DNSServiceErr [
 	
 	^dnsServiceErr
 ]
 
 { #category : #enums }
-BonjourLibraryFFI >> DNSServiceErrString [
+BonjourLibraryFFIAbstract >> DNSServiceErrString [
 
 	^'kDNSServiceErr_NoError = 0, 
 			kDNSServiceErr_Unknown = -65537, 
@@ -158,14 +135,14 @@ BonjourLibraryFFI >> DNSServiceErrString [
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceErrorType [
+BonjourLibraryFFIAbstract >> DNSServiceErrorType [
 	
 	"<C: typedef int32_t DNSServiceErrorType>"
 	
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceErrorTypeOriginal [
+BonjourLibraryFFIAbstract >> DNSServiceErrorTypeOriginal [
 	"Tried changing this to long (following changing int32_t), but this made no difference.
 	Function calls still returning a pointer to the error code"
 	
@@ -174,20 +151,20 @@ BonjourLibraryFFI >> DNSServiceErrorTypeOriginal [
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceFlags [
+BonjourLibraryFFIAbstract >> DNSServiceFlags [
 	
 	"<C: typedef uint32_t DNSServiceFlags>"
 	
 ]
 
 { #category : #enums }
-BonjourLibraryFFI >> DNSServiceFlagsEnum [
+BonjourLibraryFFIAbstract >> DNSServiceFlagsEnum [
 	
 	^dnsServiceFlags
 ]
 
 { #category : #enums }
-BonjourLibraryFFI >> DNSServiceFlagsString [
+BonjourLibraryFFIAbstract >> DNSServiceFlagsString [
 	
 	^'kDNSServiceFlagsMoreComing = 1, 
 			kDNSServiceFlagsAdd = 2, 
@@ -209,14 +186,14 @@ BonjourLibraryFFI >> DNSServiceFlagsString [
 ]
 
 { #category : #callouts }
-BonjourLibraryFFI >> DNSServiceGetAddrInfo: sdRef with: flags with: interfaceIndex with: protocol with: hostName with: callBack with: context [
+BonjourLibraryFFIAbstract >> DNSServiceGetAddrInfo: sdRef with: flags with: interfaceIndex with: protocol with: hostName with: callBack with: context [
 
 	^self ffiCall: #(
 		int DNSServiceGetAddrInfo 
 			(void * sdRef, 
 			uint32 flags, 
 			uint32 interfaceIndex, 
-			uint32 * protocol, 
+			uint32 protocol, 
 			char * hostName, 
 			BonjourCallback callBack, 
 			void * context))
@@ -224,14 +201,24 @@ BonjourLibraryFFI >> DNSServiceGetAddrInfo: sdRef with: flags with: interfaceInd
 ]
 
 { #category : #'callbacks types' }
-BonjourLibraryFFI >> DNSServiceGetAddrInfoReply [
+BonjourLibraryFFIAbstract >> DNSServiceGetAddrInfoReply [
 
 	^#(void * (void *sdRef, uint32 flags, uint32 interfaceIndex, int errorCode, char * hostname, SocketAddressStructure * sockaddr, uint32 ttl, void * context))
 	
+	"typedef void (*DNSServiceGetAddrInfoReply)(
+                       DNSServiceRef          sdRef,
+                       DNSServiceFlags        flags,
+                       uint32_t               interfaceIndex,
+                       DNSServiceErrorType    errorCode,
+                       const char*            hostname,
+                       const struct sockaddr* address,
+                       uint32_t               ttl,
+                       void*                  context);
+	"
 ]
 
 { #category : #callouts }
-BonjourLibraryFFI >> DNSServiceGetProperty: property with: result with: size [
+BonjourLibraryFFIAbstract >> DNSServiceGetProperty: property with: result with: size [
 
 	^ self ffiCall: #(
 		int32 DNSServiceGetProperty 
@@ -242,14 +229,14 @@ BonjourLibraryFFI >> DNSServiceGetProperty: property with: result with: size [
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceNATPortMappingReply [
+BonjourLibraryFFIAbstract >> DNSServiceNATPortMappingReply [
 	
 	"<C: typedef void (* DNSServiceNATPortMappingReply)(DNSServiceRef sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceErrorType errorCode, uint32_t externalAddress, enum DNSServiceProtocol protocol, uint16_t internalPort, uint16_t externalPort, uint32_t ttl, void * context)>"
 	
 ]
 
 { #category : #callouts }
-BonjourLibraryFFI >> DNSServiceProcessResult: sdRef [ 
+BonjourLibraryFFIAbstract >> DNSServiceProcessResult: sdRef [ 
 
 	^self ffiCall: #(
 		int DNSServiceProcessResult 
@@ -257,7 +244,7 @@ BonjourLibraryFFI >> DNSServiceProcessResult: sdRef [
 ]
 
 { #category : #'enums - unused' }
-BonjourLibraryFFI >> DNSServiceProtocol [
+BonjourLibraryFFIAbstract >> DNSServiceProtocol [
 	"Got name conflick when trying to compile this type - was a enum. Machinery hanging on to it?
 	Similar problem with types not being reflected, had to recompile methods"
 	
@@ -265,7 +252,7 @@ BonjourLibraryFFI >> DNSServiceProtocol [
 ]
 
 { #category : #'enums - unused' }
-BonjourLibraryFFI >> DNSServiceProtocolEnum [
+BonjourLibraryFFIAbstract >> DNSServiceProtocolEnum [
 	
 	"<C: enum DNSServiceProtocol {
 			kDNSServiceProtocol_IPv4 = 1, 
@@ -277,51 +264,51 @@ BonjourLibraryFFI >> DNSServiceProtocolEnum [
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceProtocolType [
+BonjourLibraryFFIAbstract >> DNSServiceProtocolType [
 	
 	"<C: typedef uint32_t DNSServiceProtocolType>"
 	
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceQueryRecord: sdRef with: flags with: interfaceIndex with: fullname with: rrtype with: rrclass with: callBack with: context [
+BonjourLibraryFFIAbstract >> DNSServiceQueryRecord: sdRef with: flags with: interfaceIndex with: fullname with: rrtype with: rrclass with: callBack with: context [
 	
 	"<C: DNSServiceErrorType DNSServiceQueryRecord(DNSServiceRef * sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, const char * fullname, uint16_t rrtype, uint16_t rrclass, DNSServiceQueryRecordReply callBack, void * context)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceQueryRecordReply [
+BonjourLibraryFFIAbstract >> DNSServiceQueryRecordReply [
 	
 	"<C: typedef void (* DNSServiceQueryRecordReply)(DNSServiceRef sdRef, DNSServiceFlags flags, uint32_t interfaceIndex, DNSServiceErrorType errorCode, const char * fullname, uint16_t rrtype, uint16_t rrclass, uint16_t rdlen, const void * rdata, uint32_t ttl, void * context)>"
 	
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceReconfirmRecord: flags with: interfaceIndex with: fullname with: rrtype with: rrclass with: rdlen with: rdata [
+BonjourLibraryFFIAbstract >> DNSServiceReconfirmRecord: flags with: interfaceIndex with: fullname with: rrtype with: rrclass with: rdlen with: rdata [
 	
 	"<C: DNSServiceErrorType DNSServiceReconfirmRecord(DNSServiceFlags flags, uint32_t interfaceIndex, const char * fullname, uint16_t rrtype, uint16_t rrclass, uint16_t rdlen, const void * rdata)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceRef [
+BonjourLibraryFFIAbstract >> DNSServiceRef [
 	
 	"<C: typedef struct _DNSServiceRef_t * DNSServiceRef>"
 	
 ]
 
 { #category : #callouts }
-BonjourLibraryFFI >> DNSServiceRefDeallocate: sdRef [
+BonjourLibraryFFIAbstract >> DNSServiceRefDeallocate: sdRef [
 
 	^self ffiCall: #(
-		int DNSServiceRefDeallocate 
+		void DNSServiceRefDeallocate 
 			(void *sdRef))
 	
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceRefSockFD: sdRef [
+BonjourLibraryFFIAbstract >> DNSServiceRefSockFD: sdRef [
 
 
 	^self ffiCall: #(int DNSServiceRefSockFD(void *sdRef))
@@ -331,7 +318,7 @@ BonjourLibraryFFI >> DNSServiceRefSockFD: sdRef [
 ]
 
 { #category : #callouts }
-BonjourLibraryFFI >> DNSServiceRegister: sdRef with: flags with: interfaceIndex with: name with: regtype with: domain with: host with: port with: txtLen with: txtRecord with: callBack with: context [
+BonjourLibraryFFIAbstract >> DNSServiceRegister: sdRef with: flags with: interfaceIndex with: name with: regtype with: domain with: host with: port with: txtLen with: txtRecord with: callBack with: context [
 
 	^self ffiCall: #(
 		int DNSServiceRegister 
@@ -350,21 +337,21 @@ BonjourLibraryFFI >> DNSServiceRegister: sdRef with: flags with: interfaceIndex 
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceRegisterRecord: sdRef with: RecordRef with: flags with: interfaceIndex with: fullname with: rrtype with: rrclass with: rdlen with: rdata with: ttl with: callBack with: context [
+BonjourLibraryFFIAbstract >> DNSServiceRegisterRecord: sdRef with: RecordRef with: flags with: interfaceIndex with: fullname with: rrtype with: rrclass with: rdlen with: rdata with: ttl with: callBack with: context [
 	
 	"<C: DNSServiceErrorType DNSServiceRegisterRecord(DNSServiceRef sdRef, DNSRecordRef * RecordRef, DNSServiceFlags flags, uint32_t interfaceIndex, const char * fullname, uint16_t rrtype, uint16_t rrclass, uint16_t rdlen, const void * rdata, uint32_t ttl, DNSServiceRegisterRecordReply callBack, void * context)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> DNSServiceRegisterRecordReply [
+BonjourLibraryFFIAbstract >> DNSServiceRegisterRecordReply [
 	
 	"<C: typedef void (* DNSServiceRegisterRecordReply)(DNSServiceRef sdRef, DNSRecordRef RecordRef, DNSServiceFlags flags, DNSServiceErrorType errorCode, void * context)>"
 	
 ]
 
 { #category : #'callbacks types' }
-BonjourLibraryFFI >> DNSServiceRegisterReply [
+BonjourLibraryFFIAbstract >> DNSServiceRegisterReply [
 
 
 	^#(void * (void *sdRef, uint32 flags, int errorCode, char * name, char * regtype, char * domain, void * context))
@@ -372,15 +359,34 @@ BonjourLibraryFFI >> DNSServiceRegisterReply [
 	
 ]
 
+{ #category : #callouts }
+BonjourLibraryFFIAbstract >> DNSServiceRegisterv1: sdRef with: flags with: interfaceIndex with: name with: regtype with: domain with: host with: port with: txtLen with: txtRecord with: callBack with: context [
+
+	^self ffiCall: #(
+		int DNSServiceRegister 
+			(void * sdRef, 
+			uint32 flags, 
+			uint32 interfaceIndex, 
+			char * name, 
+			char * regtype, 
+			char * domain, 
+			char * host, 
+			uint16 port, 
+			uint16 txtLen, 
+			void * txtRecord, 
+			BonjourCallback callBack, 
+			void * context))
+]
+
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceRemoveRecord: sdRef with: RecordRef with: flags [
+BonjourLibraryFFIAbstract >> DNSServiceRemoveRecord: sdRef with: RecordRef with: flags [
 	
 	"<C: DNSServiceErrorType DNSServiceRemoveRecord(DNSServiceRef sdRef, DNSRecordRef RecordRef, DNSServiceFlags flags)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #callouts }
-BonjourLibraryFFI >> DNSServiceResolve: sdRef with: flags with: interfaceIndex with: name with: regtype with: domain with: callBack with: context [
+BonjourLibraryFFIAbstract >> DNSServiceResolve: sdRef with: flags with: interfaceIndex with: name with: regtype with: domain with: callBack with: context [
 
 	^self ffiCall: #(
 		int DNSServiceResolve 
@@ -395,15 +401,15 @@ BonjourLibraryFFI >> DNSServiceResolve: sdRef with: flags with: interfaceIndex w
 ]
 
 { #category : #'callbacks types' }
-BonjourLibraryFFI >> DNSServiceResolveReply [
+BonjourLibraryFFIAbstract >> DNSServiceResolveReply [
 
-		^#(void * (void *sdRef, uint32 flags, uint32 interfaceIndex, int errorCode, char * fullName, char * hosttarget, uint16 port, uint16 txtLen, char * txtRecord, void * context))
+		^#(void * (void *sdRef, uint32 flags, uint32 interfaceIndex, int errorCode, char * fullName, char * hosttarget, uint16 port, uint16 txtLen, void * txtRecord, void * context))
 	
 	
 ]
 
 { #category : #'enums - unused' }
-BonjourLibraryFFI >> DNSServiceType [
+BonjourLibraryFFIAbstract >> DNSServiceType [
 	
 	"<C: enum DNSServiceType {
 			kDNSServiceType_A = 1, 
@@ -475,112 +481,112 @@ BonjourLibraryFFI >> DNSServiceType [
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> DNSServiceUpdateRecord: sdRef with: RecordRef with: flags with: rdlen with: rdata with: ttl [
+BonjourLibraryFFIAbstract >> DNSServiceUpdateRecord: sdRef with: RecordRef with: flags with: rdlen with: rdata with: ttl [
 	
 	"<C: DNSServiceErrorType DNSServiceUpdateRecord(DNSServiceRef sdRef, DNSRecordRef RecordRef, DNSServiceFlags flags, uint16_t rdlen, const void * rdata, uint32_t ttl)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordContainsKey: txtLen with: txtRecord with: key [
+BonjourLibraryFFIAbstract >> TXTRecordContainsKey: txtLen with: txtRecord with: key [
 	
 	"<C: int TXTRecordContainsKey(uint16_t txtLen, const void * txtRecord, const char * key)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordCreate: txtRecord with: bufferLen with: buffer [
+BonjourLibraryFFIAbstract >> TXTRecordCreate: txtRecord with: bufferLen with: buffer [
 	
 	"<C: void TXTRecordCreate(TXTRecordRef * txtRecord, uint16_t bufferLen, void * buffer)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordDeallocate: txtRecord [
+BonjourLibraryFFIAbstract >> TXTRecordDeallocate: txtRecord [
 	
 	"<C: void TXTRecordDeallocate(TXTRecordRef * txtRecord)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordGetBytesPtr: txtRecord [
+BonjourLibraryFFIAbstract >> TXTRecordGetBytesPtr: txtRecord [
 	
 	"<C: const void *  TXTRecordGetBytesPtr(const TXTRecordRef * txtRecord)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordGetCount: txtLen with: txtRecord [
+BonjourLibraryFFIAbstract >> TXTRecordGetCount: txtLen with: txtRecord [
 	
 	"<C: uint16_t TXTRecordGetCount(uint16_t txtLen, const void * txtRecord)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordGetItemAtIndex: txtLen with: txtRecord with: itemIndex with: keyBufLen with: key with: valueLen with: value [
+BonjourLibraryFFIAbstract >> TXTRecordGetItemAtIndex: txtLen with: txtRecord with: itemIndex with: keyBufLen with: key with: valueLen with: value [
 	
 	"<C: DNSServiceErrorType TXTRecordGetItemAtIndex(uint16_t txtLen, const void * txtRecord, uint16_t itemIndex, uint16_t keyBufLen, char * key, uint8_t * valueLen, const void * * value)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordGetLength: txtRecord [
+BonjourLibraryFFIAbstract >> TXTRecordGetLength: txtRecord [
 	
 	"<C: uint16_t TXTRecordGetLength(const TXTRecordRef * txtRecord)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordGetValuePtr: txtLen with: txtRecord with: key with: valueLen [
+BonjourLibraryFFIAbstract >> TXTRecordGetValuePtr: txtLen with: txtRecord with: key with: valueLen [
 	
 	"<C: const void *  TXTRecordGetValuePtr(uint16_t txtLen, const void * txtRecord, const char * key, uint8_t * valueLen)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> TXTRecordRef [
+BonjourLibraryFFIAbstract >> TXTRecordRef [
 	
 	"<C: typedef union _TXTRecordRef_t TXTRecordRef>"
 	
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordRemoveValue: txtRecord with: key [
+BonjourLibraryFFIAbstract >> TXTRecordRemoveValue: txtRecord with: key [
 	
 	"<C: DNSServiceErrorType TXTRecordRemoveValue(TXTRecordRef * txtRecord, const char * key)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #'callouts - unused' }
-BonjourLibraryFFI >> TXTRecordSetValue: txtRecord with: key with: valueSize with: value [
+BonjourLibraryFFIAbstract >> TXTRecordSetValue: txtRecord with: key with: valueSize with: value [
 	
 	"<C: DNSServiceErrorType TXTRecordSetValue(TXTRecordRef * txtRecord, const char * key, uint8_t valueSize, const void * value)>
 	^self externalAccessFailedWith: _errorCode"
 ]
 
 { #category : #structs }
-BonjourLibraryFFI >> _DNSRecordRef_t [
+BonjourLibraryFFIAbstract >> _DNSRecordRef_t [
 	
 	"<C: struct _DNSRecordRef_t>"
 	
 ]
 
 { #category : #structs }
-BonjourLibraryFFI >> _DNSServiceRef_t [
+BonjourLibraryFFIAbstract >> _DNSServiceRef_t [
 	
 	"<C: struct _DNSServiceRef_t>"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> _DNS_SD_H [
+BonjourLibraryFFIAbstract >> _DNS_SD_H [
 	
 	"<C: #define _DNS_SD_H 2140308>"
 	
 ]
 
 { #category : #unions }
-BonjourLibraryFFI >> _TXTRecordRef_t [
+BonjourLibraryFFIAbstract >> _TXTRecordRef_t [
 	
 	"<C: union _TXTRecordRef_t {
 			char PrivateData[16];
@@ -590,42 +596,42 @@ BonjourLibraryFFI >> _TXTRecordRef_t [
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> __DATE__ [
+BonjourLibraryFFIAbstract >> __DATE__ [
 	
 	"<C: #define __DATE__ ""12 December 2014"">"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> __FILE__ [
+BonjourLibraryFFIAbstract >> __FILE__ [
 	
 	"<C: #define __FILE__ c:\OverDrive\image.Bonjour\library\14.12d 0.12d.dns_sd.h>"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> __LINE__ [
+BonjourLibraryFFIAbstract >> __LINE__ [
 	
 	"<C: #define __LINE__ 0>"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> __STDC__ [
+BonjourLibraryFFIAbstract >> __STDC__ [
 	
 	"<C: #define __STDC__ 1>"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> __TIME__ [
+BonjourLibraryFFIAbstract >> __TIME__ [
 	
 	"<C: #define __TIME__ ""7:28:13 PM"">"
 	
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> basicTypeNotes [
+BonjourLibraryFFIAbstract >> basicTypeNotes [
 	"
 	uint8_t, uint16_t, uint32_t and uint64_t.
 
@@ -636,7 +642,7 @@ BonjourLibraryFFI >> basicTypeNotes [
 ]
 
 { #category : #configuration }
-BonjourLibraryFFI >> calloutAPIClass [
+BonjourLibraryFFIAbstract >> calloutAPIClass [
 
 	"super calloutAPIClass"
 
@@ -646,7 +652,7 @@ BonjourLibraryFFI >> calloutAPIClass [
 ]
 
 { #category : #configuration }
-BonjourLibraryFFI >> calloutAPIClassTest [
+BonjourLibraryFFIAbstract >> calloutAPIClassTest [
 
 	"super calloutAPIClass"
 
@@ -656,7 +662,7 @@ BonjourLibraryFFI >> calloutAPIClassTest [
 ]
 
 { #category : #enums }
-BonjourLibraryFFI >> dictionaryFrom: aString [
+BonjourLibraryFFIAbstract >> dictionaryFrom: aString [
 
 	| lines dictionary |
 	
@@ -677,13 +683,13 @@ BonjourLibraryFFI >> dictionaryFrom: aString [
 ]
 
 { #category : #configuration }
-BonjourLibraryFFI >> ffiLibrary [
+BonjourLibraryFFIAbstract >> ffiLibrary [
 
 	^self
 ]
 
 { #category : #configuration }
-BonjourLibraryFFI >> ffiLibraryName [
+BonjourLibraryFFIAbstract >> ffiLibraryName [
 
 	self halt.
 
@@ -697,7 +703,7 @@ BonjourLibraryFFI >> ffiLibraryName [
 ]
 
 { #category : #initialization }
-BonjourLibraryFFI >> initialize [
+BonjourLibraryFFIAbstract >> initialize [
 
 	"
 	self new
@@ -708,28 +714,28 @@ BonjourLibraryFFI >> initialize [
 ]
 
 { #category : #enums }
-BonjourLibraryFFI >> initializeEnums [
+BonjourLibraryFFIAbstract >> initializeEnums [
 
 	dnsServiceErr := self dictionaryFrom: self DNSServiceErrString.
 	dnsServiceFlags := self dictionaryFrom: self DNSServiceFlagsString 
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> int32_t [
+BonjourLibraryFFIAbstract >> int32_t [
 	
 	"<C: typedef long int32_t>"
 	
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> int32_tOriginal [
+BonjourLibraryFFIAbstract >> int32_tOriginal [
 	
 	"<C: typedef void * int32_tOriginal>"
 	
 ]
 
 { #category : #defines }
-BonjourLibraryFFI >> kDNSServiceInterfaceIndexAny [
+BonjourLibraryFFIAbstract >> kDNSServiceInterfaceIndexAny [
 
 
 	^0
@@ -739,35 +745,35 @@ BonjourLibraryFFI >> kDNSServiceInterfaceIndexAny [
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> kDNSServiceInterfaceIndexLocalOnly [
+BonjourLibraryFFIAbstract >> kDNSServiceInterfaceIndexLocalOnly [
 	
 	"<C: #define kDNSServiceInterfaceIndexLocalOnly ((uint32_t)-1)>"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> kDNSServiceInterfaceIndexUnicast [
+BonjourLibraryFFIAbstract >> kDNSServiceInterfaceIndexUnicast [
 	
 	"<C: #define kDNSServiceInterfaceIndexUnicast ((uint32_t)-2)>"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> kDNSServiceMaxDomainName [
+BonjourLibraryFFIAbstract >> kDNSServiceMaxDomainName [
 	
 	"<C: #define kDNSServiceMaxDomainName 1009>"
 	
 ]
 
 { #category : #'defines - unused' }
-BonjourLibraryFFI >> kDNSServiceMaxServiceName [
+BonjourLibraryFFIAbstract >> kDNSServiceMaxServiceName [
 	
 	"<C: #define kDNSServiceMaxServiceName 64>"
 	
 ]
 
 { #category : #defines }
-BonjourLibraryFFI >> kDNSServiceProperty_DaemonVersion [
+BonjourLibraryFFIAbstract >> kDNSServiceProperty_DaemonVersion [
 
 	^'DaemonVersion'
 	
@@ -776,7 +782,7 @@ BonjourLibraryFFI >> kDNSServiceProperty_DaemonVersion [
 ]
 
 { #category : #configuration }
-BonjourLibraryFFI >> macLibraryName [
+BonjourLibraryFFIAbstract >> macLibraryName [
 
 	"
 	'/usr/lib/system/libsystem_dnssd.dylib' asFileReference exists
@@ -788,46 +794,31 @@ BonjourLibraryFFI >> macLibraryName [
 ]
 
 { #category : #configuration }
-BonjourLibraryFFI >> runner [
+BonjourLibraryFFIAbstract >> runner [
 
-	"^TFProcessLocalWorker new
-  			defaultWorker: super runner;
-  			yourself"
-
-	^runner ifNil: [runner := TFWorker named: 'BONJOUR']
-
-	"Poof!!! - threaded
-	^TFWorker default
-	"
-
-	"Spinning Wheel of Death! - non threaded
-	^super runner   
+	self subclassResponsibility
 	
-	Default == super runner
-	^TFMainThreadRunner uniqueInstance  
-	"
+	"^runner ifNil: [runner := TFSameThreadRunner uniqueInstance]  - default == super runner"
+	
+	"^runner ifNil: [runner := TFWorker named: 'Bonjour']"
+	
+	"^runner ifNil: [runner := TFMainThreadRunner uniqueInstance] - not referenced?"
 
-	"
-	^TFProcessLocalWorker new
-  		defaultWorker: TFWorker default;
-  		yourself
-	"
-
- 	"
-	^TFProcessLocalWorker new
-  		defaultWorker: (TFWorker named: 'QUEUE');
-  		yourself
-	"
-		
-	"
-	^TFProcessLocalWorker new
+	"^TFProcessLocalWorker new   - how does this work - not referenced?
   		defaultWorker: super runner;
-  		yourself
-	"
+  		yourself"
+	
+
+	
+	
+	
+
+	
+
 ]
 
 { #category : #structs }
-BonjourLibraryFFI >> sockaddr [
+BonjourLibraryFFIAbstract >> sockaddr [
 	
 	"<C: struct sockaddr {
 		char				sin_len;
@@ -840,14 +831,14 @@ BonjourLibraryFFI >> sockaddr [
 ]
 
 { #category : #structs }
-BonjourLibraryFFI >> sockaddrAsParsed [
+BonjourLibraryFFIAbstract >> sockaddrAsParsed [
 	
 	"<C: struct sockaddr>"
 	
 ]
 
 { #category : #structs }
-BonjourLibraryFFI >> sockaddrv1 [
+BonjourLibraryFFIAbstract >> sockaddrv1 [
 	
 	"<C: struct sockaddr {
 		uint8_t         	sin_len;     
@@ -860,7 +851,7 @@ BonjourLibraryFFI >> sockaddrv1 [
 ]
 
 { #category : #structs }
-BonjourLibraryFFI >> sockaddrv2 [
+BonjourLibraryFFIAbstract >> sockaddrv2 [
 	
 	"<C: struct sockaddr {
 		short				sin_len;
@@ -873,7 +864,7 @@ BonjourLibraryFFI >> sockaddrv2 [
 ]
 
 { #category : #structs }
-BonjourLibraryFFI >> sockaddrv3 [
+BonjourLibraryFFIAbstract >> sockaddrv3 [
 	
 	"<C: struct sockaddr {
 		short				sin_len;
@@ -885,60 +876,15 @@ BonjourLibraryFFI >> sockaddrv3 [
 	
 ]
 
-{ #category : #structs }
-BonjourLibraryFFI >> socketNotes [
-	"	From IPSocket class comment:
-	That is, an Internet address has a 2-byte port number and a 4-byte host address.
-	struct in_addr {
-		union {
-			struct { u_char s_b1,s_b2,s_b3,s_b4; } S_un_b;
-			struct { u_short s_w1,s_w2; } S_un_w;
-			u_long S_addr;
-		} S_un;
-	struct sockaddr_in {
-		short sin_family;
-		u_short sin_port;
-		struct in_addr sin_addr;	
-		char sin_zero[8];
-	};
-=========================================================
-http://www.informit.com/articles/article.aspx?p=169505&seqNum=2
-The Internet (IPv4) socket address structure: sockaddr_in.
-struct in_addr {
-  in_addr_t   s_addr;           /* 32-bit IPv4 address */
-                                /* network byte ordered */
-};
-
-struct sockaddr_in {
-  uint8_t         sin_len;      /* length of structure (16) */
-  sa_family_t     sin_family;   /* AF_INET */
-  in_port_t       sin_port;     /* 16-bit TCP or UDP port number */
-                                /* network byte ordered */
-  struct in_addr  sin_addr;     /* 32-bit IPv4 address */
-                                /* network byte ordered */
-  char            sin_zero[8];  /* unused */
-};
-===============================================
-From: http://stackoverflow.com/questions/11924068/what-is-sa-family-t
-struct sockaddr {
-        u_short sa_family;              /* address family */
-        char    sa_data[14];            /* up to 14 bytes of direct address */
-};
-
-"
-	
-	
-]
-
 { #category : #types }
-BonjourLibraryFFI >> uint16_t [
+BonjourLibraryFFIAbstract >> uint16_t [
 	
 	"<C: typedef unsigned short uint16_t>"
 	
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> uint16_tOriginal [
+BonjourLibraryFFIAbstract >> uint16_tOriginal [
 	"Changed this as when used in resolve for the port, it was returning a 32 bit value - needs to be 16 bit"
 	
 	"<C: typedef void * uint16_tOriginal>"
@@ -946,21 +892,21 @@ BonjourLibraryFFI >> uint16_tOriginal [
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> uint32_t [
+BonjourLibraryFFIAbstract >> uint32_t [
 	
 	"<C: typedef unsigned long uint32_t>"
 	
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> uint64_t [
+BonjourLibraryFFIAbstract >> uint64_t [
 	
 	"<C: typedef unsigned long long uint64_t>"
 	
 ]
 
 { #category : #types }
-BonjourLibraryFFI >> uint8_t [
+BonjourLibraryFFIAbstract >> uint8_t [
 	
 	"<C: typedef unsigned char uint8_t>"
 	

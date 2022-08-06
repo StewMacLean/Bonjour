@@ -2,7 +2,6 @@ Class {
 	#name : #ServiceType,
 	#superclass : #BonjourModelObject,
 	#instVars : [
-		'interfaceIndex',
 		'protocol',
 		'domain',
 		'services',
@@ -101,20 +100,7 @@ ServiceType >> initialize [
 	protocol := ''.
 	domain := '.'.	"What gets returned when browsing using mDNSResponder"
 	domain := 'local.'. "What gets returned when browsing using dns-sd"
-	interfaceIndex := '0'.
 	services := OrderedCollection new
-]
-
-{ #category : #accessing }
-ServiceType >> interfaceIndex [
-	
-	^interfaceIndex
-]
-
-{ #category : #accessing }
-ServiceType >> interfaceIndex: anObject [
-	
-	interfaceIndex := anObject
 ]
 
 { #category : #accessing }
@@ -181,15 +167,10 @@ ServiceType >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: name;
 		space;
-		space;
 		nextPutAll: protocol;
 		space;
-		space;
 		nextPutAll: domain;
-		space;
-		space;
-		nextPutAll: interfaceIndex "printString".
-	aStream nextPut: $)
+		nextPut: $)
 ]
 
 { #category : #accessing }

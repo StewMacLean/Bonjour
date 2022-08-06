@@ -48,15 +48,16 @@ DiscoveryApp >> initialize [
 	bonjour
 		when: ServiceTypeAdded send: #serviceTypeAdded: to: self;
 		when: ServiceAdded send: #serviceAdded: to: self;
+		when: ServiceUpdated send: #serviceUpdated: to: self;
 		when: ServiceRemoved send: #serviceRemoved: to: self.
 	
-	self log: 'Opening Discovery...'.
+	self 
+		log: '=====================================================================';
+		log: 'Opening Discovery...'.
 	treeView 
 		hideColumnHeaders;
 		"lazilyComputeChildren: true; - shows expand icon on elements (have no children)"
-		expandAll.
-		
-	bonjour startUp
+		expandAll
 	
 	
 	
@@ -88,6 +89,7 @@ DiscoveryApp >> initializeWindow: aWindowPresenter [
 		title: title;
 		initialExtent: 500@800;
 		initialPosition: 10@20;
+		whenOpenedDo: [bonjour startUp];
 		whenClosedDo: [self shutDown]
 ]
 
@@ -145,10 +147,40 @@ DiscoveryApp >> openAppUsingCommandLineInterface [
 ]
 
 { #category : #'model updates' }
-DiscoveryApp >> serviceAdded: anEvent [
+DiscoveryApp >> refreshTree [
 
 	treeView roots: bonjour domains.
-	bonjour serviceTypes do: [: each | treeView expandPath: each path]
+	bonjour serviceTypes do: [: each | treeView expandPath: each path].
+	bonjour class = BonjourLibraryInterface
+		ifTrue: [	bonjour services do: [: each | treeView expandPath: each path]]. "for testing"
+	
+	
+	
+
+	
+]
+
+{ #category : #'building window' }
+DiscoveryApp >> requestWindowClose [
+
+	bonjour class = BonjourCommandLineInterface
+		ifTrue: [^true].
+
+	^bonjour class current
+		ifNil: [true]
+		ifNotNil: 
+			[UIManager default alert: 'About to shut down Bonjour - observe how callbacks get fired as sdRefs get deallocated - why?'. 
+			self shutDown.
+			1 seconds wait.
+			self refreshTree.
+			false]
+
+]
+
+{ #category : #'model updates' }
+DiscoveryApp >> serviceAdded: anEvent [
+
+	self refreshTree
 	
 	
 
@@ -158,19 +190,24 @@ DiscoveryApp >> serviceAdded: anEvent [
 { #category : #'model updates' }
 DiscoveryApp >> serviceRemoved: anEvent [
 
-	treeView roots: bonjour domains.
-	bonjour serviceTypes do: [: each | treeView expandPath: each path]
-
+	self refreshTree
 	
 ]
 
 { #category : #'model updates' }
 DiscoveryApp >> serviceTypeAdded: anEvent [
 
-	treeView roots: bonjour domains.
-	bonjour serviceTypes do: [: each | treeView expandPath: each path]
+	self refreshTree
 	
 	
+
+	
+]
+
+{ #category : #'model updates' }
+DiscoveryApp >> serviceUpdated: anEvent [
+
+	self refreshTree
 
 	
 ]
