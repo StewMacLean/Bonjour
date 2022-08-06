@@ -77,10 +77,15 @@ Please refer to the sample trace for further details.
 Log interpretation:
 
 **> Callout (synchronous intrinsically)
+
 **> | Callout - threaded asynchronous blocking
+
 |<** Return from blocked callout
+
 <** Callback block execution on callback queue thread
+
 @@@@ Application thread callback processing
+
 ### State change of domain model
 
 
