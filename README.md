@@ -28,13 +28,16 @@ His key changes made:
 2. Most important: callbacks needs to run too in the worker thread (hence the existence of BonjourCallback, to be implement ffiLibraryName).
 3. Value holders (the ones that you pass to a C function to later get its result). You need to pass a ByteArray to later take the stored value.
 
-Upon further testing I discovered that due to using the threaded configuration for all calls, and having multiple callouts/callbacks errors were occuring in the callback processing. See TFRunner>>returnCallback: aCallbackInvocation
+Upon further testing I discovered that due to using the threaded configuration for all calls, and having multiple callouts/callbacks errors were occuring in the callback processing. 
+
+See TFRunner>>returnCallback: aCallbackInvocation
 	"...Otherwise, throw an exception as returning means a bug in your application. [note it doesn't, it just calls recursively]
 	The user must guarantee callbacks return in the correct order"
 	
-To avoid this I created two library interface classes, thus having two workers. One library makes the "synchronous" callouts and handles the corresponding callbacks. The other library makes the asynchronous callouts for the blocking callback "pumps". Note that the instrincilly synchronous callouts are still made using the asynchronous threaded mechanisim - they just block/unblock very quickly. I tried to configure this to be true synchronous, but this caused crashes.
+To avoid this I created two library interface classes, thus having two workers. One library makes the "synchronous" callouts and handles the corresponding callbacks. The other library makes the asynchronous callouts for the blocking callback "pumps". Note that the 
+intrinsically synchronous callouts are still made using the asynchronous threaded mechanisim - they just block/unblock very quickly. I tried to configure this to be true synchronous, but this caused crashes.
 
-However it is still not running as expected. The problem is that calls to the blocking callback pumps, are not returning as expected. What should happen is that after the callout makes the request and registers the callback to receive the results, the corresponding callback pump is call. This blocks until callbacks are ready, when the return to the application indicates that there are results to process. This should happen virtually immediately, as results are return very quickly. Unfortunately, these block calls remain block for long periods of time. 
+However it is still not running as expected. The problem is that calls to the blocking callback pumps, are not returning as expected. What should happen is that after the callout makes the request and registers the callback to receive the results, the corresponding callback pump is called. This blocks until callbacks are ready. Whe the blockked call returns this indicates to the application results to process. This should happen virtually immediately, as results are returned very quickly. Unfortunately, most of these blocked calls are remaining blocked for long periods of time. 
 
 Somewhat randomly, they become unblocked after some time. This is usually caused by a callback being triggered when a new service/service type is discovered. They also become unblocked (along with a sucession of corresponding callbacks) when the socket descriptor references are deallocated. My suspision is that the semaphore that blocks the process until it returns is not being signaled. See
 
@@ -68,8 +71,6 @@ In spite of these problems, by letting it run by shutting down to fire the callb
 and also to 5. register a service
 
 Please refer to the sample traces for further details.
-
-
 
 ### Running The App
 	
@@ -106,11 +107,11 @@ To download into your image, execute:
 			on: MCMergeOrLoadWarning 
 			do: [: warning | warning load].
 			
-It should bring up a browser with the openApp method for the library interface selected (as shown above).
+It will bring up a browser with the openApp method for the library interface selected.
 
-Configure the service types to browse in the openApp method. For testing, it is best to browse for only one service type.
+Configure the service types to browse in the openApp method. For testing, it is best to browse for only one service type as there is quite alot of tracing output generated.
+
 Then click the script icon to open the app.
-
 
 ### Troubleshooting
 
