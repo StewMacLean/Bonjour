@@ -61,7 +61,7 @@ TFExternalAsynchCall>>doExecuteOn: aRunner
 	
 With reference to the comment in this method, I can't help but experience "code smell". Unfortunately, I don't have the chops to dig into the VM to prove this hypothesis! 
 
-Another factor at play is the priority of the processes making these calls. I have experiemented with various settings, above and below the priority of the Callback queue process. It seems more responsive, and less crashes occur on shut down with priority greater than the callback process (69).
+Another factor at play is the priority of the processes making these calls. I have experimented with various settings, above and below the priority of the Callback queue process. It seems more responsive, and less crashes occur on shut down with priority greater than the callback process (69).
 
 There is another issue that occurs fairly frequently - Segmentation faults related to the worker thread - Not in VM thread. I'm not sure what is causing this.
 
