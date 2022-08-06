@@ -20,7 +20,7 @@ Currently only 1. works reliably.
 As some dnssd calls using 2. can be blocking whilst waiting for results the use 
 of the threaded/non-blocking functionality of FFI is required. 
 	
-Update 29/07/22
+Update 6th August 22
 Previously the non-blocking calls would cause spectacular crashes.
 Thanks to Estebane Lorenazno, this has now been fixed. 
 His key changes made:
@@ -28,12 +28,48 @@ His key changes made:
 2. Most important: callbacks needs to run too in the worker thread (hence the existence of BonjourCallback, to be implement ffiLibraryName).
 3. Value holders (the ones that you pass to a C function to later get its result). You need to pass a ByteArray to later take the stored value.
 
-However it is still not running as expected. The problem is that calls to the api that are non blocking, are not returning immediately.
-For some reason, the call doesn't return, until a call back is fired, such as when you register a new service, which fires a callback.
-This caused the "blocked" call to return, and the system runs until the same problem occurs. If another service is registered, this
-caused the next "blocked" call to return, and so on. 
+Upon further testing I discovered that due to using the threaded configuration for all calls, and having multiple callouts/callbacks errors were occuring in the callback processing. See TFRunner>>returnCallback: aCallbackInvocation
+	"...Otherwise, throw an exception as returning means a bug in your application. [note it doesn't, it just calls recursively]
+	The user must guarantee callbacks return in the correct order"
+	
+To avoid this I created two library interface classes, thus having two workers. One library makes the "synchronous" callouts and handles the corresponding callbacks. The other library makes the asynchronous callouts for the blocking callback "pumps". Note that the instrincilly synchronous callouts are still made using the asynchronous threaded mechanisim - they just block/unblock very quickly. I tried to configure this to be true synchronous, but this caused crashes.
 
-Please refer to the annotated trace for further details.
+However it is still not running as expected. The problem is that calls to the blocking callback pumps, are not returning as expected. What should happen is that after the callout makes the request and registers the callback to receive the results, the corresponding callback pump is call. This blocks until callbacks are ready, when the return to the application indicates that there are results to process. This should happen virtually immediately, as results are return very quickly. Unfortunately, these block calls remain block for long periods of time. 
+
+Somewhat randomly, they become unblocked after some time. This is usually caused by a callback being triggered when a new service/service type is discovered. They also become unblocked (along with a sucession of corresponding callbacks) when the socket descriptor references are deallocated. My suspision is that the semaphore that blocks the process until it returns is not being signaled. See
+
+TFExternalAsynchCall>>doExecuteOn: aRunner
+	
+	| aTaskAddress | 
+	
+	aTaskAddress := aRunner
+		executeFunction: function
+		withArguments: parameterArray
+		usingSemaphore: self semaphoreIndex.
+	
+	"I check if the semaphore is already signaled, because doing it in this way 
+	is thousands of times faster than just executing the wait. 
+	I think is a bug in the VM"
+	
+	self semaphore isSignaled 
+		ifFalse: [ self semaphore wait ].
+	
+	^ aRunner readReturnValueFromTask: aTaskAddress
+	
+With reference to the comment in this method, I can't help but experience "code smell". Unfortunately, I don't have the chops to dig into the VM to prove this hypothesis!
+
+There is another issue that occurs fairly frequently - Segmentation faults related to the worker thread - Not in VM thread. I'm not sure what is causing this.
+
+In spite of these problems, by letting it run by shutting down to fire the callbacks I have been able to fully test the full sequence of calls:
+1. Browse for service types
+2. Browse for services of one or more types
+3. Resolve a service to obtain its host name, port and text records
+4. Obtain the addresses of each service
+and also to 5. register a service
+
+Please refer to the sample traces for further details.
+
+
 
 ### Running The App
 	
@@ -70,7 +106,11 @@ To download into your image, execute:
 			on: MCMergeOrLoadWarning 
 			do: [: warning | warning load].
 			
-It should bring up a browser with the openApp method for the library interface selected (as shown above) - click it to run the app.
+It should bring up a browser with the openApp method for the library interface selected (as shown above).
+
+Configure the service types to browse in the openApp method. For testing, it is best to browse for only one service type.
+Then click the script icon to open the app.
+
 
 ### Troubleshooting
 
@@ -79,8 +119,11 @@ Execution is logged to:
 2. Files within ./logs bonjour/
 3. To the terminal 
 
-Start Pharo with logLevel=4 using:
+To see terminal output start Pharo with logLevel=4 using:
 <...>/Pharo.app/Contents/MacOS/Pharo  --logLevel=4  <...>/Pharo.image
+
+Results can be validated by running similar app, Discovery - DNS-SD Browser,  available from the Apple App store:
+	https://apps.apple.com/us/app/discovery-dns-sd-browser/id1381004916?mt=12
 
 
 ### Get Involved
