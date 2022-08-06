@@ -65,12 +65,13 @@ Another factor at play is the priority of the processes making these calls. I ha
 
 There is another issue that occurs fairly frequently - Segmentation faults related to the worker thread - Not in VM thread. I'm not sure what is causing this.
 
-In spite of these problems, by letting it run by shutting down to fire the callbacks I have been able to fully test the full sequence of calls:
+In spite of these problems, by letting it run by shutting down to fire the callbacks I have been able to fully test the full functionality of calls:
+
 1. Browse for service types
 2. Browse for services of one or more types
 3. Resolve a service to obtain its host name, port and text records
 4. Obtain the addresses of each service
-and also to 5. register a service
+5. Registration of a service
 
 Please refer to the sample traces for further details.
 
@@ -125,9 +126,10 @@ Execution is logged to:
 3. To the terminal 
 
 To see terminal output start Pharo with logLevel=4 using:
+
 <...>/Pharo.app/Contents/MacOS/Pharo  --logLevel=4  <...>/Pharo.image
 
-Results can be validated by running similar app, Discovery - DNS-SD Browser,  available from the Apple App store:
+Results can be validated by running similar a app, Discovery - DNS-SD Browser,  available from the Apple App store:
 	https://apps.apple.com/us/app/discovery-dns-sd-browser/id1381004916?mt=12
 
 
