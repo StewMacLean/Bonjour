@@ -1,0 +1,202 @@
+Last login: Sat Aug  6 14:33:27 on ttys000
+/Users/stewart/Desktop/OverDriveNew.command ; exit;
+stewart@Stewarts-Mac-mini ~ % /Users/stewart/Desktop/OverDriveNew.command ; exit;
+[DEBUG] 2022-08-06 14:33:44.000 logParameters (src/parameters/parameters.c:341):Image file name: /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDriveNew/Pharo.image
+[DEBUG] 2022-08-06 14:33:44.000 logParameters (src/parameters/parameters.c:342):Is default Image: no
+[DEBUG] 2022-08-06 14:33:44.000 logParameters (src/parameters/parameters.c:343):Is interactive session: no
+[DEBUG] 2022-08-06 14:33:44.000 logParameterVector (src/parameters/parameters.c:331):vmParameters [count = 2]:
+[DEBUG] 2022-08-06 14:33:44.000 logParameterVector (src/parameters/parameters.c:334): /Volumes/Data/Development/Smalltalk/Engines/Pharo/Pharo10.0/Pharo.app/Contents/MacOS/Pharo
+[DEBUG] 2022-08-06 14:33:44.000 logParameterVector (src/parameters/parameters.c:334): --logLevel=4
+[DEBUG] 2022-08-06 14:33:44.000 logParameterVector (src/parameters/parameters.c:331):imageParameters [count = 0]:
+[INFO ] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:113):Opening Image: /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDriveNew/Pharo.image
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:135):Working Directory /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDriveNew
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:137):sizeof(int): 4
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:138):sizeof(long): 8
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:139):sizeof(long long): 8
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:140):sizeof(void*): 8
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:141):sizeof(sqInt): 8
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:142):sizeof(sqLong): 8
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:143):sizeof(float): 4
+[DEBUG] 2022-08-06 14:33:44.000 vm_main_with_parameters (src/client.c:144):sizeof(double): 8
+[DEBUG] 2022-08-06 14:33:44.000 runOnMainThread (src/client.c:254):Running VM on main thread
+[DEBUG] 2022-08-06 14:33:44.000 allocateJITMemory (src/memoryUnix.c:110):Trying to allocate JIT memory in 0x1085f4000
+[DEBUG] 2022-08-06 14:33:44.000 sqAllocateMemory (src/memoryUnix.c:139):Trying to load the image in 0x108734000
+[DEBUG] 2022-08-06 14:33:44.000 sqAllocateMemory (src/memoryUnix.c:181):Loading the image in 0x108734000
+[WARN ] 2022-08-06 14:33:44.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: SecurityPlugin
+[WARN ] 2022-08-06 14:33:44.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveTimezoneOffset
+[WARN ] 2022-08-06 14:33:44.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveFileMasks
+[WARN ] 2022-08-06 14:33:44.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveDirectoryDelimitor
+[WARN ] 2022-08-06 14:33:44.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveFileStdioHandles
+[WARN ] 2022-08-06 14:33:44.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: InternetConfigPlugin
+[WARN ] 2022-08-06 14:33:45.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveSigChldNumber
+[WARN ] 2022-08-06 14:33:45.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: os_exports
+[WARN ] 2022-08-06 14:33:45.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveResolverStatus
+[WARN ] 2022-08-06 14:33:45.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveResolverLocalAddress
+[WARN ] 2022-08-06 14:33:45.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveResolverHostNameSize
+[WARN ] 2022-08-06 14:33:45.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveResolverHostNameResult
+[WARN ] 2022-08-06 14:33:45.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: MD5Plugin
+[WARN ] 2022-08-06 14:33:45.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: SDL2DisplayPlugin
+[WARN ] 2022-08-06 14:33:45.000 unimplementedPrimitive (src/nullDisplay.c:6):Unimplemented primitive: ioNoteDisplayChangedwidthheightdepth
+[WARN ] 2022-08-06 14:33:45.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveFileStdioHandles
+[WARN ] 2022-08-06 14:34:09.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveCompressToByteArray
+[DEBUG] 2022-08-06 14:34:09.000 snapshot (Replacement/generated/64/vm/src/gcc3x-cointerp.c:72699):Garbage Collect for Snapshot
+[DEBUG] 2022-08-06 14:34:09.000 writeImageFileIO (Replacement/generated/64/vm/src/gcc3x-cointerp.c:74311):Writing snapshot file /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDriveNew/Pharo.image
+[WARN ] 2022-08-06 14:34:09.000 unimplementedPrimitive (src/nullDisplay.c:6):Unimplemented primitive: ioScreenSize
+[DEBUG] 2022-08-06 14:34:09.000 writeImageFileIO (Replacement/generated/64/vm/src/gcc3x-cointerp.c:74389):Snapshot file /Volumes/Data/Projects/OverDrive/Pharo/Application/OverDriveNew/Pharo.image done
+[WARN ] 2022-08-06 14:34:09.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveTimezoneOffset
+[WARN ] 2022-08-06 14:34:09.000 ioFindExternalFunctionInAccessorDepthInto (src/externalPrimitives.c:149):Missing Accessor Depth: primitiveDirectoryDelimitor
+[WARN ] 2022-08-06 14:34:09.000 ioLoadModule (src/externalPrimitives.c:102):Failed to load module: InternetConfigPlugin
+2022-08-06 14:34:21:386 931527 40 =====================================================================
+2022-08-06 14:34:21:387 931527 40 Opening Discovery...
+2022-08-06 14:34:21:418 931527 40 Starting up on mDNSResponder
+2022-08-06 14:34:21:419 289631 71 Callback Stream opened
+2022-08-06 14:34:21:445 931527 40 Threaded runner for synchronous callouts is: a TFWorker(@ 16r00000000)
+2022-08-06 14:34:21:446 931527 40 Threaded runner for asynchronous callouts is: a TFWorker(@ 16r00000000)
+2022-08-06 14:34:21:446 931527 40 Browsing for services with types of: #('_osc._udp.')
+2022-08-06 14:34:21:447 716384 71 **> Browse Service Types...
+2022-08-06 14:34:21:450 296708 72 Starting Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r600003D30380
+2022-08-06 14:34:21:451 296708 72 **>| Threaded Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r600003D30380
+2022-08-06 14:34:21:451 357864 69 <** Service Type Added: _smb._tcp.local. interface: 1
+2022-08-06 14:34:21:452 335886 69 <** Service Type Added: _smb._tcp.local. interface: 4
+2022-08-06 14:34:21:452 841913 69 <** Service Type Added: _smb._tcp.local. interface: 5
+2022-08-06 14:34:21:452 361969 69 <** Service Type Added: _apple-lgremote._tcp.local. interface: 14
+2022-08-06 14:34:21:452 227628 69 <** Service Type Added: _apple-lgremote._tcp.local. interface: 11
+2022-08-06 14:34:21:452 82354 69 <** Service Type Added: _smb._tcp.local. interface: 14
+2022-08-06 14:34:21:452 935515 69 <** Service Type Added: _smb._tcp.local. interface: 11
+2022-08-06 14:34:21:452 989984 69 <** Service Type Added: _osc._udp.local. interface: 1
+2022-08-06 14:34:21:452 289631 71 ### Service Type created: _osc._udp.
+2022-08-06 14:34:21:455 289631 71 **> Browse Services of type _osc._udp.
+2022-08-06 14:34:21:458 603971 72 Starting Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r600003D305B0
+2022-08-06 14:34:21:458 603971 72 **>| Threaded Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r600003D305B0
+2022-08-06 14:34:21:458 394677 69 <** Service Type Added: _osc._udp.local. interface: 4
+2022-08-06 14:34:21:459 323770 69 <** Service Type Added: _osc._udp.local. interface: 5
+2022-08-06 14:34:21:459 970906 69 <** Service Type Added: _osc._udp.local. interface: 11
+2022-08-06 14:34:21:459 564152 69 <** Service Type Added: _osc._udp.local. interface: 14
+2022-08-06 14:34:21:459 643434 69 <** Service Type Added: _raop._tcp.local. interface: 1
+2022-08-06 14:34:21:459 202415 69 <** Service Type Added: _companion-link._tcp.local. interface: 1
+2022-08-06 14:34:21:459 770204 69 <** Service Type Added: _airplay._tcp.local. interface: 1
+2022-08-06 14:34:21:459 211540 69 <** Service Type Added: _raop._tcp.local. interface: 4
+2022-08-06 14:34:21:459 637080 69 <** Service Type Added: _companion-link._tcp.local. interface: 4
+2022-08-06 14:34:21:459 665099 69 <** Service Type Added: _airplay._tcp.local. interface: 4
+2022-08-06 14:34:21:459 134935 69 <** Service Type Added: _raop._tcp.local. interface: 5
+2022-08-06 14:34:21:459 177885 69 <** Service Type Added: _companion-link._tcp.local. interface: 5
+2022-08-06 14:34:21:459 258119 69 <** Service Type Added: _airplay._tcp.local. interface: 5
+2022-08-06 14:34:21:459 296466 69 <** Service Type Added: _raop._tcp.local. interface: 14
+2022-08-06 14:34:21:460 310672 69 <** Service Type Added: _companion-link._tcp.local. interface: 14
+2022-08-06 14:34:21:460 39962 69 <** Service Type Added: _airplay._tcp.local. interface: 14
+2022-08-06 14:34:21:460 561750 69 <** Service Type Added: _raop._tcp.local. interface: 11
+2022-08-06 14:34:21:460 933354 69 <** Service Type Added: _companion-link._tcp.local. interface: 11
+2022-08-06 14:34:21:460 865899 69 <** Service Type Added: _airplay._tcp.local. interface: 11
+2022-08-06 14:34:21:460 676813 69 <** Service Type Added: _rdlink._tcp.local. interface: 14
+2022-08-06 14:34:21:460 647319 69 <** Service Type Added: _rdlink._tcp.local. interface: 11
+2022-08-06 14:34:21:460 296708 72 |<** Threaded return Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r600003D30380
+2022-08-06 14:34:21:460 296708 72 **>| Threaded Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r600003D30380
+2022-08-06 14:34:21:460 22047 69 <** Service Added : Stewart s MacBook Air type: _osc._udp. interface: 14
+2022-08-06 14:34:21:460 289631 71 ### Service created: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:34:21:461 289631 71 **> Resolve Service: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:34:21:466 863940 72 Starting Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r600003D30F50
+2022-08-06 14:34:21:466 863940 72 **>| Threaded Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r600003D30F50
+2022-08-06 14:34:21:466 806124 69 <** Service Added : Stewart s MacBook Air type: _osc._udp. interface: 11
+2022-08-06 14:34:21:466 603971 72 |<** Threaded return Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r600003D305B0
+2022-08-06 14:34:21:466 603971 72 **>| Threaded Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r600003D305B0
+2022-08-06 14:34:22:474 931527 40 **> Register Service: MacMini [iPhone] (OverDrive)._osc._udp.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4)
+2022-08-06 14:34:22:485 216957 72 Starting Pump 00004 Register service MacMini [iPhone] (OverDrive)._osc._udp. sdRef: @ 16r600003D16760
+2022-08-06 14:34:22:486 216957 72 **>| Threaded Pump 00004 Register service MacMini [iPhone] (OverDrive)._osc._udp. sdRef: @ 16r600003D16760
+2022-08-06 14:34:28:257 487360 69 <** Service Type Removed: _smb._tcp.local. interface: 1
+2022-08-06 14:34:28:260 345526 69 <** Service Type Removed: _smb._tcp.local. interface: 4
+2022-08-06 14:34:28:261 831747 69 <** Service Type Removed: _smb._tcp.local. interface: 5
+2022-08-06 14:34:28:261 296708 72 |<** Threaded return Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r600003D30380
+2022-08-06 14:34:28:261 296708 72 **>| Threaded Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef: @ 16r600003D30380
+2022-08-06 14:34:28:262 41685 69 <** Service Resolved: Stewart s MacBook Air._osc._udp.local. host: Stewarts-MacBook-Air.local. port: 7000 interface: 14
+2022-08-06 14:34:28:262 289631 71 ### Service updated: Stewart s MacBook Air._osc._udp.local. host: Stewarts-MacBook-Air.local. port: 7000
+2022-08-06 14:34:28:269 638166 69 <** Service Resolved: Stewart s MacBook Air._osc._udp.local. host: Stewarts-MacBook-Air.local. port: 7000 interface: 11
+2022-08-06 14:34:28:271 289631 71 **> Get addresses of: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:34:28:284 863940 72 |<** Threaded return Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r600003D30F50
+2022-08-06 14:34:28:285 863940 72 **>| Threaded Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r600003D30F50
+2022-08-06 14:34:28:285 548215 72 Starting Pump 00005 Get addresses of Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r600003D30D90
+2022-08-06 14:34:28:285 548215 72 **>| Threaded Pump 00005 Get addresses of Stewart s MacBook Air._osc._udp.local. sdRef: @ 16r600003D30D90
+2022-08-06 14:34:28:285 289631 71 Removing Pump 00003 Resolve: Stewart s MacBook Air._osc._udp.local. sdRef @ 16r600003D30F50
+2022-08-06 14:34:28:286 289631 71 **> Deallocating @ 16r600003D30F50
+2022-08-06 14:34:28:288 205227 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 1
+2022-08-06 14:34:28:289 289631 71 ### Service created: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:28:292 289631 71 **> Resolve Service: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:28:292 442366 72 Starting Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r600003D30F50
+2022-08-06 14:34:28:292 442366 72 **>| Threaded Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r600003D30F50
+2022-08-06 14:34:28:293 495622 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 4
+2022-08-06 14:34:28:293 369819 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 11
+2022-08-06 14:34:28:293 839090 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 14
+2022-08-06 14:34:28:293 238311 69 <** Service Added : MacMini [iPhone] (OverDrive) type: _osc._udp. interface: 5
+2022-08-06 14:34:28:293 603971 72 |<** Threaded return Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r600003D305B0
+2022-08-06 14:34:28:293 603971 72 **>| Threaded Pump 00002 Browse Services of type: _osc._udp. sdRef: @ 16r600003D305B0
+2022-08-06 14:34:28:293 436894 69 <** Service Registered: MacMini [iPhone] (OverDrive)._osc._udp.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4)
+2022-08-06 14:34:28:294 289631 71 ### Service Registered for: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:41:299 931527 40 ==============================================================================
+2022-08-06 14:34:41:300 931527 40 Shutting down on BonjourLibraryInterface
+2022-08-06 14:34:41:301 931527 40 ==> Deregister Service: MacMini [iPhone] (OverDrive)._osc._udp.local.  no address 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4)
+2022-08-06 14:34:41:301 931527 40 **> Deallocating @ 16r600003D16760
+2022-08-06 14:34:42:057 931527 40 Removing Pump 00001 Browse Service Types: _services._dns-sd._udp sdRef @ 16r600003D30380
+2022-08-06 14:34:42:059 931527 40 **> Deallocating @ 16r600003D30380
+2022-08-06 14:34:42:061 875278 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 4
+2022-08-06 14:34:42:062 289631 71 ### Service updated: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345
+2022-08-06 14:34:42:070 143732 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 5
+2022-08-06 14:34:42:071 955501 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 1
+2022-08-06 14:34:42:071 987249 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 14
+2022-08-06 14:34:42:072 43627 69 <** Service Resolved: MacMini [iPhone] (OverDrive)._osc._udp.local. host: Stewarts-Mac-mini.local. port: 12345 interface: 11
+2022-08-06 14:34:42:073 289631 71 **> Get addresses of: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:075 442366 72 |<** Threaded return Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r600003D30F50
+2022-08-06 14:34:42:075 442366 72 **>| Threaded Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r600003D30F50
+2022-08-06 14:34:42:075 719419 72 Starting Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r600003D0E0D0
+2022-08-06 14:34:42:075 719419 72 **>| Threaded Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r600003D0E0D0
+2022-08-06 14:34:42:075 719419 72 |<** Threaded return Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r600003D0E0D0
+2022-08-06 14:34:42:075 719419 72 **>| Threaded Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef: @ 16r600003D0E0D0
+2022-08-06 14:34:42:075 289631 71 Removing Pump 00006 Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef @ 16r600003D30F50
+2022-08-06 14:34:42:076 289631 71 **> Deallocating @ 16r600003D30F50
+2022-08-06 14:34:42:076 929889 69 <** Address of service Stewart s MacBook Air._osc._udp.local. is FE80:00:00:00:CC9:67BF:A1A4:9D4A
+2022-08-06 14:34:42:076 289631 71 ### Address: FE80:00:00:00:CC9:67BF:A1A4:9D4A on interface: 14 added to: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:34:42:078 785885 69 <** Address of service Stewart s MacBook Air._osc._udp.local. is FE80:00:00:00:CC9:67BF:A1A4:9D4A
+2022-08-06 14:34:42:078 289631 71 ### Address: FE80:00:00:00:CC9:67BF:A1A4:9D4A on interface: 11 added to: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:34:42:080 851827 69 <** Address of service Stewart s MacBook Air._osc._udp.local. is 192.168.1.8
+2022-08-06 14:34:42:080 289631 71 ### Address: 192.168.1.8 on interface: 14 added to: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:34:42:081 18095 69 <** Address of service Stewart s MacBook Air._osc._udp.local. is 192.168.1.8
+2022-08-06 14:34:42:081 289631 71 ### Address: 192.168.1.8 on interface: 11 added to: Stewart s MacBook Air._osc._udp.local.
+2022-08-06 14:34:42:082 289631 71 Removing Pump 00005 Get addresses of Stewart s MacBook Air._osc._udp.local. sdRef @ 16r600003D30D90
+2022-08-06 14:34:42:082 289631 71 **> Deallocating @ 16r600003D30D90
+[ERROR] 2022-08-06 14:34:42.000 worker_run (ffi/src/worker/worker.c:186):Unsupported task type: -1263219392
+Bad file descriptor
+2022-08-06 14:34:42:316 931527 40 Removing Pump 00002 Browse Services of type: _osc._udp. sdRef @ 16r600003D305B0
+2022-08-06 14:34:42:317 931527 40 **> Deallocating @ 16r600003D305B0
+2022-08-06 14:34:42:318 626464 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:D0B1:31FF:FE25:2C35
+2022-08-06 14:34:42:318 289631 71 ### Address: FE80:00:00:00:D0B1:31FF:FE25:2C35 on interface: 4 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:320 533098 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 00:00:00:00:00:00:00:01
+2022-08-06 14:34:42:320 289631 71 ### Address: 00:00:00:00:00:00:00:01 on interface: 1 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:321 60460 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:00:00:00:01
+2022-08-06 14:34:42:321 289631 71 ### Address: FE80:00:00:00:00:00:00:01 on interface: 1 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:322 924405 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:D0B1:31FF:FE25:2C34
+2022-08-06 14:34:42:322 289631 71 ### Address: FE80:00:00:00:D0B1:31FF:FE25:2C34 on interface: 5 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:323 144449 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:10B0:597C:BA49:798
+2022-08-06 14:34:42:323 289631 71 ### Address: FE80:00:00:00:10B0:597C:BA49:798 on interface: 11 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:323 989146 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:1C72:B6C:13DF:7A53
+2022-08-06 14:34:42:323 289631 71 ### Address: FE80:00:00:00:1C72:B6C:13DF:7A53 on interface: 14 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:324 158089 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:10B0:597C:BA49:798
+2022-08-06 14:34:42:325 289631 71 ### Address: FE80:00:00:00:10B0:597C:BA49:798 on interface: 14 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:325 991099 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is FE80:00:00:00:1C72:B6C:13DF:7A53
+2022-08-06 14:34:42:326 289631 71 ### Address: FE80:00:00:00:1C72:B6C:13DF:7A53 on interface: 11 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:326 496342 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 127.0.0.1
+2022-08-06 14:34:42:327 289631 71 ### Address: 127.0.0.1 on interface: 1 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:327 773506 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 192.168.1.6
+2022-08-06 14:34:42:327 289631 71 ### Address: 192.168.1.6 on interface: 11 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:328 417279 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 192.168.1.4
+2022-08-06 14:34:42:328 289631 71 ### Address: 192.168.1.4 on interface: 14 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:329 122243 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 192.168.1.6
+2022-08-06 14:34:42:329 289631 71 ### Address: 192.168.1.6 on interface: 14 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:330 739809 69 <** Address of service MacMini [iPhone] (OverDrive)._osc._udp.local. is 192.168.1.4
+2022-08-06 14:34:42:330 289631 71 ### Address: 192.168.1.4 on interface: 11 added to: MacMini [iPhone] (OverDrive)._osc._udp.local.
+2022-08-06 14:34:42:330 289631 71 Removing Pump 00007 Get addresses of MacMini [iPhone] (OverDrive)._osc._udp.local. sdRef @ 16r600003D0E0D0
+2022-08-06 14:34:42:331 289631 71 **> Deallocating @ 16r600003D0E0D0
+2022-08-06 14:34:42:576 931527 40 Pump not found when removing Vector(pump : a Process in Process>>endProcess service : Stewart s MacBook Air._osc._udp.local. [FE80:00:00:00:CC9:67BF:A1A4:9D4A 192.168.1.8] 7000 TextRecordPair(AppleLogic=LogicProX) TextRecordPair(mfk=1) callback : a BonjourCallback name : 'Get addresses of Stewart s MacBook Air._osc._udp.local.' id : '00005' sdRef : @ 16r600003D30D90)
+2022-08-06 14:34:42:577 931527 40 @ 16r600003D30D90
+2022-08-06 14:34:42:577 931527 40 **> Deallocating @ 16r600003D30D90
+2022-08-06 14:34:42:831 931527 40 Pump not found when removing Vector(pump : a Process in Process>>endProcess service : MacMini [iPhone] (OverDrive)._osc._udp.local. [FE80:00:00:00:D0B1:31FF:FE25:2C35 00:00:00:00:00:00:00:01 FE80:00:00:00:00:00:00:01 FE80:00:00:00:D0B1:31FF:FE25:2C34 FE80:00:00:00:10B0:597C:BA49:798 FE80:00:00:00:1C72:B6C:13DF:7A53 127.0.0.1 192.168.1.6 192.168.1.4] 12345 TextRecordPair(Rendezvous Is Cool=) TextRecordPair(name=value) TextRecordPair(paper=A4) callback : a BonjourCallback name : 'Resolve: MacMini [iPhone] (OverDrive)._osc._udp.local.' id : '00006' sdRef : @ 16r600003D30F50)
+2022-08-06 14:34:42:831 931527 40 @ 16r600003D30F50
+2022-08-06 14:34:42:831 931527 40 **> Deallocating @ 16r600003D30F50
+
