@@ -31,13 +31,13 @@ His key changes made:
 Upon further testing I discovered that due to using the threaded configuration for all calls, and having multiple callouts/callbacks errors were occuring in the callback processing. 
 
 See TFRunner>>returnCallback: aCallbackInvocation
-	"...Otherwise, throw an exception as returning means a bug in your application. [note it doesn't, it just calls recursively]
+	"...Otherwise, throw an exception as returning means a bug in your application. [note it doesn't, it just calls recursively].
 	The user must guarantee callbacks return in the correct order"
 	
 To avoid this I created two library interface classes, thus having two workers. One library makes the "synchronous" callouts and handles the corresponding callbacks. The other library makes the asynchronous callouts for the blocking callback "pumps". Note that the 
 intrinsically synchronous callouts are still made using the asynchronous threaded mechanisim - they just block/unblock very quickly. I tried to configure this to be true synchronous, but this caused crashes.
 
-However it is still not running as expected. The problem is that calls to the blocking callback pumps, are not returning as expected. What should happen is that after the callout makes the request and registers the callback to receive the results, the corresponding callback pump is called. This blocks until callbacks are ready. Whe the blockked call returns this indicates to the application results to process. This should happen virtually immediately, as results are returned very quickly. Unfortunately, most of these blocked calls are remaining blocked for long periods of time. 
+However it is still not running as expected. The problem is that calls to the blocking callback pumps, are not returning as expected. What should happen is that after the callout makes the request and registers the callback to receive the results, the corresponding callback pump is called. This blocks until callbacks are ready. Whe the blocked call returns this indicates to the application that there are results to process. This should happen virtually immediately, as results are returned very quickly. Unfortunately, most of these blocked calls are remaining blocked for long periods of time. 
 
 Somewhat randomly, they become unblocked after some time. This is usually caused by a callback being triggered when a new service/service type is discovered. They also become unblocked (along with a sucession of corresponding callbacks) when the socket descriptor references are deallocated. My suspision is that the semaphore that blocks the process until it returns is not being signaled. See
 
@@ -59,7 +59,9 @@ TFExternalAsynchCall>>doExecuteOn: aRunner
 	
 	^ aRunner readReturnValueFromTask: aTaskAddress
 	
-With reference to the comment in this method, I can't help but experience "code smell". Unfortunately, I don't have the chops to dig into the VM to prove this hypothesis!
+With reference to the comment in this method, I can't help but experience "code smell". Unfortunately, I don't have the chops to dig into the VM to prove this hypothesis! 
+
+Another factor at play is the priority of the processes making these calls. I have experiemented with various settings, above and below the priority of the Callback queue process. It seems more responsive, and less crashes occur on shut down with priority greater than the callback process (69).
 
 There is another issue that occurs fairly frequently - Segmentation faults related to the worker thread - Not in VM thread. I'm not sure what is causing this.
 
@@ -112,6 +114,8 @@ It will bring up a browser with the openApp method for the library interface sel
 Configure the service types to browse in the openApp method. For testing, it is best to browse for only one service type as there is quite alot of tracing output generated.
 
 Then click the script icon to open the app.
+
+Alternatively, you can download the preloaded image and Pharo 10 engine for a quick start.
 
 ### Troubleshooting
 
