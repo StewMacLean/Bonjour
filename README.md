@@ -144,7 +144,7 @@ To see terminal output start Pharo with logLevel=4 using:
 
 <...>/Pharo.app/Contents/MacOS/Pharo  --logLevel=4  <...>/Pharo.image
 
-Results can be validated by running similar a app, Discovery - DNS-SD Browser,  available from the Apple App store:
+Results can be validated by running similar app, Discovery - DNS-SD Browser,  available from the Apple App store:
 	https://apps.apple.com/us/app/discovery-dns-sd-browser/id1381004916?mt=12
 
 
